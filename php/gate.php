@@ -131,12 +131,12 @@ function createUser()
   
 //       $mail->send();
       if ($User_re) {
-        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
+        $returnResponse = ['status' => "1", 'message' => "{$email} added successfully"];
         exit(json_encode($returnResponse));
     // }
 //   } catch (Exception $e) {
 }else {
-        $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
+        $returnResponse = ['status' => "0", 'message' => "{$email} not created, try again"];
         exit(json_encode($returnResponse));
     }
   }
