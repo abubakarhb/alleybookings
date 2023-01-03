@@ -1,5 +1,13 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
 function check_db_query_staus($db_state, $db_actions)
 {
     include "config/index.php";
@@ -79,25 +87,55 @@ function createUser()
         exit(json_encode($returnResponse));
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $message = "
-        Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
-           \n
-            https://alleybookings/user/verification/?" . $verification . "
-            \n   \n         
-            This link is only valid for 3 day, so please make sure to click on it as soon as possible.
-            \n \n
-            Thank you,\n
-            Ibrahim Ismail
-            \n\n
-            I hope this helps! Let me know if you have any questions or need further assistance.
-        \n
-        ";
-        // More headers
-        $headers .= 'From: <hello@alleybookings.com>' . "\r\n";
-        $headers .= 'Cc: marketing@alleybookings.com' . "\r\n";
-        mail($email, "ALLEYBOOKINGS VERIFICATION", $message, $headers);
+        
+        
+  $mail = new PHPMailer(true);
+
+  try {
+      //Server settings
+    //   $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+      $mail->isSMTP();                                            //Send using SMTP
+      $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
+      $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+      $mail->Username   = 'alleyys.com@gmail.com';                     //SMTP username
+      $mail->Password   = 'yuceluhpldrxvyqh';                               //SMTP password
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+      $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+  
+      //Recipients
+      $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
+      $mail->addAddress($email);     //Add a recipient
+      // $mail->addAddress('ellen@example.com');               //Name is optional
+      // $mail->addReplyTo('info@example.com', 'Information');
+    
+  
+      //Content
+      $mail->isHTML(true);                                  //Set email format to HTML
+      $mail->Subject = "Alleybookings Account Verification";
+      $mail->Body    = "
+      Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
+         <br>
+          https://alleybookings/user/verification/?" . $verification . "
+          <br>       
+          This link is only valid for 3 day, so please make sure to click on it as soon as possible.
+          <br>
+          Thank you,<br>
+          Ibrahim Ismail
+          <br>
+          <br>
+          I hope this helps! Let me know if you have any questions or need further assistance.
+      \n
+      ";
+      // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
+      // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+  
+      $mail->send();
+      echo "<script>
+      alert('sent successfully')
+      </script>";
+  } catch (Exception $e) {
+      echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+  }
         if ($User_re) {
             $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
             exit(json_encode($returnResponse));
