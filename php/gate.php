@@ -53,7 +53,6 @@ function check_db_query_staus($db_state, $db_actions)
             break;
     }
 }
-
 function login($username, $password)
 {
     include "config/index.php";
@@ -90,60 +89,59 @@ function createUser()
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
         
         
-  $mail = new PHPMailer(true);
+//   $mail = new PHPMailer(true);
 
-  try {
-      //Server settings
-    //   $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-      $mail->isSMTP();                                            //Send using SMTP
-      $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
-      $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-      $mail->Username   = 'alleyys.com@gmail.com';                     //SMTP username
-      $mail->Password   = 'yuceluhpldrxvyqh';                               //SMTP password
-      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-      $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+//   try {
+//       //Server settings
+//     //   $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+//       $mail->isSMTP();                                            //Send using SMTP
+//       $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
+//       $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+//       $mail->Username   = 'alleyys.com@gmail.com';                     //SMTP username
+//       $mail->Password   = 'yuceluhpldrxvyqh';                               //SMTP password
+//       $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+//       $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
   
-      //Recipients
-      $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
-      $mail->addAddress($email);     //Add a recipient
-      // $mail->addAddress('ellen@example.com');               //Name is optional
-      // $mail->addReplyTo('info@example.com', 'Information');
+//       //Recipients
+//       $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
+//       $mail->addAddress($email);     //Add a recipient
+//       // $mail->addAddress('ellen@example.com');               //Name is optional
+//       // $mail->addReplyTo('info@example.com', 'Information');
     
   
-      //Content
-      $mail->isHTML(true);                                  //Set email format to HTML
-      $mail->Subject = "Alleybookings Account Verification";
-      $mail->Body    = "
-      Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
-         <br/>
-          https://alleybookings/user/verification/?" . $verification . "
-          <br/>       
-          This link is only valid for 3 day, so please make sure to click on it as soon as possible.
-          <br/>
-          Thank you,<br>
-          Alleybookings
-          <br/>
-          <br/>
-          I hope this helps! Let me know if you have any questions or need further assistance.
-      \n
-      ";
-      // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
-      // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+//       //Content
+//       $mail->isHTML(true);                                  //Set email format to HTML
+//       $mail->Subject = "Alleybookings Account Verification";
+//       $mail->Body    = "
+//       Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
+//          <br/>
+//           https://alleybookings/user/verification/?" . $verification . "
+//           <br/>       
+//           This link is only valid for 3 day, so please make sure to click on it as soon as possible.
+//           <br/>
+//           Thank you,<br>
+//           Alleybookings
+//           <br/>
+//           <br/>
+//           I hope this helps! Let me know if you have any questions or need further assistance.
+//       \n
+//       ";
+//       // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
+//       // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
   
-      $mail->send();
-    
-  } catch (Exception $e) {
-    
-  }
-
-  if ($User_re) {
-    $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
-    exit(json_encode($returnResponse));
+//       $mail->send();
+      if ($User_re) {
+        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
+        exit(json_encode($returnResponse));
+    // }
+//   } catch (Exception $e) {
 }else {
-    $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-    exit(json_encode($returnResponse));
-}   
-    }}
+        $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
+        exit(json_encode($returnResponse));
+    }
+  }
+       
+    }
 
 function createListerUser($email, $firstname, $lastname, $phone)
 {
