@@ -53,6 +53,7 @@ function check_db_query_staus($db_state, $db_actions)
             break;
     }
 }
+
 function login($username, $password)
 {
     include "config/index.php";
@@ -130,19 +131,19 @@ function createUser()
       // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
   
       $mail->send();
-      if ($User_re) {
-        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
-        exit(json_encode($returnResponse));
-    }
+    
   } catch (Exception $e) {
-    if($User_re < 0) {
-        $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-        exit(json_encode($returnResponse));
-    }
+    
   }
-       
-    }
-}
+
+  if ($User_re) {
+    $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
+    exit(json_encode($returnResponse));
+}else {
+    $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
+    exit(json_encode($returnResponse));
+}   
+    }}
 
 function createListerUser($email, $firstname, $lastname, $phone)
 {
