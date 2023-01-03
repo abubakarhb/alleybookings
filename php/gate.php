@@ -160,10 +160,25 @@ function hotelListerPropertiesLocation($property_location, $property_country, $p
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
         $returnResponse = ['status' => 1];
-        exit(json_encode($returnResponse));
+        return(json_encode($returnResponse));
     } else {
         $returnResponse = ['status' => 0];
-        exit(json_encode($returnResponse));
+        return(json_encode($returnResponse));
+    }
+}
+
+function hotelListerProperties($property_name, $property_type, $property_currency, $zip_code, $property_chain_status, $property_channel_manager_status, $hotelListerProperties_id)
+{
+    include "config/index.php";
+    $query_User_re = sprintf("INSERT INTO `hotelListerProperties`(`property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`) 
+                     VALUES ('$property_name', '$property_type', '$property_currency', '$zip_code', '$property_chain_status', '$property_channel_manager_status', $hotelListerProperties_id)");
+    $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+    if ($User_re) {
+        $returnResponse = ['status' => 1];
+        return(json_encode($returnResponse));
+    } else {
+        $returnResponse = ['status' => 0];
+        return(json_encode($returnResponse));
     }
 }
 function hotelListerUserCall001($data)
@@ -172,7 +187,17 @@ function hotelListerUserCall001($data)
         if (filter_var($data->hotelListerUsers->email, FILTER_VALIDATE_EMAIL)) {
             $user_creation = json_decode(createListerUser($data->hotelListerUsers->email, $data->hotelListerUsers->first_name, $data->hotelListerUsers->last_name, $data->hotelListerUsers->phone));
             if ($user_creation->status == 1) {
-                hotelListerPropertiesLocation($data->hotelListerPropertiesLocation->property_location, $data->hotelListerPropertiesLocation->property_country, $data->hotelListerPropertiesLocation->property_street_address, $data->hotelListerPropertiesLocation->property_unit_number, $data->hotelListerPropertiesLocation->property_city, $data->hotelListerPropertiesLocation->zip_code, $user_creation->user);
+                $pLocation = hotelListerPropertiesLocation($data->hotelListerPropertiesLocation->property_location, $data->hotelListerPropertiesLocation->property_country, $data->hotelListerPropertiesLocation->property_street_address, $data->hotelListerPropertiesLocation->property_unit_number, $data->hotelListerPropertiesLocation->property_city, $data->hotelListerPropertiesLocation->zip_code, $user_creation->user);
+                $pListedDetail = hotelListerProperties($data->hotelListerProperties->property_name, $data->hotelListerProperties->property_type, $data->hotelListerProperties->property_currency, $data->hotelListerProperties->zip_code, $data->hotelListerProperties->property_chain_status, $data->hotelListerProperties->property_channel_manager_status, $user_creation->user);
+                $arr = [];
+                if (json_decode($pListedDetail)->status == 1) {
+                    $arr['hotelListerProperties'] = json_decode($pListedDetail)->status;
+                }
+                if (json_decode($pLocation)->status == 1) {
+                    $arr['hotelListerPropertiesLocation'] = json_decode($pLocation)->status;
+                }
+                $arr['message'] = "Successfully created an account";
+                echo json_encode($arr);    
             } else {
             }
         } else {
