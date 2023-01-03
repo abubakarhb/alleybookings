@@ -209,3 +209,18 @@ function hotelListerUserCall001($data)
         exit(json_encode($objectLengthRespError));
     }
 }
+
+function hotelListerPropertie($property_name, $property_type, $property_currency, $zip_code, $property_chain_status, $property_channel_manager_status, $hotelListerProperties_id)
+{
+    include "config/index.php";
+    $query_User_re = sprintf("INSERT INTO `hotelListerProperties`(`property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`) 
+                     VALUES ('$property_name', '$property_type', '$property_currency', '$zip_code', '$property_chain_status', '$property_channel_manager_status', $hotelListerProperties_id)");
+    $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+    if ($User_re) {
+        $returnResponse = ['status' => 1];
+        return(json_encode($returnResponse));
+    } else {
+        $returnResponse = ['status' => 0];
+        return(json_encode($returnResponse));
+    }
+}
