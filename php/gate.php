@@ -142,11 +142,12 @@ function createListerUser($email, $firstname, $lastname, $phone)
         $headers .= 'Cc: marketing@alleybookings.com' . "\r\n";
         mail($email, "ALLEYBOOKINGS VERIFICATION", $message, $headers);
         if ($User_re) {
-            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
-            exit(json_encode($returnResponse));
+            $last_id = mysqli_insert_id($alleybookingsConnection);
+            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", "user" => $last_id];
+            return (json_encode($returnResponse));
         } else {
             $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-            exit(json_encode($returnResponse));
+            return(json_encode($returnResponse));
         }
     }
 }
@@ -154,9 +155,8 @@ function createListerUser($email, $firstname, $lastname, $phone)
 function hotelListerPropertiesLocation($property_location, $property_country, $property_street_address, $property_unit_number, $property_city, $zip_code, $hotelListerProperties_id)
 {
     include "config/index.php";
-    include "config/enctp.php";
-    $query_User_re = sprintf("INSERT INTO `hotelListerPropertiesLocation`(`property_location`, `property_country`, `property_street_address`, `property_unit_number`, `property_city`, `zip_code`, `hotelListerProperties_id`,)
-                     VALUES ('$property_location', '$property_country', '$property_street_address', '$property_unit_number', '$property_city', '$zip_code', '$hotelListerProperties_id)");
+    $query_User_re = sprintf("INSERT INTO `hotelListerPropertiesLocation`(`property_location`, `property_country`, `property_street_address`, `property_unit_number`, `property_city`, `zip_code`, `hotelListerProperties_id`)
+                     VALUES ('$property_location', '$property_country', '$property_street_address', $property_unit_number, '$property_city', '$zip_code', $hotelListerProperties_id)");
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
         $returnResponse = ['status' => 1];
@@ -168,9 +168,13 @@ function hotelListerPropertiesLocation($property_location, $property_country, $p
 }
 function hotelListerUserCall001($data)
 {
-    if (count($data->hotelListerUsers) == 4) {
-        if (filter_var($data->hotelListerUsers[2], FILTER_VALIDATE_EMAIL)) {
-            createListerUser($data->hotelListerUsers[2], $data->hotelListerUsers[0], $data->hotelListerUsers[1], $data->hotelListerUsers[3]);
+    if (count(get_object_vars($data->hotelListerUsers)) == 4) {
+        if (filter_var($data->hotelListerUsers->email, FILTER_VALIDATE_EMAIL)) {
+            $user_creation = json_decode(createListerUser($data->hotelListerUsers->email, $data->hotelListerUsers->first_name, $data->hotelListerUsers->last_name, $data->hotelListerUsers->phone));
+            if ($user_creation->status == 1) {
+                hotelListerPropertiesLocation($data->hotelListerPropertiesLocation->property_location, $data->hotelListerPropertiesLocation->property_country, $data->hotelListerPropertiesLocation->property_street_address, $data->hotelListerPropertiesLocation->property_unit_number, $data->hotelListerPropertiesLocation->property_city, $data->hotelListerPropertiesLocation->zip_code, $user_creation->user);
+            } else {
+            }
         } else {
             $emailRespError = ["Error" => "Invalid Email"];
             exit(json_encode($emailRespError));
