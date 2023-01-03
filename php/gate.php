@@ -97,8 +97,8 @@ function createUser()
 //       $mail->isSMTP();                                            //Send using SMTP
 //       $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
 //       $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-//       $mail->Username   = 'alleyys.com@gmail.com';                     //SMTP username
-//       $mail->Password   = 'yuceluhpldrxvyqh';                               //SMTP password
+//       $mail->Username   = 'steamledgelimited@gmail.com';                   //SMTP username
+//       $mail->Password   = 'rjwbbowhpnffazcw';                               //SMTP password
 //       $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
 //       $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
   
@@ -129,19 +129,27 @@ function createUser()
 //       // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
 //       // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
   
+    
 //       $mail->send();
-      if ($User_re) {
-        $returnResponse = ['status' => "1", 'message' => "{$email} added successfully"];
-        exit(json_encode($returnResponse));
-    // }
+//       $returnResponse = ['message' => "message sent successfully"];
+//       exit(json_encode($returnResponse));
 //   } catch (Exception $e) {
+//     $returnResponse = ['message' => "{$mail->ErrorInfo} Message could not be sent. Mailer Error"];
+//         exit(json_encode($returnResponse));
+//   }
+
+      if ($User_re) {
+        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
+        exit(json_encode($returnResponse));
+    
 }else {
-        $returnResponse = ['status' => "0", 'message' => "{$email} not created, try again"];
+        $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
         exit(json_encode($returnResponse));
     }
   }
-       
-    }
+}    
+    
+
 
 function createListerUser($email, $firstname, $lastname, $phone)
 {
