@@ -114,15 +114,15 @@ function createUser()
       $mail->Subject = "Alleybookings Account Verification";
       $mail->Body    = "
       Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
-         <br>
+         <br/>
           https://alleybookings/user/verification/?" . $verification . "
-          <br>       
+          <br/>       
           This link is only valid for 3 day, so please make sure to click on it as soon as possible.
-          <br>
+          <br/>
           Thank you,<br>
-          Ibrahim Ismail
-          <br>
-          <br>
+          Alleybookings
+          <br/>
+          <br/>
           I hope this helps! Let me know if you have any questions or need further assistance.
       \n
       ";
@@ -130,19 +130,17 @@ function createUser()
       // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
   
       $mail->send();
-      echo "<script>
-      alert('sent successfully')
-      </script>";
+      if ($User_re) {
+        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
+        exit(json_encode($returnResponse));
+    }
   } catch (Exception $e) {
-      echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    if($User_re < 0) {
+        $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
+        exit(json_encode($returnResponse));
+    }
   }
-        if ($User_re) {
-            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
-            exit(json_encode($returnResponse));
-        } else {
-            $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-            exit(json_encode($returnResponse));
-        }
+       
     }
 }
 
