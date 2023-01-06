@@ -87,68 +87,20 @@ function createUser()
         exit(json_encode($returnResponse));
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
-        
-        
-  $mail = new PHPMailer(true);
 
-//   try {
-//       //Server settings
-//     //   $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-//       $mail->isSMTP();                                            //Send using SMTP
-//       $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
-//       $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-//       $mail->Username   = 'steamledgelimited@gmail.com';                   //SMTP username
-//       $mail->Password   = 'rjwbbowhpnffazcw';                               //SMTP password
-//       $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-//       $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-  
-//       //Recipients
-//       $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
-//       $mail->addAddress($email);     //Add a recipient
-//       // $mail->addAddress('ellen@example.com');               //Name is optional
-//       // $mail->addReplyTo('info@example.com', 'Information');
-    
-  
-//       //Content
-//       $mail->isHTML(true);                                  //Set email format to HTML
-//       $mail->Subject = "Alleybookings Account Verification";
-//       $mail->Body    = "
-//       Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
-//          <br/>
-//           https://alleybookings/user/verification/?" . $verification . "
-//           <br/>       
-//           This link is only valid for 3 day, so please make sure to click on it as soon as possible.
-//           <br/>
-//           Thank you,<br>
-//           Alleybookings
-//           <br/>
-//           <br/>
-//           I hope this helps! Let me know if you have any questions or need further assistance.
-//       \n
-//       ";
-//       // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
-//       // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-  
-    
-//       $mail->send();
-//       $returnResponse = ['message' => "message sent successfully"];
-//       exit(json_encode($returnResponse));
-//   } catch (Exception $e) {
-//     $returnResponse = ['message' => "{$mail->ErrorInfo} Message could not be sent. Mailer Error"];
-//         exit(json_encode($returnResponse));
-//   }
 
-      if ($User_re) {
-        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
-        exit(json_encode($returnResponse));
-    
-}else {
-        $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-        exit(json_encode($returnResponse));
+        $mail = new PHPMailer(true);
+
+        if ($User_re) {
+            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
+            exit(json_encode($returnResponse));
+        } else {
+            $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
+            exit(json_encode($returnResponse));
+        }
     }
-  }
-}    
-    
+}
+
 
 
 function createListerUser($email, $firstname, $lastname, $phone)
@@ -190,7 +142,7 @@ function createListerUser($email, $firstname, $lastname, $phone)
             return (json_encode($returnResponse));
         } else {
             $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-            return(json_encode($returnResponse));
+            return (json_encode($returnResponse));
         }
     }
 }
@@ -203,10 +155,10 @@ function hotelListerPropertiesLocation($property_location, $property_country, $p
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
         $returnResponse = ['status' => 1];
-        return(json_encode($returnResponse));
+        return (json_encode($returnResponse));
     } else {
         $returnResponse = ['status' => 0];
-        return(json_encode($returnResponse));
+        return (json_encode($returnResponse));
     }
 }
 
@@ -218,10 +170,10 @@ function hotelListerProperties($property_name, $property_type, $property_currenc
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
         $returnResponse = ['status' => 1];
-        return(json_encode($returnResponse));
+        return (json_encode($returnResponse));
     } else {
         $returnResponse = ['status' => 0];
-        return(json_encode($returnResponse));
+        return (json_encode($returnResponse));
     }
 }
 function hotelListerUserCall001($data)
@@ -240,7 +192,7 @@ function hotelListerUserCall001($data)
                     $arr['hotelListerPropertiesLocation'] = json_decode($pLocation)->status;
                 }
                 $arr['message'] = "Successfully created an account";
-                echo json_encode($arr);    
+                echo json_encode($arr);
             } else {
             }
         } else {
@@ -261,9 +213,61 @@ function hotelListerPropertie($property_name, $property_type, $property_currency
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
         $returnResponse = ['status' => 1];
-        return(json_encode($returnResponse));
+        return (json_encode($returnResponse));
     } else {
         $returnResponse = ['status' => 0];
-        return(json_encode($returnResponse));
+        return (json_encode($returnResponse));
+    }
+}
+
+function CreateHotelPropertyDetails($data)
+{
+    if (isset($data->basicInfo)) {
+        // print_r($data->basicInfo);
+        include "config/index.php";
+        $query_User_re = sprintf("INSERT INTO `hotelListerPropertiesBasicInfo`(`name`, `startRate`, `hotelListerPropertiesId`) 
+                     VALUES ('{$data->basicInfo->propertyInfo->name}', '{$data->basicInfo->propertyInfo->starRate}', {$data->accountInfo->propertyId})");
+        $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re) {
+            $query_User_re_propertyContactDetails = sprintf("INSERT INTO `propertyContactDetails`(`name`, `phone1`, `phone2`, `company`, `hotelListerPropertiesId`) 
+                     VALUES ('{$data->basicInfo->propertyContactDetails->name}', '{$data->basicInfo->propertyContactDetails->phone1}', '{$data->basicInfo->propertyContactDetails->phone2}', '{$data->basicInfo->propertyContactDetails->company}', {$data->accountInfo->propertyId})");
+            $User_re_propertyContactDetails = mysqli_query($alleybookingsConnection, $query_User_re_propertyContactDetails) or die(mysqli_error($alleybookingsConnection));
+            $query_User_re_channelManager = sprintf("INSERT INTO `channelManager`(`status`, `content`, `hotelListerPropertiesId`) 
+                     VALUES ('{$data->basicInfo->channelManager->value}', '{$data->basicInfo->channelManager->name}',{$data->accountInfo->propertyId})");
+            $User_re_channelManager = mysqli_query($alleybookingsConnection, $query_User_re_channelManager) or die(mysqli_error($alleybookingsConnection));
+            $query_User_re_propertyLocation = sprintf("INSERT INTO `propertyLocation`(`address1`, `address2`, `country`, `city`, `zip`, `hotelListerPropertiesId`) 
+            VALUES ('{$data->basicInfo->propertyLocation->address1}', '{$data->basicInfo->propertyLocation->address2}', '{$data->basicInfo->propertyLocation->country}', '{$data->basicInfo->propertyLocation->city}', '{$data->basicInfo->propertyLocation->zip}', {$data->accountInfo->propertyId})");
+            $User_re_propertyLocation = mysqli_query($alleybookingsConnection, $query_User_re_propertyLocation) or die(mysqli_error($alleybookingsConnection));
+            //2 layoutPrice
+            $query_User_re_layoutPrice = sprintf("INSERT INTO `layoutPrice`(`roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `hotelListerPropertiesId`) 
+            VALUES ('{$data->layoutPrice->budgetDoubleRoom->roomType}', '{$data->layoutPrice->budgetDoubleRoom->roomName}', '{$data->layoutPrice->budgetDoubleRoom->customName}', '{$data->layoutPrice->budgetDoubleRoom->smokingPolicy}', '{$data->layoutPrice->budgetDoubleRoom->numRoom}', '{$data->layoutPrice->bedOptions->bedKinds}', '{$data->layoutPrice->bedOptions->numGuest}', '{$data->layoutPrice->basePricePerNight->pricePerPerson}', {$data->accountInfo->propertyId})");
+            $User_re_layoutPrice = mysqli_query($alleybookingsConnection, $query_User_re_layoutPrice) or die(mysqli_error($alleybookingsConnection));
+
+            $query_User_re_facilitiesServices = sprintf("INSERT INTO `facilitiesServices`(`avaibleForGuest_parking`, `type_parking`, `needToReserve_parking`, `availability_breakfast`, `price_breakfast`, `typeOfBreakfast_breakfast`, `languagesSpoken`, `facilities`, `hotelListerPropertiesId`) 
+            VALUES ('{$data->facilitiesServices->parking->avaibleForGuest}', '{$data->facilitiesServices->parking->type}', '{$data->facilitiesServices->parking->needToReserve}', '{$data->facilitiesServices->breakfast->availability}', '{$data->facilitiesServices->breakfast->price}', '{$data->facilitiesServices->breakfast->typeOfBreakfast}', '{$data->facilitiesServices->languagesSpoken}', '{$data->facilitiesServices->facilities}', {$data->accountInfo->propertyId})");
+            $User_re_facilitiesServices = mysqli_query($alleybookingsConnection, $query_User_re_facilitiesServices) or die(mysqli_error($alleybookingsConnection));
+
+            $query_User_re_amenties = sprintf("INSERT INTO `amenties`(`extra_extraBedOptions`, `numberOfExtra_extraBedOptions`, `amenities`, `hotelListerPropertiesId`) 
+            VALUES ('{$data->amenities->extraBedOptions->extra}', '{$data->amenities->extraBedOptions->numberOfExtra}', '{$data->amenities->amenities}', {$data->accountInfo->propertyId})");
+            $User_re_amenties = mysqli_query($alleybookingsConnection, $query_User_re_amenties) or die(mysqli_error($alleybookingsConnection));
+
+            $query_User_re_photos = sprintf("INSERT INTO `propertiesPhotos`(`content`, `hotelListerPropertiesId`) 
+            VALUES ('{$data->photos}', {$data->accountInfo->propertyId})");
+            $User_re_photos = mysqli_query($alleybookingsConnection, $query_User_re_photos) or die(mysqli_error($alleybookingsConnection));
+
+            $query_User_re_policies = sprintf("INSERT INTO `policies`(`daysInAdvance_cancellations`, `guestPay_cancellations`, `checkIn_checkTime`, `checkOut_checkTime`, `accomondateChildren`, `accomondatePet`, `hotelListerPropertiesId`) 
+            VALUES ('{$data->policies->cancellations->daysInAdvance}', '{$data->policies->cancellations->guestPay}', '{$data->policies->checkTime->checkIn}', '{$data->policies->checkTime->checkOut}', '{$data->policies->accomondateChildren}', '{$data->policies->accomondatePet}', {$data->accountInfo->propertyId})");
+            $User_re_policies = mysqli_query($alleybookingsConnection, $query_User_re_policies) or die(mysqli_error($alleybookingsConnection));
+            
+            $query_User_re_payments = sprintf("INSERT INTO `hotelListerPayments`(`chargeCreditProperty_guestPaymentOptions`, `methods_guestPaymentOptions`, `commissionPercentage_commissionPayments`, `invoiceCompanyTitle_commissionPayments`, `hotelListerPropertiesId`) 
+            VALUES ('{$data->payments->guestPaymentOptions->chargeCreditProperty}', '{$data->payments->guestPaymentOptions->methods}', '{$data->payments->commissionPayments->commissionPercentage}', '{$data->payments->commissionPayments->invoiceCompanyTitle}', {$data->accountInfo->propertyId})");
+            $User_re_payments = mysqli_query($alleybookingsConnection, $query_User_re_payments) or die(mysqli_error($alleybookingsConnection));
+
+            $query_User_re_hotelListerrights = sprintf("INSERT INTO `hotelListerrights`(`rights`, `right2`, `hotelListerPropertiesId`) 
+            VALUES ('{$data->rights[0]}', '{$data->rights[1]}', {$data->accountInfo->propertyId})");
+            $User_re_hotelListerrights = mysqli_query($alleybookingsConnection, $query_User_re_hotelListerrights) or die(mysqli_error($alleybookingsConnection));
+
+
+        }
     }
 }

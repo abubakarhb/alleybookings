@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $data = (array) json_decode($entityBody);
         if ($data['endpoint'] == "HotelListerUser") {
             hotelListerUserCall001($data['data']);
+        }elseif ($data['endpoint'] == "CreateHotelPropertyDetails") {
+            CreateHotelPropertyDetails($data['data']);
+            // print_r($data['data']);
         }
     }
 }
