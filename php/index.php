@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-// header('Content-type:application/json;charset=utf-8');
+header('Content-type:application/json;charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header('Content-Type: application/json');

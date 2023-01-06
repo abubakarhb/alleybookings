@@ -126,13 +126,11 @@ function createUser()
           I hope this helps! Let me know if you have any questions or need further assistance.
       \n
       ";
-      // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
-      // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-  
-      $mail->send();
+      
       if ($User_re) {
         $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
         exit(json_encode($returnResponse));
+        $mail->send();
     }
   } catch (Exception $e) {
     if($User_re < 0) {
