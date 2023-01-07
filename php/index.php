@@ -25,6 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "CreateHotelPropertyDetails") {
             CreateHotelPropertyDetails($data['data']);
             // print_r($data['data']);
+        } elseif ($data['endpoint'] == "hotelGeneralRoomAmenities") {
+            hotelGeneralRoomAmenities($data['data']);
+            // print_r($data['data']);
+        } elseif ($data['endpoint'] == "hotelGeneralNotification") {
+            hotelGeneralRoomAmenities($data['data']);
+            // print_r($data['data']);
         }
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -40,6 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             // print_r($data['data']);
         } elseif ($data['endpoint'] == "UpdateHotelPolicies") {
             updateHotelPolicies($data['data']);
+            // print_r($data['data']);
+        } elseif ($data['endpoint'] == "UpdateHotelMoreFacilities") {
+            updateHotelMoreFacilities($data['data']);
             // print_r($data['data']);
         }
     }
