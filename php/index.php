@@ -22,8 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $data = (array) json_decode($entityBody);
         if ($data['endpoint'] == "HotelListerUser") {
             hotelListerUserCall001($data['data']);
-        }elseif ($data['endpoint'] == "CreateHotelPropertyDetails") {
+        } elseif ($data['endpoint'] == "CreateHotelPropertyDetails") {
             CreateHotelPropertyDetails($data['data']);
+            // print_r($data['data']);
+        }
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    include 'gate.php';
+    $entityBody = file_get_contents('php://input');
+    // price_update_add($entityBody);
+    if (!empty($entityBody)) {
+        $data = (array) json_decode($entityBody);
+        if ($data['endpoint'] == "UpdateHotelHostType") {
+            updateHotelHostType($data['data']);
+        } elseif ($data['endpoint'] == "UpdateHotelPhotos") {
+            updateHotelPhotos($data['data']);
+            // print_r($data['data']);
+        } elseif ($data['endpoint'] == "UpdateHotelPolicies") {
+            updateHotelPolicies($data['data']);
             // print_r($data['data']);
         }
     }
