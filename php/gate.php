@@ -87,20 +87,65 @@ function createUser()
         exit(json_encode($returnResponse));
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+        // ?" . $verification . "
+        
+  $mail = new PHPMailer(true);
 
+  try {
+                      //Enable verbose debug output
+      $mail->isSMTP();                                            //Send using SMTP
+      $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
+      $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+      $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
+      $mail->Password   = 'snqwdcnibuxrxxnd';                               //SMTP password
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+      $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+  
+      //Recipients
+      $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
+      $mail->addAddress($email);     //Add a recipient
+     
+    
+  
+      //Content
+      $mail->isHTML(true);                                  //Set email format to HTML
+      $mail->Subject = "Alleybookings Account Verification";
+      $mail->Body    = "
+      Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
+         <br/>
+         http://localhost:3000/verifyemail
+          <br/>       
 
-        $mail = new PHPMailer(true);
-
-        if ($User_re) {
-            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
-            exit(json_encode($returnResponse));
-        } else {
-            $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-            exit(json_encode($returnResponse));
-        }
+          This link is only valid for 3 day, so please make sure to click on it as soon as possible.
+          <br/>
+          Thank you,<br>
+          Alleybookings
+          <br/>
+          <br/>
+          I hope this helps! Let me know if you have any questions or need further assistance.
+      \n
+      ";
+      // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
+      // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+  
+    
+      $mail->send();
+      if ($User_re) {
+        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "message sent successfully"];
+        exit(json_encode($returnResponse));
+    }
+    //   $returnResponse = ['message' => "message sent successfully"];
+    //   exit(json_encode($returnResponse));
+  } catch (Exception $e) {
+    if ($User_re < 1) {
+        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "{$mail->ErrorInfo} Message could not be sent. Mailer Error"];
+        exit(json_encode($returnResponse));
+    }
+    
+  }
+        
     }
 }
-
 
 
 function createListerUser($email, $firstname, $lastname, $phone)
@@ -395,5 +440,76 @@ function hotelGeneralRoomAmenities($data)
     }
 }
 
+function hotelOpenAndCloseRoom($data)
+{
+
+    if (isset($data->openClose)) {
+        //print_r($data->openClose); 
+        include "config/index.php";
+        $row = check_db_query_staus("SELECT * FROM `open_close_rooms` WHERE `room_id`= {$data->openClose->room_id}", "CHK");
+        //print_r($row);
+        if ($row['status'] == 1) {
+            $query =  "UPDATE `open_close_rooms` SET `room_id`='{$data->openClose->room_id}',`date_from`='{$data->openClose->date_from}',`date_to`='{$data->openClose->date_to}',`room_type`='{$data->openClose->room_type}',`room_selling_amount`='{$data->openClose->room_selling_amount}',`standard_rate`='{$data->openClose->standard_rate}',`non_refundable_rates`='{$data->openClose->non_refundable_rates}',`open_close_booking_status`='{$data->openClose->open_close_booking_status}',`standard_rate_status`='{$data->openClose->standard_rate_status}',`non_refundable_rates_status`='{$data->openClose->non_refundable_rates_status}' WHERE `room_id` = {$data->openClose->room_id}";
 
 
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Rooms Set for Booking are Updated successfully"];
+                exit(json_encode($arr));
+            } else {
+                $error_updating = ["Error" => "Invalid operation"];
+                exit(json_encode($error_updating));
+            }
+        } else {
+            $query = sprintf("INSERT INTO `open_close_rooms`(`room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) VALUES ('{$data->openClose->room_id}','{$data->openClose->date_from}','{$data->openClose->date_to}','{$data->openClose->room_type}','{$data->openClose->room_selling_amount}','{$data->openClose->standard_rate}','{$data->openClose->non_refundable_rates}','{$data->openClose->open_close_booking_status}','{$data->openClose->standard_rate_status}','{$data->openClose->non_refundable_rates_status}')");
+
+
+
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Rooms Successfully Set for Booking"];
+                exit(json_encode($arr));
+            } else {
+                $error_updating = ["Error" => "Invalid operation"];
+                exit(json_encode($error_updating));
+            }
+        }
+    }
+}
+
+function newsletter($data)
+{
+
+    if (isset($data)) {
+        include "config/index.php";
+        //print_r($data);
+        // Validate email address
+        if (!filter_var($data->email, FILTER_VALIDATE_EMAIL)) {
+            $error_sub = ["Error" => "Please provide a valid email address!"];
+            exit(json_encode($error_sub));
+        }
+        // Check if email exists in the database
+        $row2 = check_db_query_staus("SELECT * FROM `newsletter` WHERE `email` = '{$data->email}'", "CHK");
+        //print_r($row2);
+        if ($row2['status'] == 1) {
+            $error_sub = ["Error" => "You're already a subscriber!"];
+            exit(json_encode($error_sub));
+        } else {
+             // Insert email address into the database
+            $query = sprintf("INSERT INTO `newsletter`(`firstname`, `lastName`, `phoneNumber`, `email`) VALUES ('{$data->firstname}','{$data->lastName}','{$data->phoneNumber}','{$data->email}')");
+
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Thank you for subscribing!"];
+                exit(json_encode($arr));
+            } else {
+                $error_sub = ["Error" => "Subscription Failed"];
+                exit(json_encode($error_sub));
+            }
+         }
+    } 
+}
+
+// select all from user where created_at BETWEEN `` AND ``;
