@@ -355,11 +355,12 @@ function updateHotelPolicies($data)
 {
     include "config/index.php";
     if ((!empty($data->accountId)) && (isset($data->accountId))) {
+        $all_responses = [];
         if (isset($data->cancellations)) {
             $query = "UPDATE `policies` SET `daysInAdvance_cancellations`='{$data->cancellations->daysOfCancellations}', `guestPay_cancellations`='{$data->cancellations->PercenToChargeCancellations}' WHERE `hotelListerPropertiesId` = {$data->accountId}";
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
             if ($User_re) {
-                $arr = ["status" => 1, "message" => "Hotel information(`Cancellation Policies`) successfully updated"];
+                $all_responses[] = ["status" => 1, "message" => "Hotel information(`Cancellation Policies`) successfully updated"];
                 // exit(json_encode($arr));
             } else {
                 $error_updating = ["Error" => "Invalid operation"];
@@ -370,19 +371,67 @@ function updateHotelPolicies($data)
             $query = "UPDATE `policies` SET `checkIn_checkTime`='{$data->checks->checkInTime}', `checkOut_checkTime`='{$data->checks->checkOutTime}' WHERE `hotelListerPropertiesId` = {$data->accountId}";
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
             if ($User_re) {
-                $arr = ["status" => 1, "message" => "Hotel information(`Check-In Policies`) successfully updated"];
+                $all_responses[] = ["status" => 1, "message" => "Hotel information(`Check-In Policies`) successfully updated"];
                 // exit(json_encode($arr));
             } else {
-                $error_updating = ["Error" => "Invalid operation"];
-                exit(json_encode($error_updating));
+                $all_responses[] = ["Error" => "Invalid operation"];
+                // exit(json_encode($error_updating));
             }
         }
         if (isset($data->accomondations)) {
             $query = "UPDATE `policies` SET `accomondateChildren`='{$data->accomondations->accomondateChildren}', `accomondatePet`='{$data->accomondations->accomondatePet}' WHERE `hotelListerPropertiesId` = {$data->accountId}";
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
             if ($User_re) {
-                $arr = ["status" => 1, "message" => "Hotel information(`Accommodation Policies`) successfully updated"];
+                $all_responses[] = ["status" => 1, "message" => "Hotel information(`Accommodation Policies`) successfully updated"];
                 // exit(json_encode($arr));
+            } else {
+                $all_responses[] = ["Error" => "Invalid operation"];
+                // exit(json_encode($error_updating));
+            }
+        }
+        exit(json_encode($all_responses));
+    }
+}
+
+function updateHotelMoreFacilities($data)
+{
+    include "config/index.php";
+    if (!empty($data->accountId)) {
+        $fac_data = json_encode($data);
+        $query = "UPDATE `facilitiesServices` SET `more_facilities`='{$fac_data}' WHERE `hotelListerPropertiesId` = {$data->accountId}";
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Hotel information(`Extended Facilities and Services`) successfully updated"];
+            exit(json_encode($arr));
+        } else {
+            $error_updating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_updating));
+        }
+    }
+}
+
+function hotelGeneralRoomAmenities($data)
+{
+    include "config/index.php";
+    if (!empty($data->accountId)) {
+        $checkingLog = check_db_query_staus("SELECT `hotelListerPropertiesId` FROM `HotelListerNotifications` WHERE `hotelListerPropertiesId`= {$data->accountId}", "CHK");
+        if ($checkingLog['status'] == 1) {
+            $query = "UPDATE `HotelListerNotifications` SET `email`='{$data->email}', `automatic_reply`='{$data->automatic_reply}', `reminder`='{$data->reminder}' WHERE `hotelListerPropertiesId` = {$data->accountId}";
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Hotel information(`General Hotel Notifications`) successfully updated"];
+                exit(json_encode($arr));
+            } else {
+                $error_updating = ["Error" => "Invalid operation"];
+                exit(json_encode($error_updating));
+            }
+        } else {
+            $query = "INSERT INTO `HotelListerNotifications`(`email`, `automatic_reply`, `reminder`, `hotelListerPropertiesId`) 
+            VALUE('$data->email', '$data->automatic_reply', '$data->reminder', $data->accountId)";
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Hotel information(`Hotel General Notifications`) successfully added"];
+                exit(json_encode($arr));
             } else {
                 $error_updating = ["Error" => "Invalid operation"];
                 exit(json_encode($error_updating));
@@ -390,3 +439,77 @@ function updateHotelPolicies($data)
         }
     }
 }
+
+function hotelOpenAndCloseRoom($data)
+{
+
+    if (isset($data->openClose)) {
+        //print_r($data->openClose); 
+        include "config/index.php";
+        $row = check_db_query_staus("SELECT * FROM `open_close_rooms` WHERE `room_id`= {$data->openClose->room_id}", "CHK");
+        //print_r($row);
+        if ($row['status'] == 1) {
+            $query =  "UPDATE `open_close_rooms` SET `room_id`='{$data->openClose->room_id}',`date_from`='{$data->openClose->date_from}',`date_to`='{$data->openClose->date_to}',`room_type`='{$data->openClose->room_type}',`room_selling_amount`='{$data->openClose->room_selling_amount}',`standard_rate`='{$data->openClose->standard_rate}',`non_refundable_rates`='{$data->openClose->non_refundable_rates}',`open_close_booking_status`='{$data->openClose->open_close_booking_status}',`standard_rate_status`='{$data->openClose->standard_rate_status}',`non_refundable_rates_status`='{$data->openClose->non_refundable_rates_status}' WHERE `room_id` = {$data->openClose->room_id}";
+
+
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Rooms Set for Booking are Updated successfully"];
+                exit(json_encode($arr));
+            } else {
+                $error_updating = ["Error" => "Invalid operation"];
+                exit(json_encode($error_updating));
+            }
+        } else {
+            $query = sprintf("INSERT INTO `open_close_rooms`(`room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) VALUES ('{$data->openClose->room_id}','{$data->openClose->date_from}','{$data->openClose->date_to}','{$data->openClose->room_type}','{$data->openClose->room_selling_amount}','{$data->openClose->standard_rate}','{$data->openClose->non_refundable_rates}','{$data->openClose->open_close_booking_status}','{$data->openClose->standard_rate_status}','{$data->openClose->non_refundable_rates_status}')");
+
+
+
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Rooms Successfully Set for Booking"];
+                exit(json_encode($arr));
+            } else {
+                $error_updating = ["Error" => "Invalid operation"];
+                exit(json_encode($error_updating));
+            }
+        }
+    }
+}
+
+function newsletter($data)
+{
+
+    if (isset($data)) {
+        include "config/index.php";
+        //print_r($data);
+        // Validate email address
+        if (!filter_var($data->email, FILTER_VALIDATE_EMAIL)) {
+            $error_sub = ["Error" => "Please provide a valid email address!"];
+            exit(json_encode($error_sub));
+        }
+        // Check if email exists in the database
+        $row2 = check_db_query_staus("SELECT * FROM `newsletter` WHERE `email` = '{$data->email}'", "CHK");
+        //print_r($row2);
+        if ($row2['status'] == 1) {
+            $error_sub = ["Error" => "You're already a subscriber!"];
+            exit(json_encode($error_sub));
+        } else {
+             // Insert email address into the database
+            $query = sprintf("INSERT INTO `newsletter`(`firstname`, `lastName`, `phoneNumber`, `email`) VALUES ('{$data->firstname}','{$data->lastName}','{$data->phoneNumber}','{$data->email}')");
+
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Thank you for subscribing!"];
+                exit(json_encode($arr));
+            } else {
+                $error_sub = ["Error" => "Subscription Failed"];
+                exit(json_encode($error_sub));
+            }
+         }
+    } 
+}
+
+// select all from user where created_at BETWEEN `` AND ``;
