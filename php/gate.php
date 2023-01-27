@@ -394,3 +394,6 @@ function hotelGeneralRoomAmenities($data)
         }
     }
 }
+
+
+
