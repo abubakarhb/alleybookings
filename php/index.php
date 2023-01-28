@@ -13,6 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         login($username, $password);
     } elseif (isset($_GET['createEndUser'])) {
         createUser();
+    }elseif (isset($_GET['reservationDetail'])) {
+        //print_r($_GET['user_id']);
+        reservationDetail($_GET);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
