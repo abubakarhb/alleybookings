@@ -497,7 +497,7 @@ function newsletter($data)
             exit(json_encode($error_sub));
         } else {
              // Insert email address into the database
-            $query = sprintf("INSERT INTO `newsletter`(`firstname`, `lastName`, `phoneNumber`, `email`) VALUES ('{$data->firstname}','{$data->lastName}','{$data->phoneNumber}','{$data->email}')");
+             $query = sprintf("INSERT INTO `newsletter`(`firstname`, `lastName`, `phoneNumber`, `email`,`country`,`city`) VALUES ('{$data->firstname}','{$data->lastName}','{$data->phoneNumber}','{$data->email}','{$data->country}', '{$data->city}')");
 
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
 
@@ -505,7 +505,7 @@ function newsletter($data)
                 $arr = ["status" => 1, "message" => "Thank you for subscribing!"];
                 exit(json_encode($arr));
             } else {
-                $error_sub = ["Error" => "Subscription Failed"];
+                $error_sub = ["status" => 0, "Error" => "Subscription Failed"];
                 exit(json_encode($error_sub));
             }
          }
