@@ -86,7 +86,7 @@ function check_db_query_staus1($db_state, $db_actions)
                     $all = [];
                     while ($row_User_re = mysqli_fetch_assoc($User_re)) {
                         $all[] = $row_User_re;
-                        // $User_re11 = mysqli_query($alleybookingsConnection, "INSERT INTO mda(`fullname`) VALUE('{$row_User_re['COL_3']}')") or die(mysqli_error($alleybookingsConnection));
+                        // $User_re11 = mysqli_query($ibsConnection, "INSERT INTO mda(`fullname`) VALUE('{$row_User_re['COL_3']}')") or die(mysqli_error($ibsConnection));
                     };
                     $arr = ['status' => 1, 'message' => $all];
                     return ($arr);
@@ -104,8 +104,6 @@ function check_db_query_staus1($db_state, $db_actions)
             break;
     }
 }
-
-
 function login($username, $password)
 {
     include "config/index.php";
@@ -115,7 +113,7 @@ function login($username, $password)
     $totalRows_User_re = mysqli_num_rows($User_re);
     if ($totalRows_User_re > 0) {
         if ($row_User_re['password'] == $password) {
-            $arr = ['status' => 1, 'message' => 'Buzzing you in 😎', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']];
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']];
             exit(json_encode($arr));
         }
     } else {
@@ -130,7 +128,7 @@ function createUser()
     $password = $_GET['password'];
     $firstname = $_GET['firstname'];
     $lastname = $_GET['lastname'];
-    $verification = encripted_data($email . "£" . "30" . "_");
+    $verification = encripted_data($email . "Â£" . "30" . "_");
     $query_User_re = sprintf("INSERT INTO `endUsers`(`first_name`, `last_name`, `email`, `password`,`verification_status`) 
                     VALUES ('$firstname', '$lastname', '$email', '$password','$verification')");
     $check_exist = check_db_query_staus("SELECT email FROM endUsers WHERE email='{$email}'", "CHK");
@@ -140,27 +138,72 @@ function createUser()
         exit(json_encode($returnResponse));
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+        // ?" . $verification . "
+        
+  $mail = new PHPMailer(true);
 
+  try {
+                      //Enable verbose debug output
+      $mail->isSMTP();                                            //Send using SMTP
+      $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
+      $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+      $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
+      $mail->Password   = 'snqwdcnibuxrxxnd';                               //SMTP password
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+      $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+  
+      //Recipients
+      $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
+      $mail->addAddress($email);     //Add a recipient
+     
+    
+  
+      //Content
+      $mail->isHTML(true);                                  //Set email format to HTML
+      $mail->Subject = "Alleybookings Account Verification";
+      $mail->Body    = "
+      Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
+         <br/>
+         http://localhost:3000/verifyemail
+          <br/>       
 
-        $mail = new PHPMailer(true);
-
-        if ($User_re) {
-            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
-            exit(json_encode($returnResponse));
-        } else {
-            $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-            exit(json_encode($returnResponse));
-        }
+          This link is only valid for 3 day, so please make sure to click on it as soon as possible.
+          <br/>
+          Thank you,<br>
+          Alleybookings
+          <br/>
+          <br/>
+          I hope this helps! Let me know if you have any questions or need further assistance.
+      \n
+      ";
+      // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
+      // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+  
+    
+      $mail->send();
+      if ($User_re) {
+        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "message sent successfully"];
+        exit(json_encode($returnResponse));
+    }
+    //   $returnResponse = ['message' => "message sent successfully"];
+    //   exit(json_encode($returnResponse));
+  } catch (Exception $e) {
+    if ($User_re < 1) {
+        $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "{$mail->ErrorInfo} Message could not be sent. Mailer Error"];
+        exit(json_encode($returnResponse));
+    }
+    
+  }
+        
     }
 }
-
 
 
 function createListerUser($email, $firstname, $lastname, $phone)
 {
     include "config/index.php";
     include "config/enctp.php";
-    $verification = encripted_data($email . "££" . "30" . "_");
+    $verification = encripted_data($email . "Â£Â£" . "30" . "_");
     $query_User_re = sprintf("INSERT INTO `hotelListerUsers`(`first_name`, `last_name`, `email`, `phone_number`) 
                         VALUES ('$firstname','$lastname','$email','$phone')");
     $check_exist = check_db_query_staus("SELECT email FROM hotelListerUsers WHERE email='{$email}'", "CHK");
@@ -504,8 +547,8 @@ function newsletter($data)
             $error_sub = ["Error" => "You're already a subscriber!"];
             exit(json_encode($error_sub));
         } else {
-            // Insert email address into the database
-            $query = sprintf("INSERT INTO `newsletter`(`firstname`, `lastName`, `phoneNumber`, `email`) VALUES ('{$data->firstname}','{$data->lastName}','{$data->phoneNumber}','{$data->email}')");
+             // Insert email address into the database
+             $query = sprintf("INSERT INTO `newsletter`(`firstname`, `lastName`, `phoneNumber`, `email`,`country`,`city`) VALUES ('{$data->firstname}','{$data->lastName}','{$data->phoneNumber}','{$data->email}','{$data->country}', '{$data->city}')");
 
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
 
@@ -516,9 +559,10 @@ function newsletter($data)
                 $error_sub = ["Error" => "Subscription Failed"];
                 exit(json_encode($error_sub));
             }
-        }
-    }
+         }
+    } 
 }
+
 function reservationDetail()
 {
     include "config/index.php";
@@ -607,4 +651,3 @@ function singleUserReservation($data)
     exit(json_encode($pull_data));
 }
 // select all from user where created_at BETWEEN `` AND ``;
-
