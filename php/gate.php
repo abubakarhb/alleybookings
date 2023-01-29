@@ -601,5 +601,10 @@ function singleHotelReservation($data)
     $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE `property_id`= '{$data}' ", "CHK");
     exit(json_encode($pull_data));
 }
+function singleUserReservation($data)
+{
+    $pull_data = check_db_query_staus("SELECT * FROM `hotelReservation` WHERE `id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
 // select all from user where created_at BETWEEN `` AND ``;
 
