@@ -53,6 +53,59 @@ function check_db_query_staus($db_state, $db_actions)
             break;
     }
 }
+
+function check_db_query_staus1($db_state, $db_actions)
+{
+    include "config/index.php";
+    $query_User_re = sprintf($db_state);
+    $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+
+    $totalRows_User_re = mysqli_num_rows($User_re);
+    switch ($db_actions) {
+        case 'DEL':
+            if ($User_re) {
+                $returnResponse = ['status' => 1, 'message' => "Deleted successfully"];
+                return ($returnResponse);
+            } else {
+                $returnResponse = ['status' => 0, 'message' => "try again"];
+                return ($returnResponse);
+            }
+            break;
+        case 'UPD':
+            if ($User_re) {
+                $returnResponse = ['status' => 1, 'message' => "Updated successfully"];
+                return ($returnResponse);
+            } else {
+                $returnResponse = ['status' => 0, 'message' => "try again"];
+                return ($returnResponse);
+            }
+            break;
+        case 'CHK':
+            if ($User_re) {
+                if ($totalRows_User_re > 0) {
+                    $all = [];
+                    while ($row_User_re = mysqli_fetch_assoc($User_re)) {
+                        $all[] = $row_User_re;
+                        // $User_re11 = mysqli_query($alleybookingsConnection, "INSERT INTO mda(`fullname`) VALUE('{$row_User_re['COL_3']}')") or die(mysqli_error($alleybookingsConnection));
+                    };
+                    $arr = ['status' => 1, 'message' => $all];
+                    return ($arr);
+                } else {
+                    $returnResponse = ['status' => 0, 'message' => "try again"];
+                    return ($returnResponse);
+                }
+            } else {
+                $returnResponse = ['status' => 0, 'message' => "try again"];
+                return ($returnResponse);
+            }
+            break;
+
+        default:
+            break;
+    }
+}
+
+
 function login($username, $password)
 {
     include "config/index.php";
@@ -542,5 +595,10 @@ function reservationDetail()
     // INSERT INTO invoices (invoice_number, payer_id, revenue_head, due_date, payment_status) 
     //                   VALUES ('$invoice_number', $payer_id, $revenue_head_id,'$due_date', 2)";
     
+}
+function singleHotelReservation($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
 }
 // select all from user where created_at BETWEEN `` AND ``;
