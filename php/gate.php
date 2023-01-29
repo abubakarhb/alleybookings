@@ -602,4 +602,4 @@ function singleHotelReservation($data)
     exit(json_encode($pull_data));
 }
 // select all from user where created_at BETWEEN `` AND ``;
-// select all from user where created_at BETWEEN `` AND ``;
+
