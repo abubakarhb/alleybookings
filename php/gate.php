@@ -650,4 +650,36 @@ function singleUserReservation($data)
     $pull_data = check_db_query_staus("SELECT * FROM `hotelReservation` WHERE `id`= '{$data}' ", "CHK");
     exit(json_encode($pull_data));
 }
+
+function getAllRoomType($data){
+    $pull_data = check_db_query_staus1("SELECT * FROM `layoutPrice` WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+
+function copyYearlyRate($data){
+    // print_r($data);
+    include "config/index.php";
+   $property_id = $data->property_id;
+   $date_from = $data->date_from;
+   $date_to = $data->date_to;
+   $days_of_week =  $data->days_of_week;
+   $room_type =  $data->room_type;
+   $rate_changes = $data->rate_changes;
+   $restriction = $data->restriction;
+   
+   $query = sprintf("INSERT INTO `copy_of_yearly_rate`(`property_id`, `rates_from`, `rates_to`, `days_of_week`, `room_type`, `rate_changes`, `restriction`) VALUES ('$property_id','$date_from','$date_to','$days_of_week','$room_type','$rate_changes','$restriction')");
+   //print_r($query);die;
+   $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+   if ($User_re) {
+       $arr = ["status" => 1, "message" => "Yearly Rates Successfully Created for Copying into Existing Rate"];
+       exit(json_encode($arr));
+   } else {
+       $error_creating = ["Error" => "Invalid operation"];
+       exit(json_encode($error_creating));
+   }
+
+}
+
 // select all from user where created_at BETWEEN `` AND ``;
