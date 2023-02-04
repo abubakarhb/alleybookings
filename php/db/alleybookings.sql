@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.3
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 07, 2023 at 06:19 PM
+-- Generation Time: Jan 29, 2023 at 04:05 PM
 -- Server version: 10.4.21-MariaDB
--- PHP Version: 7.4.28
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -120,7 +120,7 @@ CREATE TABLE `endUsers` (
 INSERT INTO `endUsers` (`id`, `first_name`, `last_name`, `email`, `password`, `verification_status`, `time_in`) VALUES
 (31, 'abu', 'ab', 'assadeeq543@gmail.com', '12345', 'TFBKTW82MTFlWk1XSlhXeTVDUkpKR0NHZDJyME1WeE5QVXREMGpTN1RSQT0=', '2023-01-03 15:36:40'),
 (32, 'abu', 'ab', 'assadee2q543@gmail.com', '12345', 'TVBQQzUzMnFXSDhMVWFzc2FHWk5UUlJVOHlLeGx1M0QwV1Y2aHdLd0JQQT0=', '2023-01-03 17:04:13'),
-(33, 'fgdhjfjhf', 'htfjyrf', 'fgsgrs@sss.von', 'sdfwfrw', 'Zzd0blBLVUxyMDU2WjVkaGovd0UwUTZUNFU0SHlPaHZVZ2Q0Q0F3Y1lJUT0=', '2023-01-03 17:45:15'),
+(33, 'Mohammed', 'Hassan', 'fgsgrs@sss.von', 'sdfwfrw', 'Zzd0blBLVUxyMDU2WjVkaGovd0UwUTZUNFU0SHlPaHZVZ2Q0Q0F3Y1lJUT0=', '2023-01-28 05:56:49'),
 (34, 'Abubakar', 'Bello', 'assadeeq543a@gmail.com', '1234', 'dHBpT0ZQWjRpR0RZVkhFQ24yUVVUVWhJOERHMTlHckVJRmpJSXZ4SEZicz0=', '2023-01-03 18:10:49'),
 (35, 'Abubakar', 'Bello', 'assadeeq543sa@gmail.com', '1234', 'Ulhlc1J3R2xFaUVIMW9OLzhTSlhQODR1UU5qcldTSGQ5RnFQbVVPTnNmUT0=', '2023-01-03 18:10:59');
 
@@ -232,8 +232,8 @@ CREATE TABLE `hotelListerPayments` (
 --
 
 INSERT INTO `hotelListerPayments` (`id`, `chargeCreditProperty_guestPaymentOptions`, `methods_guestPaymentOptions`, `commissionPercentage_commissionPayments`, `invoiceCompanyTitle_commissionPayments`, `hotelListerPropertiesId`) VALUES
-(1, '1', 'string', 4.50, 'string', 24),
-(2, '1', 'string', 4.50, 'string', 24),
+(1, '10', 'string', 4.50, 'string', 1),
+(2, '1', 'string', 4.50, 'string', 2),
 (3, '1', 'string', 4.50, 'string', 24);
 
 -- --------------------------------------------------------
@@ -259,10 +259,10 @@ CREATE TABLE `hotelListerProperties` (
 --
 
 INSERT INTO `hotelListerProperties` (`id`, `property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`, `time_in`) VALUES
-(1, 'ee', 1, 'NG', 'z12', 1, 1, 24, '2023-01-03 13:29:47'),
-(2, 'ee', 1, 'NG', 'z12', 1, 1, 25, '2023-01-03 13:30:08'),
+(1, 'City Garden Hotel', 1, 'NG', '564ED', 1, 1, 24, '2023-01-28 22:35:05'),
+(2, 'Royal Guest Hotel', 1, 'NG', 'z12', 1, 1, 25, '2023-01-28 05:58:41'),
 (3, 'ee', 1, 'NG', 'z12', 1, 1, 26, '2023-01-03 15:32:40'),
-(4, 'ee', 1, 'NG', 'z12', 1, 1, 27, '2023-01-06 16:02:10');
+(4, 'ee', 1, 'NG', 'z12', 1, 1, 27, '2023-01-20 16:09:03');
 
 -- --------------------------------------------------------
 
@@ -335,8 +335,8 @@ CREATE TABLE `hotelListerPropertiesLocation` (
 --
 
 INSERT INTO `hotelListerPropertiesLocation` (`id`, `property_location`, `property_country`, `property_street_address`, `property_unit_number`, `property_city`, `zip_code`, `hotelListerProperties_id`, `time_in`) VALUES
-(1, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 16, '2023-01-03 12:46:20'),
-(2, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 17, '2023-01-03 13:11:07'),
+(1, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 1, '2023-01-27 22:51:49'),
+(2, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 2, '2023-01-28 05:59:32'),
 (3, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 18, '2023-01-03 13:20:45'),
 (4, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 19, '2023-01-03 13:21:17'),
 (5, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 20, '2023-01-03 13:21:54'),
@@ -420,6 +420,40 @@ INSERT INTO `hotelListerUsers` (`id`, `first_name`, `last_name`, `email`, `phone
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hotelReservation`
+--
+
+CREATE TABLE `hotelReservation` (
+  `id` int(11) NOT NULL,
+  `property_id` bigint(20) NOT NULL,
+  `property_name` varchar(300) NOT NULL,
+  `property_location` varchar(200) NOT NULL,
+  `room_type` varchar(200) NOT NULL,
+  `room_name` varchar(200) NOT NULL,
+  `guest_name` varchar(300) NOT NULL,
+  `check_in` varchar(200) NOT NULL,
+  `check_out` varchar(200) NOT NULL DEFAULT 'Not Specified yet',
+  `status` enum('Yes','No') NOT NULL,
+  `total_payment` varchar(200) NOT NULL,
+  `commission` varchar(300) NOT NULL,
+  `reservation_no` varchar(300) NOT NULL,
+  `book_on` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `hotelReservation`
+--
+
+INSERT INTO `hotelReservation` (`id`, `property_id`, `property_name`, `property_location`, `room_type`, `room_name`, `guest_name`, `check_in`, `check_out`, `status`, `total_payment`, `commission`, `reservation_no`, `book_on`) VALUES
+(1, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Abubakar Bello', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '10', '4.50', '1674947209', '2023-01-28 22:52:03'),
+(2, 2, 'Royal Guest Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Abubakar Bello', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '1', '4.50', '1674946465', '2023-01-28 22:52:32'),
+(3, 2, 'Royal Guest Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Mohammed Hassan', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '1', '4.50', '1674946409', '2023-01-28 22:52:40'),
+(4, 1, 'City Garden Hotel', 'ui', 'Room for Extended Stay', 'RFE 123', 'Abubakar Bello', '01/29/2023 03:58 pm', 'Not Specified yet', 'Yes', '10', '4.50', '1675004730', '2023-01-29 14:58:05'),
+(5, 1, 'City Garden Hotel', 'ui', 'Suite / Executive Suite', 'SES-001', 'Mohammed Hassan', '01/29/2023 04:03 pm', 'Not Specified yet', 'Yes', '10', '4.50', '1675005489', '2023-01-29 15:03:13');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `layoutPrice`
 --
 
@@ -433,33 +467,84 @@ CREATE TABLE `layoutPrice` (
   `bedKind_bedOptions` varchar(255) NOT NULL,
   `numGuest_bedOptions` int(255) NOT NULL,
   `pricePerPerson_basePricePerNight` double(10,2) NOT NULL,
-  `hotelListerPropertiesId` int(255) NOT NULL
+  `hotelListerPropertiesId` int(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `layoutPrice`
 --
 
-INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `hotelListerPropertiesId`) VALUES
-(1, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(2, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(3, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(4, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(5, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(6, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(7, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(8, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(9, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(10, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(11, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(12, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(13, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(14, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(15, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(16, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(17, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(18, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24),
-(19, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24);
+INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `hotelListerPropertiesId`, `created_at`) VALUES
+(1, 'Presidential Suite', 'CHF-125', 'string', 'string', 1, 'string', 2, 2.50, 1, '2023-01-28 22:49:17'),
+(2, 'Suite / Executive Suite', 'SES-001', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:49:24'),
+(3, 'Room for Extended Stay', 'RFE 123', 'string', 'string', 1, 'string', 2, 2.50, 1, '2023-01-28 22:29:44'),
+(4, 'King', 'string', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:29:49'),
+(5, 'Queen', 'string', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:29:53'),
+(6, 'Single', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-28 06:31:12'),
+(7, 'Double', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-28 06:31:33'),
+(8, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-18 23:00:00'),
+(9, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-18 23:00:00'),
+(10, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-25 07:37:28'),
+(11, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(12, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(13, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(14, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(15, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(16, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(17, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(18, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(19, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletter`
+--
+
+CREATE TABLE `newsletter` (
+  `id` int(11) NOT NULL,
+  `firstname` varchar(200) NOT NULL,
+  `lastName` varchar(200) NOT NULL,
+  `phoneNumber` varchar(200) NOT NULL,
+  `email` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `newsletter`
+--
+
+INSERT INTO `newsletter` (`id`, `firstname`, `lastName`, `phoneNumber`, `email`) VALUES
+(1, 'First Name', 'Last Name', '070896875', 'ccc@gmail.com'),
+(2, 'First Name of another', 'Last Name of another', '070896875345', 'string@gmail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `open_close_rooms`
+--
+
+CREATE TABLE `open_close_rooms` (
+  `id` int(11) NOT NULL,
+  `room_id` tinyint(11) NOT NULL,
+  `date_from` varchar(200) NOT NULL,
+  `date_to` varchar(200) NOT NULL,
+  `room_type` varchar(300) NOT NULL,
+  `room_selling_amount` float NOT NULL,
+  `standard_rate` float NOT NULL,
+  `non_refundable_rates` float NOT NULL,
+  `open_close_booking_status` enum('active','inactive') NOT NULL,
+  `standard_rate_status` enum('active','inactive') NOT NULL,
+  `non_refundable_rates_status` enum('active','inactive') DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `open_close_rooms`
+--
+
+INSERT INTO `open_close_rooms` (`id`, `room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`, `created_at`) VALUES
+(1, 1, '2023-01-17', '2023-01-17', 'string', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-01-24 09:38:47');
 
 -- --------------------------------------------------------
 
@@ -684,9 +769,27 @@ ALTER TABLE `hotelListerUsers`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hotelReservation`
+--
+ALTER TABLE `hotelReservation`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `layoutPrice`
 --
 ALTER TABLE `layoutPrice`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `newsletter`
+--
+ALTER TABLE `newsletter`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `open_close_rooms`
+--
+ALTER TABLE `open_close_rooms`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -763,7 +866,7 @@ ALTER TABLE `hotelListerPayments`
 -- AUTO_INCREMENT for table `hotelListerProperties`
 --
 ALTER TABLE `hotelListerProperties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `hotelListerPropertiesBasicInfo`
@@ -790,10 +893,28 @@ ALTER TABLE `hotelListerUsers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
+-- AUTO_INCREMENT for table `hotelReservation`
+--
+ALTER TABLE `hotelReservation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `layoutPrice`
 --
 ALTER TABLE `layoutPrice`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `newsletter`
+--
+ALTER TABLE `newsletter`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `open_close_rooms`
+--
+ALTER TABLE `open_close_rooms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `policies`

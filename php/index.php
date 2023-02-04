@@ -13,6 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         login($username, $password);
     } elseif (isset($_GET['createEndUser'])) {
         createUser();
+    }elseif (isset($_GET['reservationDetail'])) {;
+        reservationDetail($_GET);
+    }elseif (isset($_GET['singleHotelReservation'])) {
+        singleHotelReservation($_GET['property_id']);
+    } elseif (isset($_GET['singleUserReservation'])) {
+        singleUserReservation($_GET['id']);
+    }elseif (isset($_GET['getAllRoomType'])) {
+        getAllRoomType($_GET['property_id']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
@@ -37,6 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }  elseif ($data['endpoint'] == "newsletter") {
             newsletter($data['data']);
             // print_r($data['data']);
+        }  elseif ($data['endpoint'] == "copyYearlyRate") {
+            copyYearlyRate($data['data']);
+             //print_r($data['data']);
         } 
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
