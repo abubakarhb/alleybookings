@@ -651,13 +651,15 @@ function singleUserReservation($data)
     exit(json_encode($pull_data));
 }
 
-function getAllRoomType($data){
+function getAllRoomType($data)
+{
     $pull_data = check_db_query_staus1("SELECT * FROM `layoutPrice` WHERE `property_id`= '{$data}' ", "CHK");
     exit(json_encode($pull_data));
 }
 
 
-function copyYearlyRate($data){
+function copyYearlyRate($data)
+{
     // print_r($data);
     include "config/index.php";
    $property_id = $data->property_id;
