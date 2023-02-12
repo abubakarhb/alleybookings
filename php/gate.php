@@ -986,7 +986,7 @@ function searchFiltering()
     AND open_close_rooms.date_from >= '$checkin'";
 
         $User_re = mysqli_query($alleybookingsConnection, $pull_data) or die(mysqli_error($alleybookingsConnection));
-        if ($User_re > 0) {
+        if ($User_re) {
             $all = [];
             while ($row_User_re = mysqli_fetch_assoc($User_re)) {
                 $all[] = $row_User_re;
@@ -1004,13 +1004,12 @@ function searchFiltering()
                 $getAllRooms = check_db_query_staus1("SELECT * FROM layoutPrice WHERE `hotelListerPropertiesId` = {$value2} ORDER BY pricePerPerson_basePricePerNight DESC LIMIT 1", "CHK");
                 // print_r($getAllRooms);
                 foreach ($existence_hotels as $key3 => $value3) {
-                    if($value3['id'] == $value2) {
+                    if ($value3['id'] == $value2) {
                         $existence_hotels[$key3]['rooms'] = $getAllRooms['message'];
                     }
                 }
             }
             exit(json_encode($existence_hotels));
-
         }
     } elseif (!empty($property_location)) {
         //   print_r("yes");
