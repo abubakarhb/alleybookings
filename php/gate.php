@@ -974,11 +974,14 @@ function searchFiltering()
         hotelListerPropertiesLocation.property_country,
         hotelListerPropertiesLocation.property_city,
         open_close_rooms.date_from,
-        open_close_rooms.date_to
+        open_close_rooms.date_to,
+        propertiesPhotos.content
     FROM
         hotelListerProperties
     JOIN hotelListerPropertiesLocation ON hotelListerProperties.id = hotelListerPropertiesLocation.hotelListerProperties_id
     JOIN open_close_rooms ON hotelListerProperties.id = open_close_rooms.property_id
+    JOIN propertiesPhotos ON hotelListerProperties.id = propertiesPhotos.hotelListerPropertiesId
+
     WHERE
         (
             hotelListerPropertiesLocation.property_location LIKE '%$property_location%' OR hotelListerPropertiesLocation.property_country LIKE '%$property_location%' OR hotelListerPropertiesLocation.property_city LIKE '%$property_location%' OR hotelListerProperties.property_name LIKE '%$property_location%'
@@ -989,6 +992,7 @@ function searchFiltering()
         if ($User_re) {
             $all = [];
             while ($row_User_re = mysqli_fetch_assoc($User_re)) {
+                $row_User_re['content'] = explode("~", $row_User_re['content']);
                 $all[] = $row_User_re;
             };
             $existence_hotels_index = [];
