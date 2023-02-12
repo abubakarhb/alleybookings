@@ -1001,11 +1001,11 @@ function searchFiltering()
                 }
             }
             foreach ($existence_hotels_index as $keys => $value2) {
-                $getAllRooms = check_db_query_staus1("SELECT * FROM layoutPrice WHERE `hotelListerPropertiesId` = {$value2}", "CHK");
+                $getAllRooms = check_db_query_staus1("SELECT * FROM layoutPrice WHERE `hotelListerPropertiesId` = {$value2} ORDER BY pricePerPerson_basePricePerNight DESC LIMIT 1", "CHK");
                 // print_r($getAllRooms);
                 foreach ($existence_hotels as $key3 => $value3) {
                     if($value3['id'] == $value2) {
-                        $value3['rooms'] = $getAllRooms['message'];
+                        $existence_hotels[$key3]['rooms'] = $getAllRooms['message'];
                     }
                 }
             }
