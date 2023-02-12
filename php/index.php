@@ -11,16 +11,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $username = (string) $_GET['email'];
         $password = (string) $_GET['password'];
         login($username, $password);
-    } elseif (isset($_GET['createEndUser'])) {
+    }   elseif (isset($_GET['createEndUser'])) {
         createUser();
-    }elseif (isset($_GET['reservationDetail'])) {;
+    }   elseif (isset($_GET['reservationDetail'])) {;
         reservationDetail($_GET);
-    }elseif (isset($_GET['singleHotelReservation'])) {
+    }   elseif (isset($_GET['singleHotelReservation'])) {
         singleHotelReservation($_GET['property_id']);
-    } elseif (isset($_GET['singleUserReservation'])) {
+    }   elseif (isset($_GET['singleUserReservation'])) {
         singleUserReservation($_GET['id']);
-    }elseif (isset($_GET['getAllRoomType'])) {
-        getAllRoomType($_GET['property_id']);
+    }   elseif (isset($_GET['HotelReservationStatement'])) {
+        HotelReservationStatement($_GET);
+    }   elseif (isset($_GET['getAllRoom'])) {
+        getAllRoom($_GET['hotelListerPropertiesId']);
+    }   elseif (isset($_GET['getSingleRoom'])) {
+        getSingleRoom($_GET['id']);
+    }   elseif (isset($_GET['getAllRoomType'])) {
+        getAllRoomType($_GET['hotelListerPropertiesId']);
+    }   elseif (isset($_GET['reservationGrossRevenue'])) {
+        reservationGrossRevenue($_GET['property_id']);
+    }   elseif (isset($_GET['reservationCommision'])) {
+        reservationCommision($_GET['property_id']);
+    }   elseif (isset($_GET['VATDetails'])) {
+        VATDetails($_GET);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
@@ -48,6 +60,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }  elseif ($data['endpoint'] == "copyYearlyRate") {
             copyYearlyRate($data['data']);
              //print_r($data['data']);
+        } elseif ($data['endpoint'] == "insertRoomDetails") {
+            insertRoomDetails($data['data']);
+             //print_r($data['data']);
+        } elseif ($data['endpoint'] == "propertyRoomAndOtherDiscription") {
+            propertyRoomAndOtherDescription($data['data']);
+             //print_r($data['data']);
+        } elseif ($data['endpoint'] == "invoice") {
+            invoice($data['data']);
+             //print_r($data['data']);
+        } elseif ($data['endpoint'] == "hotelListerAgent") {
+            hotelListerAgent($data['data']);
+             //print_r($data['data']);
+        } elseif ($data['endpoint'] == "healthAndSafety") {
+            healthAndSafety($data['data']);
+             //print_r($data['data']);
         } 
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -66,6 +93,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             // print_r($data['data']);
         } elseif ($data['endpoint'] == "UpdateHotelMoreFacilities") {
             updateHotelMoreFacilities($data['data']);
+            // print_r($data['data']);
+        } elseif ($data['endpoint'] == "UpdateSingleRoom") {
+            updateSingleRoom($data['data']);
             // print_r($data['data']);
         }
     }
