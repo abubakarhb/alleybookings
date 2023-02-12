@@ -991,7 +991,25 @@ function searchFiltering()
             while ($row_User_re = mysqli_fetch_assoc($User_re)) {
                 $all[] = $row_User_re;
             };
-            print_r($all);
+            $existence_hotels_index = [];
+            $existence_hotels = [];
+            foreach ($all as $key => $value) {
+                if (in_array($value['id'], $existence_hotels_index)) {
+                } else {
+                    $existence_hotels_index[] = $value['id'];
+                    $existence_hotels[] = $value;
+                }
+            }
+            foreach ($existence_hotels_index as $keys => $value2) {
+                $getAllRooms = check_db_query_staus1("SELECT * FROM layoutPrice WHERE `hotelListerPropertiesId` = {$value2}", "CHK");
+                // print_r($getAllRooms);
+                foreach ($existence_hotels as $key3 => $value3) {
+                    if($value3['id'] == $value2) {
+                        $value3['rooms'] = $getAllRooms['message'];
+                    }
+                }
+            }
+            print_r($existence_hotels);
 
         }
     } elseif (!empty($property_location)) {
@@ -1004,7 +1022,6 @@ function searchFiltering()
                 $all[] = $row_User_re;
             };
             print_r($all);
-
         }
     }
 }

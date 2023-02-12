@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 12, 2023 at 03:09 PM
+-- Generation Time: Feb 12, 2023 at 05:52 PM
 -- Server version: 10.4.21-MariaDB
--- PHP Version: 8.1.6
+-- PHP Version: 7.4.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -499,10 +499,11 @@ CREATE TABLE `hotelReservation` (
   `property_location` varchar(200) NOT NULL,
   `room_type` varchar(200) NOT NULL,
   `room_name` varchar(200) NOT NULL,
+  `room_id` int(255) NOT NULL,
   `guest_name` varchar(300) NOT NULL,
-  `check_in` varchar(200) NOT NULL,
-  `check_out` varchar(200) NOT NULL DEFAULT 'Not Specified yet',
   `status` enum('Yes','No') NOT NULL,
+  `check_in` date NOT NULL,
+  `check_out` date NOT NULL,
   `total_payment` varchar(200) NOT NULL,
   `commission` varchar(300) NOT NULL,
   `reservation_no` varchar(300) NOT NULL,
@@ -513,12 +514,12 @@ CREATE TABLE `hotelReservation` (
 -- Dumping data for table `hotelReservation`
 --
 
-INSERT INTO `hotelReservation` (`id`, `property_id`, `property_name`, `property_location`, `room_type`, `room_name`, `guest_name`, `check_in`, `check_out`, `status`, `total_payment`, `commission`, `reservation_no`, `book_on`) VALUES
-(1, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Abubakar Bello', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '10', '4.50', '1674947209', '2023-01-28 22:52:03'),
-(2, 2, 'Royal Guest Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Abubakar Bello', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '1', '4.50', '1674946465', '2023-01-28 22:52:32'),
-(3, 2, 'Royal Guest Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Mohammed Hassan', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '1', '4.50', '1674946409', '2023-01-28 22:52:40'),
-(4, 1, 'City Garden Hotel', 'ui', 'Room for Extended Stay', 'RFE 123', 'Abubakar Bello', '01/29/2023 03:58 pm', 'Not Specified yet', 'Yes', '10', '4.50', '1675004730', '2023-01-29 14:58:05'),
-(5, 1, 'City Garden Hotel', 'ui', 'Suite / Executive Suite', 'SES-001', 'Mohammed Hassan', '01/29/2023 04:03 pm', 'Not Specified yet', 'Yes', '10', '4.50', '1675005489', '2023-01-29 15:03:13');
+INSERT INTO `hotelReservation` (`id`, `property_id`, `property_name`, `property_location`, `room_type`, `room_name`, `room_id`, `guest_name`, `status`, `check_in`, `check_out`, `total_payment`, `commission`, `reservation_no`, `book_on`) VALUES
+(1, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'CHF-125', 1, 'Abubakar Bello', 'Yes', '2023-02-12', '2023-02-13', '10', '4.50', '1674947209', '2023-01-28 22:52:03'),
+(2, 2, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Abubakar Bello', 'Yes', '2023-02-13', '2023-02-14', '1', '4.50', '1674946465', '2023-01-28 22:52:32'),
+(3, 2, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Mohammed Hassan', 'Yes', '2023-02-05', '2023-02-07', '1', '4.50', '1674946409', '2023-01-28 22:52:40'),
+(4, 1, 'City Garden Hotel', 'ui', 'Room for Extended Stay', 'RFE 123', 3, 'Abubakar Bello', 'Yes', '2023-02-15', '2023-02-17', '10', '4.50', '1675004730', '2023-01-29 14:58:05'),
+(5, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'SES-001', 1, 'Mohammed Hassan', 'Yes', '2023-02-08', '2023-02-10', '10', '4.50', '1675005489', '2023-01-29 15:03:13');
 
 -- --------------------------------------------------------
 
@@ -656,10 +657,10 @@ INSERT INTO `newsletter` (`id`, `firstname`, `lastName`, `phoneNumber`, `email`)
 
 CREATE TABLE `open_close_rooms` (
   `id` int(11) NOT NULL,
-  `room_id` tinyint(11) NOT NULL,
+  `room_id` int(255) NOT NULL,
   `property_id` int(11) NOT NULL,
-  `date_from` varchar(200) NOT NULL,
-  `date_to` varchar(200) NOT NULL,
+  `date_from` date NOT NULL,
+  `date_to` date NOT NULL,
   `room_type` varchar(300) NOT NULL,
   `room_selling_amount` float NOT NULL,
   `standard_rate` float NOT NULL,
@@ -675,10 +676,12 @@ CREATE TABLE `open_close_rooms` (
 --
 
 INSERT INTO `open_close_rooms` (`id`, `room_id`, `property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`, `created_at`) VALUES
-(1, 1, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 13:29:52'),
-(2, 2, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 13:30:05'),
-(3, 3, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 13:30:51'),
-(4, 4, 1, '2023-01-16', '2023-01-18', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 13:31:02');
+(1, 1, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:08:50'),
+(2, 2, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:08:52'),
+(3, 3, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:08:55'),
+(4, 4, 1, '2023-01-16', '2023-01-18', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:08:57'),
+(5, 5, 2, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:09:01'),
+(6, 6, 2, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:09:04');
 
 -- --------------------------------------------------------
 
@@ -1145,7 +1148,7 @@ ALTER TABLE `newsletter`
 -- AUTO_INCREMENT for table `open_close_rooms`
 --
 ALTER TABLE `open_close_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `otherPropertyDescription`
