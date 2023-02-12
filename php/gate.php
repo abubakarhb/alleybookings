@@ -500,7 +500,7 @@ function hotelOpenAndCloseRoom($data)
         $row = check_db_query_staus("SELECT * FROM `open_close_rooms` WHERE `room_id`= {$data->openClose->room_id}", "CHK");
         //print_r($row);
         if ($row['status'] == 1) {
-            $query =  "UPDATE `open_close_rooms` SET `room_id`='{$data->openClose->room_id}',`date_from`='{$data->openClose->date_from}',`date_to`='{$data->openClose->date_to}',`room_type`='{$data->openClose->room_type}',`room_selling_amount`='{$data->openClose->room_selling_amount}',`standard_rate`='{$data->openClose->standard_rate}',`non_refundable_rates`='{$data->openClose->non_refundable_rates}',`open_close_booking_status`='{$data->openClose->open_close_booking_status}',`standard_rate_status`='{$data->openClose->standard_rate_status}',`non_refundable_rates_status`='{$data->openClose->non_refundable_rates_status}' WHERE `room_id` = {$data->openClose->room_id}";
+            $query =  "UPDATE `open_close_rooms` SET `room_id`='{$data->openClose->room_id}',`property_id`='{$data->openClose->property_id}',`date_from`='{$data->openClose->date_from}',`date_to`='{$data->openClose->date_to}',`room_type`='{$data->openClose->room_type}',`room_selling_amount`='{$data->openClose->room_selling_amount}',`standard_rate`='{$data->openClose->standard_rate}',`non_refundable_rates`='{$data->openClose->non_refundable_rates}',`open_close_booking_status`='{$data->openClose->open_close_booking_status}',`standard_rate_status`='{$data->openClose->standard_rate_status}',`non_refundable_rates_status`='{$data->openClose->non_refundable_rates_status}' WHERE `room_id` = {$data->openClose->room_id}";
 
 
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
@@ -512,7 +512,7 @@ function hotelOpenAndCloseRoom($data)
                 exit(json_encode($error_updating));
             }
         } else {
-            $query = sprintf("INSERT INTO `open_close_rooms`(`room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) VALUES ('{$data->openClose->room_id}','{$data->openClose->date_from}','{$data->openClose->date_to}','{$data->openClose->room_type}','{$data->openClose->room_selling_amount}','{$data->openClose->standard_rate}','{$data->openClose->non_refundable_rates}','{$data->openClose->open_close_booking_status}','{$data->openClose->standard_rate_status}','{$data->openClose->non_refundable_rates_status}')");
+            $query = sprintf("INSERT INTO `open_close_rooms`(`room_id`, `property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) VALUES ('{$data->openClose->room_id}','{$data->openClose->property_id}','{$data->openClose->date_from}','{$data->openClose->date_to}','{$data->openClose->room_type}','{$data->openClose->room_selling_amount}','{$data->openClose->standard_rate}','{$data->openClose->non_refundable_rates}','{$data->openClose->open_close_booking_status}','{$data->openClose->standard_rate_status}','{$data->openClose->non_refundable_rates_status}')");
 
 
 
@@ -988,6 +988,61 @@ function healthAndSafety($data)
 
 }
 
+function searchFiltering()
+{
+       include "config/index.php";
+    include "config/enctp.php";
+    $property_location = $_GET['property_location'];
+    $checkin = $_GET['checkin'];
+    $checkout = $_GET['checkout'];
+    $room = $_GET['room'];
+    // print_r($property_location); die;
+
+
+    if (!empty($property_location) && !empty($checkin)) 
+    {
+        $pull_data = "SELECT hotelListerProperties.property_name, hotelListerPropertiesLocation.property_location, hotelListerPropertiesLocation.property_country, hotelListerPropertiesLocation.property_city,open_close_rooms.date_from FROM hotelListerProperties LEFT JOIN hotelListerPropertiesLocation ON hotelListerPropertiesLocation.hotelListerProperties_id = hotelListerProperties.id LEFT JOIN open_close_rooms ON open_close_rooms.property_id = hotelListerProperties.id WHERE hotelListerPropertiesLocation.property_location LIKE '%$property_location%' or hotelListerPropertiesLocation.property_country LIKE '%$property_location%' or hotelListerPropertiesLocation.property_city LIKE '%$property_location%' or hotelListerProperties.property_name LIKE '%$property_location%' or open_close_rooms.date_from LIKE '%$checkin%'";
+
+        // where created_at BETWEEN `` AND ``
+
+        $User_re = mysqli_query($alleybookingsConnection, $pull_data) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re > 0) {
+            $all = [];
+            while ($row_User_re = mysqli_fetch_assoc($User_re)) {
+                $all[] = $row_User_re;
+                print_r($row_User_re);
+            };
+        }
+       
+    } elseif (!empty($property_location)) {
+        //   print_r("yes");
+        $pull_data = "SELECT hotelListerPropertiesLocation.property_location, hotelListerPropertiesLocation.property_country, hotelListerPropertiesLocation.property_city, hotelListerProperties.property_name FROM hotelListerPropertiesLocation LEFT JOIN hotelListerProperties ON hotelListerPropertiesLocation.hotelListerProperties_id = hotelListerProperties.id WHERE hotelListerPropertiesLocation.property_location LIKE '%$property_location%' or hotelListerPropertiesLocation.property_country LIKE '%$property_location%' or hotelListerPropertiesLocation.property_city LIKE '%$property_location%' or hotelListerProperties.property_name LIKE '%$property_location%'";
+        $User_re = mysqli_query($alleybookingsConnection, $pull_data) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re > 0) {
+            $all = [];
+            while ($row_User_re = mysqli_fetch_assoc($User_re)) {
+                $all[] = $row_User_re;
+                print_r($row_User_re);
+            };
+        }
+    }
+    
+
+}
+
 
 // select all from user where created_at BETWEEN `` AND ``;
 // SELECT SUM(score) as sum_score FROM game;
+// "SELECT * FROM `member` WHERE `firstname` LIKE '%$keyword%' or `lastname` LIKE '%$keyword%' or `address` LIKE '%$keyword%'"
+// SELECT posts.id, posts.title, posts.content, users.name, categories.name
+// FROM posts
+// LEFT JOIN users
+// ON posts.users_id = users.id
+// LEFT JOIN categories
+// ON posts.category_id = categories.id
+// WHERE posts.id LIKE '%$id%' OR
+// WHERE posts.title LIKE '%$title%' OR
+// WHERE posts.content LIKE '%$content%' OR
+// WHERE users.name LIKE '%$user_name%' OR
+// WHERE categories.name LIKE '%$category_name%'
+

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 12, 2023 at 10:37 AM
+-- Generation Time: Feb 12, 2023 at 03:09 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.1.6
 
@@ -404,9 +404,9 @@ CREATE TABLE `hotelListerPropertiesLocation` (
 --
 
 INSERT INTO `hotelListerPropertiesLocation` (`id`, `property_location`, `property_country`, `property_street_address`, `property_unit_number`, `property_city`, `zip_code`, `hotelListerProperties_id`, `time_in`) VALUES
-(1, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 1, '2023-01-27 22:51:49'),
-(2, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 2, '2023-01-28 05:59:32'),
-(3, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 18, '2023-01-03 13:20:45'),
+(1, 'United Kingdom', 'United Kingdom', 'ui', 2, 'London', 'Z10', 1, '2023-02-12 11:04:54'),
+(2, 'Nigeria', 'Nigeria', 'ui', 2, 'kano', 'Z10', 2, '2023-02-12 11:05:11'),
+(3, 'Nigeria', 'Nigeria', 'ui', 2, 'Niger', 'Z10', 18, '2023-02-12 11:16:35'),
 (4, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 19, '2023-01-03 13:21:17'),
 (5, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 20, '2023-01-03 13:21:54'),
 (6, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 21, '2023-01-03 13:22:36'),
@@ -657,6 +657,7 @@ INSERT INTO `newsletter` (`id`, `firstname`, `lastName`, `phoneNumber`, `email`)
 CREATE TABLE `open_close_rooms` (
   `id` int(11) NOT NULL,
   `room_id` tinyint(11) NOT NULL,
+  `property_id` int(11) NOT NULL,
   `date_from` varchar(200) NOT NULL,
   `date_to` varchar(200) NOT NULL,
   `room_type` varchar(300) NOT NULL,
@@ -673,8 +674,11 @@ CREATE TABLE `open_close_rooms` (
 -- Dumping data for table `open_close_rooms`
 --
 
-INSERT INTO `open_close_rooms` (`id`, `room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`, `created_at`) VALUES
-(1, 1, '2023-01-17', '2023-01-17', 'string', 12.5, 12.5, 12.5, 'inactive', 'inactive', 'inactive', '2023-02-01 16:38:46');
+INSERT INTO `open_close_rooms` (`id`, `room_id`, `property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`, `created_at`) VALUES
+(1, 1, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 13:29:52'),
+(2, 2, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 13:30:05'),
+(3, 3, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 13:30:51'),
+(4, 4, 1, '2023-01-16', '2023-01-18', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 13:31:02');
 
 -- --------------------------------------------------------
 
@@ -1141,7 +1145,7 @@ ALTER TABLE `newsletter`
 -- AUTO_INCREMENT for table `open_close_rooms`
 --
 ALTER TABLE `open_close_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `otherPropertyDescription`

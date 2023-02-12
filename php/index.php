@@ -33,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         reservationCommision($_GET['property_id']);
     }   elseif (isset($_GET['VATDetails'])) {
         VATDetails($_GET);
+    } elseif (isset($_GET['searchFiltering'])) {
+        searchFiltering($_GET);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
