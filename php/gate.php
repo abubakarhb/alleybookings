@@ -1040,6 +1040,11 @@ function propertiesPhotos($data)
     $pull_data = check_db_query_staus1("SELECT * FROM `propertiesPhotos` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
     exit(json_encode($pull_data));
 }
+function otherPropertyDescription($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `otherPropertyDescription` WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
 
 // select all from user where created_at BETWEEN `` AND ``;
 // SELECT SUM(score) as sum_score FROM game;

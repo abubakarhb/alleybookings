@@ -41,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         generalRoomAmenities($_GET['property_id']);
     } elseif (isset($_GET['propertiesPhotos'])) {
         propertiesPhotos($_GET['property_id']);
+    } elseif (isset($_GET['otherPropertyDescription'])) {
+        otherPropertyDescription($_GET['property_id']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
