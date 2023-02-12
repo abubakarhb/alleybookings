@@ -992,7 +992,8 @@ function searchFiltering()
         if ($User_re) {
             $all = [];
             while ($row_User_re = mysqli_fetch_assoc($User_re)) {
-                $row_User_re['content'] = explode("~", $row_User_re['content']);
+                $row_User_re['photos'] = explode("~", $row_User_re['content']);
+                unset($row_User_re['content']);
                 $all[] = $row_User_re;
             };
             $existence_hotels_index = [];
