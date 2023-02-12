@@ -35,6 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         VATDetails($_GET);
     } elseif (isset($_GET['searchFiltering'])) {
         searchFiltering($_GET);
+    } elseif (isset($_GET['roomsInAHotel'])) {
+        roomsInAHotel($_GET['property_id']);
+    } elseif (isset($_GET['generalRoomAmenities'])) {
+        generalRoomAmenities($_GET['property_id']);
+    } elseif (isset($_GET['propertiesPhotos'])) {
+        propertiesPhotos($_GET['property_id']);
+    } elseif (isset($_GET['otherPropertyDescription'])) {
+        otherPropertyDescription($_GET['property_id']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
