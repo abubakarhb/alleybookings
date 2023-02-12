@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 29, 2023 at 04:05 PM
+-- Generation Time: Feb 12, 2023 at 10:37 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.1.6
 
@@ -100,6 +100,31 @@ INSERT INTO `channelManager` (`id`, `status`, `content`, `hotelListerPropertiesI
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `copy_of_yearly_rate`
+--
+
+CREATE TABLE `copy_of_yearly_rate` (
+  `id` int(11) NOT NULL,
+  `property_id` bigint(20) NOT NULL,
+  `rates_from` varchar(200) NOT NULL,
+  `rates_to` varchar(200) NOT NULL,
+  `days_of_week` varchar(200) NOT NULL,
+  `room_type` varchar(300) NOT NULL,
+  `rate_changes` varchar(200) NOT NULL,
+  `restriction` varchar(200) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `copy_of_yearly_rate`
+--
+
+INSERT INTO `copy_of_yearly_rate` (`id`, `property_id`, `rates_from`, `rates_to`, `days_of_week`, `room_type`, `rate_changes`, `restriction`, `created_at`) VALUES
+(1, 1, '2023-01-17', '2023-01-17', 'Mon, Tues, Wed', 'string', 'string', 'string', '2023-02-01 18:13:04');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `endUsers`
 --
 
@@ -190,6 +215,50 @@ CREATE TABLE `generalRoomAmenities` (
 
 INSERT INTO `generalRoomAmenities` (`id`, `unit`, `size`, `other_amenities`, `hotelListerPropertiesId`) VALUES
 (1, 'ft', 24, '{\"daysOfCancellations\":\"33\",\"PercenToChargeCancellations\":\"23.43\"}', 24);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `health_safety_features`
+--
+
+CREATE TABLE `health_safety_features` (
+  `id` int(11) NOT NULL,
+  `staff_follow_protocols` enum('Yes','No') NOT NULL,
+  `shared_stationery_removed` enum('Yes','No') NOT NULL,
+  `guestHandSanitizer` enum('Yes','No') NOT NULL,
+  `process_to_check_guests_health` enum('Yes','No') NOT NULL,
+  `first_aid_avail` enum('Yes','No') NOT NULL,
+  `healthCareAccess` enum('Yes','No') NOT NULL,
+  `guest_thermometers` enum('Yes','No') NOT NULL,
+  `guest_face_mask` enum('Yes','No') NOT NULL,
+  `air_purifiers` enum('Yes','No') NOT NULL,
+  `contactless_check_in_out` enum('Yes','No') NOT NULL,
+  `cashless_payment_available` enum('Yes','No') NOT NULL,
+  `physical_distancing_rules_followed` enum('Yes','No') NOT NULL,
+  `mobile_app_for_room_service` enum('Yes','No') NOT NULL,
+  `physical_barriers_between_staff_and_guests_where_necessary` enum('Yes','No') NOT NULL,
+  `Single_room_AC_for_guest_accommodation` enum('Yes','No') NOT NULL,
+  `chemicals_needed_against_coronavirus` enum('Yes','No') NOT NULL,
+  `items_washed_in_accordance_with_local_authority_guidelines` enum('Yes','No') NOT NULL,
+  `guest_accommodation_disinfected_between_stays` enum('Yes','No') NOT NULL,
+  `guest_accommodation_sealed_after_cleaning` enum('Yes','No') NOT NULL,
+  `property_cleaned_by_professional` enum('Yes','No') NOT NULL,
+  `guests_can_cancel_any_cleaning_services_during_stay` enum('Yes','No') NOT NULL,
+  `hand_sanitizer` enum('Yes','No') NOT NULL,
+  `physical_distancing_in_dining_areas` enum('Yes','No') NOT NULL,
+  `food_can_be_delivered_to_guest` enum('Yes','No') NOT NULL,
+  `other_tableware_items_sanitized` enum('Yes','No') NOT NULL,
+  `breakfast_to_go_containers` enum('Yes','No') NOT NULL,
+  `delivered_food_covered_securely` enum('Yes','No') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `health_safety_features`
+--
+
+INSERT INTO `health_safety_features` (`id`, `staff_follow_protocols`, `shared_stationery_removed`, `guestHandSanitizer`, `process_to_check_guests_health`, `first_aid_avail`, `healthCareAccess`, `guest_thermometers`, `guest_face_mask`, `air_purifiers`, `contactless_check_in_out`, `cashless_payment_available`, `physical_distancing_rules_followed`, `mobile_app_for_room_service`, `physical_barriers_between_staff_and_guests_where_necessary`, `Single_room_AC_for_guest_accommodation`, `chemicals_needed_against_coronavirus`, `items_washed_in_accordance_with_local_authority_guidelines`, `guest_accommodation_disinfected_between_stays`, `guest_accommodation_sealed_after_cleaning`, `property_cleaned_by_professional`, `guests_can_cancel_any_cleaning_services_during_stay`, `hand_sanitizer`, `physical_distancing_in_dining_areas`, `food_can_be_delivered_to_guest`, `other_tableware_items_sanitized`, `breakfast_to_go_containers`, `delivered_food_covered_securely`) VALUES
+(1, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -454,6 +523,62 @@ INSERT INTO `hotelReservation` (`id`, `property_id`, `property_name`, `property_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `Hotel_lister_agent`
+--
+
+CREATE TABLE `Hotel_lister_agent` (
+  `id` int(11) NOT NULL,
+  `fname` varchar(200) NOT NULL,
+  `lname` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `mobile_number` varchar(300) NOT NULL,
+  `property_id` bigint(20) NOT NULL,
+  `homepage_access` enum('Yes','No') NOT NULL,
+  `reservations_access` enum('Yes','No') NOT NULL,
+  `finance_access` enum('Yes','No') NOT NULL,
+  `users_access` enum('Yes','No') NOT NULL,
+  `rates_availability_access` enum('Yes','No') NOT NULL,
+  `property_access` enum('Yes','No') NOT NULL,
+  `messages_access` enum('Yes','No') NOT NULL,
+  `reviews_access` enum('Yes','No') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `Hotel_lister_agent`
+--
+
+INSERT INTO `Hotel_lister_agent` (`id`, `fname`, `lname`, `email`, `mobile_number`, `property_id`, `homepage_access`, `reservations_access`, `finance_access`, `users_access`, `rates_availability_access`, `property_access`, `messages_access`, `reviews_access`) VALUES
+(1, 'Double', 'string', 'string@gmail', '070989687', 1, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+(2, 'Double11', 'string11', 'string11@gmail', '070989687', 1, 'No', 'No', 'Yes', 'Yes', 'No', 'Yes', 'Yes', 'Yes');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoices`
+--
+
+CREATE TABLE `invoices` (
+  `id` int(11) NOT NULL,
+  `document_name` varchar(200) NOT NULL,
+  `invoice_number` varchar(200) NOT NULL,
+  `date` varchar(200) NOT NULL,
+  `period` varchar(300) NOT NULL,
+  `action` varchar(200) NOT NULL,
+  `amount` varchar(200) NOT NULL,
+  `status` enum('paid','unpaid') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `invoices`
+--
+
+INSERT INTO `invoices` (`id`, `document_name`, `invoice_number`, `date`, `period`, `action`, `amount`, `status`) VALUES
+(1, 'Double', '63e55e661d6dd', '2023-01-12', '2days', 'none', '10', 'unpaid'),
+(2, 'Double', '63e5d4910b63e', '2023-01-12', '2days', 'none', '10', 'unpaid');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `layoutPrice`
 --
 
@@ -467,6 +592,10 @@ CREATE TABLE `layoutPrice` (
   `bedKind_bedOptions` varchar(255) NOT NULL,
   `numGuest_bedOptions` int(255) NOT NULL,
   `pricePerPerson_basePricePerNight` double(10,2) NOT NULL,
+  `roomLocation` varchar(200) NOT NULL,
+  `totalOccupant` varchar(200) NOT NULL,
+  `maxAdultOccupants` varchar(200) NOT NULL,
+  `maxChildrenOccupants` varchar(200) NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -475,26 +604,27 @@ CREATE TABLE `layoutPrice` (
 -- Dumping data for table `layoutPrice`
 --
 
-INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `hotelListerPropertiesId`, `created_at`) VALUES
-(1, 'Presidential Suite', 'CHF-125', 'string', 'string', 1, 'string', 2, 2.50, 1, '2023-01-28 22:49:17'),
-(2, 'Suite / Executive Suite', 'SES-001', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:49:24'),
-(3, 'Room for Extended Stay', 'RFE 123', 'string', 'string', 1, 'string', 2, 2.50, 1, '2023-01-28 22:29:44'),
-(4, 'King', 'string', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:29:49'),
-(5, 'Queen', 'string', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:29:53'),
-(6, 'Single', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-28 06:31:12'),
-(7, 'Double', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-28 06:31:33'),
-(8, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-18 23:00:00'),
-(9, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-18 23:00:00'),
-(10, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-25 07:37:28'),
-(11, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
-(12, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
-(13, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
-(14, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
-(15, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
-(16, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
-(17, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
-(18, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
-(19, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00');
+INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `roomLocation`, `totalOccupant`, `maxAdultOccupants`, `maxChildrenOccupants`, `hotelListerPropertiesId`, `created_at`) VALUES
+(1, 'Presidential Suite', 'CHF-125', 'string', 'string', 3, 'string', 2, 2.50, 'string', '', '', '', 1, '2023-02-09 14:50:29'),
+(2, 'Suite / Executive Suite', 'SES-001', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 2, '2023-01-28 22:49:24'),
+(3, 'Room for Extended Stay', 'RFE 123', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 1, '2023-01-28 22:29:44'),
+(4, 'King', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 2, '2023-01-28 22:29:49'),
+(5, 'Queen', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 2, '2023-01-28 22:29:53'),
+(6, 'Single', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '2023-01-28 06:31:12'),
+(7, 'Double', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '2023-01-28 06:31:33'),
+(8, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '2023-01-18 23:00:00'),
+(9, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '2023-01-18 23:00:00'),
+(10, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '2023-01-25 07:37:28'),
+(11, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(12, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(13, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(14, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(15, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(16, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(17, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(18, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(19, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
+(20, 'Double Room Updadted and Again', 'CHA-1', 'NULLY Updated', 'Created Policy Updadte', 8, 'full Updadted', 5, 200.00, 'Estate Around', '2', '7', '3', 1, '2023-02-10 05:53:58');
 
 -- --------------------------------------------------------
 
@@ -544,7 +674,29 @@ CREATE TABLE `open_close_rooms` (
 --
 
 INSERT INTO `open_close_rooms` (`id`, `room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`, `created_at`) VALUES
-(1, 1, '2023-01-17', '2023-01-17', 'string', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-01-24 09:38:47');
+(1, 1, '2023-01-17', '2023-01-17', 'string', 12.5, 12.5, 12.5, 'inactive', 'inactive', 'inactive', '2023-02-01 16:38:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `otherPropertyDescription`
+--
+
+CREATE TABLE `otherPropertyDescription` (
+  `id` int(11) NOT NULL,
+  `propertyDescription` text NOT NULL,
+  `roomDescription` text NOT NULL,
+  `property_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `otherPropertyDescription`
+--
+
+INSERT INTO `otherPropertyDescription` (`id`, `propertyDescription`, `roomDescription`, `property_id`, `created_at`) VALUES
+(1, 'Double', 'NULLY updated', 1, '2023-02-09 20:09:20'),
+(2, 'As you can see we are using', 'to get the age range and', 2, '2023-02-10 06:55:48');
 
 -- --------------------------------------------------------
 
@@ -590,13 +742,7 @@ CREATE TABLE `propertiesPhotos` (
 --
 
 INSERT INTO `propertiesPhotos` (`id`, `content`, `hotelListerPropertiesId`) VALUES
-(1, 'hi~hi~hi', 24),
-(2, 'hi~hi~hi', 24),
-(3, 'hi~hi~hi', 24),
-(4, 'hi~hi~hi', 24),
-(5, 'hi~hi~hi', 24),
-(6, 'hi~hi~hi', 24),
-(7, 'hi~hi~hi', 24);
+(1, 'hi~hi~hi', 24);
 
 -- --------------------------------------------------------
 
@@ -691,6 +837,26 @@ INSERT INTO `propertyLocation` (`id`, `address1`, `address2`, `country`, `city`,
 (22, 'string', 'string', 'string', 'string', 'string', 24),
 (23, 'string', 'string', 'string', 'string', 'string', 24);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `VAT_details`
+--
+
+CREATE TABLE `VAT_details` (
+  `id` int(11) NOT NULL,
+  `status` enum('Yes','No') NOT NULL,
+  `tin` varchar(200) NOT NULL,
+  `property_id` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `VAT_details`
+--
+
+INSERT INTO `VAT_details` (`id`, `status`, `tin`, `property_id`) VALUES
+(1, 'Yes', '20230210143825926295', 1);
+
 --
 -- Indexes for dumped tables
 --
@@ -705,6 +871,12 @@ ALTER TABLE `amenties`
 -- Indexes for table `channelManager`
 --
 ALTER TABLE `channelManager`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `copy_of_yearly_rate`
+--
+ALTER TABLE `copy_of_yearly_rate`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -724,6 +896,12 @@ ALTER TABLE `facilitiesServices`
 -- Indexes for table `generalRoomAmenities`
 --
 ALTER TABLE `generalRoomAmenities`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `health_safety_features`
+--
+ALTER TABLE `health_safety_features`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -775,6 +953,18 @@ ALTER TABLE `hotelReservation`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `Hotel_lister_agent`
+--
+ALTER TABLE `Hotel_lister_agent`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `invoices`
+--
+ALTER TABLE `invoices`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `layoutPrice`
 --
 ALTER TABLE `layoutPrice`
@@ -793,6 +983,12 @@ ALTER TABLE `open_close_rooms`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `otherPropertyDescription`
+--
+ALTER TABLE `otherPropertyDescription`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `policies`
 --
 ALTER TABLE `policies`
@@ -802,7 +998,8 @@ ALTER TABLE `policies`
 -- Indexes for table `propertiesPhotos`
 --
 ALTER TABLE `propertiesPhotos`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `hotelListerPropertiesId` (`hotelListerPropertiesId`);
 
 --
 -- Indexes for table `propertyContactDetails`
@@ -814,6 +1011,12 @@ ALTER TABLE `propertyContactDetails`
 -- Indexes for table `propertyLocation`
 --
 ALTER TABLE `propertyLocation`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `VAT_details`
+--
+ALTER TABLE `VAT_details`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -833,6 +1036,12 @@ ALTER TABLE `channelManager`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
+-- AUTO_INCREMENT for table `copy_of_yearly_rate`
+--
+ALTER TABLE `copy_of_yearly_rate`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `endUsers`
 --
 ALTER TABLE `endUsers`
@@ -848,6 +1057,12 @@ ALTER TABLE `facilitiesServices`
 -- AUTO_INCREMENT for table `generalRoomAmenities`
 --
 ALTER TABLE `generalRoomAmenities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `health_safety_features`
+--
+ALTER TABLE `health_safety_features`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -899,10 +1114,22 @@ ALTER TABLE `hotelReservation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `Hotel_lister_agent`
+--
+ALTER TABLE `Hotel_lister_agent`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `invoices`
+--
+ALTER TABLE `invoices`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `layoutPrice`
 --
 ALTER TABLE `layoutPrice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `newsletter`
@@ -915,6 +1142,12 @@ ALTER TABLE `newsletter`
 --
 ALTER TABLE `open_close_rooms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `otherPropertyDescription`
+--
+ALTER TABLE `otherPropertyDescription`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `policies`
@@ -939,6 +1172,12 @@ ALTER TABLE `propertyContactDetails`
 --
 ALTER TABLE `propertyLocation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `VAT_details`
+--
+ALTER TABLE `VAT_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
