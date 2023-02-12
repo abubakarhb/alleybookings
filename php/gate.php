@@ -1009,7 +1009,7 @@ function searchFiltering()
                     }
                 }
             }
-            print_r($existence_hotels);
+            exit(json_encode($existence_hotels));
 
         }
     } elseif (!empty($property_location)) {
