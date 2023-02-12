@@ -1025,7 +1025,21 @@ function searchFiltering()
         }
     }
 }
-
+function roomsInAHotel($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `layoutPrice` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function generalRoomAmenities($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `generalRoomAmenities` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function propertiesPhotos($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `propertiesPhotos` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
 
 // select all from user where created_at BETWEEN `` AND ``;
 // SELECT SUM(score) as sum_score FROM game;
