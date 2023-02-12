@@ -500,7 +500,7 @@ function hotelOpenAndCloseRoom($data)
         $row = check_db_query_staus("SELECT * FROM `open_close_rooms` WHERE `room_id`= {$data->openClose->room_id}", "CHK");
         //print_r($row);
         if ($row['status'] == 1) {
-            $query =  "UPDATE `open_close_rooms` SET `room_id`='{$data->openClose->room_id}',`date_from`='{$data->openClose->date_from}',`date_to`='{$data->openClose->date_to}',`room_type`='{$data->openClose->room_type}',`room_selling_amount`='{$data->openClose->room_selling_amount}',`standard_rate`='{$data->openClose->standard_rate}',`non_refundable_rates`='{$data->openClose->non_refundable_rates}',`open_close_booking_status`='{$data->openClose->open_close_booking_status}',`standard_rate_status`='{$data->openClose->standard_rate_status}',`non_refundable_rates_status`='{$data->openClose->non_refundable_rates_status}' WHERE `room_id` = {$data->openClose->room_id}";
+            $query =  "UPDATE `open_close_rooms` SET `room_id`='{$data->openClose->room_id}',`property_id`='{$data->openClose->property_id}',`date_from`='{$data->openClose->date_from}',`date_to`='{$data->openClose->date_to}',`room_type`='{$data->openClose->room_type}',`room_selling_amount`='{$data->openClose->room_selling_amount}',`standard_rate`='{$data->openClose->standard_rate}',`non_refundable_rates`='{$data->openClose->non_refundable_rates}',`open_close_booking_status`='{$data->openClose->open_close_booking_status}',`standard_rate_status`='{$data->openClose->standard_rate_status}',`non_refundable_rates_status`='{$data->openClose->non_refundable_rates_status}' WHERE `room_id` = {$data->openClose->room_id}";
 
 
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
@@ -512,7 +512,7 @@ function hotelOpenAndCloseRoom($data)
                 exit(json_encode($error_updating));
             }
         } else {
-            $query = sprintf("INSERT INTO `open_close_rooms`(`room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) VALUES ('{$data->openClose->room_id}','{$data->openClose->date_from}','{$data->openClose->date_to}','{$data->openClose->room_type}','{$data->openClose->room_selling_amount}','{$data->openClose->standard_rate}','{$data->openClose->non_refundable_rates}','{$data->openClose->open_close_booking_status}','{$data->openClose->standard_rate_status}','{$data->openClose->non_refundable_rates_status}')");
+            $query = sprintf("INSERT INTO `open_close_rooms`(`room_id`, `property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) VALUES ('{$data->openClose->room_id}','{$data->openClose->property_id}','{$data->openClose->date_from}','{$data->openClose->date_to}','{$data->openClose->room_type}','{$data->openClose->room_selling_amount}','{$data->openClose->standard_rate}','{$data->openClose->non_refundable_rates}','{$data->openClose->open_close_booking_status}','{$data->openClose->standard_rate_status}','{$data->openClose->non_refundable_rates_status}')");
 
 
 
@@ -651,13 +651,21 @@ function singleUserReservation($data)
     exit(json_encode($pull_data));
 }
 
-function getAllRoomType($data){
-    $pull_data = check_db_query_staus1("SELECT * FROM `layoutPrice` WHERE `property_id`= '{$data}' ", "CHK");
+function HotelReservationStatement()
+{
+    include "config/index.php";
+    include "config/enctp.php";
+    $property_id = $_GET['property_id'];
+    $date_from = $_GET['date_from'];
+    $date_to = $_GET['date_to'];
+    // print_r($property_id ." ". $date_to); die;
+
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE book_on BETWEEN '{$date_from}' AND '{$date_to}' AND `property_id`= '{$property_id}'  ", "CHK");
     exit(json_encode($pull_data));
 }
 
-
-function copyYearlyRate($data){
+function copyYearlyRate($data)
+{
     // print_r($data);
     include "config/index.php";
    $property_id = $data->property_id;
@@ -682,4 +690,359 @@ function copyYearlyRate($data){
 
 }
 
+function insertRoomDetails($data)
+{
+
+      // print_r($data);
+      include "config/index.php";
+      $roomType = $data->roomType_budgetDoubleRoom;
+      $roomName = $data->roomName_budgetDoubleRoom;
+      $customName = $data->customName_budgetDoubleRoom;
+      $smokingPolicy =  $data->smokingPolicy_budgetDoubleRoom;
+      $numRoom_ =  $data->numRoom_budgetDoubleRoom;
+      $bedKind = $data->bedKind_bedOptions;
+      $numGuest = $data->numGuest_bedOptions;
+      $pricePerPerson = $data->pricePerPerson_basePricePerNight;
+      $roomLocation = $data->roomLocation;
+      $totalOccupant = $data->totalOccupant;
+      $maxAdultOccupants =  $data->maxAdultOccupants;
+      $maxChildrenOccupants =  $data->maxChildrenOccupants;
+      $hotelListerPropertiesId = $data->hotelListerPropertiesId;
+      
+      $query = sprintf("INSERT INTO `layoutPrice`(`roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `roomLocation`, `totalOccupant`, `maxAdultOccupants`, `maxChildrenOccupants`, `hotelListerPropertiesId`) VALUES ('$roomType','$roomName','$customName','$smokingPolicy','$numRoom_','$bedKind','$numGuest','$pricePerPerson','$roomLocation','$totalOccupant','$maxAdultOccupants','$maxChildrenOccupants','$hotelListerPropertiesId')");
+      //print_r($query);die;
+      $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+   
+      if ($User_re) {
+          $arr = ["status" => 1, "message" => "Room Details Successfully Created "];
+          exit(json_encode($arr));
+      } else {
+          $error_creating = ["Error" => "Invalid operation"];
+          exit(json_encode($error_creating));
+      }
+
+
+
+  
+}
+
+function getAllRoom($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `layoutPrice` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function getSingleRoom($data)
+{
+    $pull_data = check_db_query_staus("SELECT * FROM `layoutPrice` WHERE `id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+
+function getAllRoomType($data)
+{
+    $pull_data = check_db_query_staus1("SELECT id, roomType_budgetDoubleRoom FROM `layoutPrice` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function updateSingleRoom($data)
+{
+    //print_r($data); die;
+   include "config/index.php";
+   $roomType = $data->roomType_budgetDoubleRoom;
+   $roomName = $data->roomName_budgetDoubleRoom;
+   $customName = $data->customName_budgetDoubleRoom;
+   $smokingPolicy =  $data->smokingPolicy_budgetDoubleRoom;
+   $numRoom_ =  $data->numRoom_budgetDoubleRoom;
+   $bedKind = $data->bedKind_bedOptions;
+   $numGuest = $data->numGuest_bedOptions;
+   $pricePerPerson = $data->pricePerPerson_basePricePerNight;
+   $roomLocation = $data->roomLocation;
+   $totalOccupant = $data->totalOccupant;
+   $maxAdultOccupants =  $data->maxAdultOccupants;
+   $maxChildrenOccupants =  $data->maxChildrenOccupants;
+   $id = $data->id;
+
+
+   $query =  "UPDATE `layoutPrice` SET `roomType_budgetDoubleRoom`='{$roomType}',`roomName_budgetDoubleRoom`='{$roomName}',`customName_budgetDoubleRoom`='{$customName}',`smokingPolicy_budgetDoubleRoom`='{$smokingPolicy}',`numRoom_budgetDoubleRoom`='{$numRoom_}',`bedKind_bedOptions`='{$bedKind}',`numGuest_bedOptions`='{$numGuest}',`pricePerPerson_basePricePerNight`='{$pricePerPerson}',`roomLocation`='{$roomLocation}',`totalOccupant`='{$totalOccupant}',`maxAdultOccupants`='{$maxAdultOccupants}',`maxChildrenOccupants`='{$maxChildrenOccupants}' WHERE `id` = {$id}";
+
+    //print_r($query);die;
+   $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+   if ($User_re) {
+       $arr = ["status" => 1, "message" => "Room Details Successfully Updated "];
+       exit(json_encode($arr));
+   } else {
+       $error_creating = ["Error" => "Invalid operation"];
+       exit(json_encode($error_creating));
+   }
+}
+
+function propertyRoomAndOtherDescription($data)
+{
+      // print_r($data);
+      include "config/index.php";
+      $propertyDescription = $data->propertyDescription;
+      
+      $roomDescription = $data->roomDescription;
+      
+      $property_id =  $data->property_id;
+      if (isset($data)) {
+        //print_r($data); 
+        include "config/index.php";
+        $row = check_db_query_staus("SELECT * FROM `otherPropertyDescription` WHERE `property_id`= {$property_id}", "CHK");
+        //print_r($row);
+        if ($row['status'] == 1) {
+            $query =  "UPDATE `otherPropertyDescription` SET  `propertyDescription`='{$propertyDescription}',`roomDescription`='{$roomDescription}' WHERE `property_id` = {$property_id}";
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Description Updated successfully"];
+                exit(json_encode($arr));
+            } else {
+                $error_updating = ["Error" => "Invalid operation"];
+                exit(json_encode($error_updating));
+            }
+        } else {
+            $query = sprintf("  INSERT INTO `otherPropertyDescription`(`propertyDescription`, `roomDescription`,  `property_id`) VALUES ('$propertyDescription','$roomDescription','$property_id')");
+            //print_r($query);die;
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+         
+            if ($User_re) {
+                $arr = ["status" => 1, "message" => "Description Created Successfully"];
+                exit(json_encode($arr));
+            } else {
+                $error_creating = ["Error" => "Invalid operation"];
+                exit(json_encode($error_creating));
+            }
+        }
+    }
+
+
+
+
+
+
+
+  
+
+
+
+
+
+    
+
+  
+}
+
+function invoice($data)
+{
+
+      // print_r($data);
+      include "config/index.php";
+      $document_name = $data->document_name;
+      $date = $data->date;
+      $period = $data->period;
+      $action = $data->action;
+      $invoice_number = uniqid();
+      $amount =  $data->amount;
+      $status =  $data->status;
+    
+        //print_r($invoice_number);
+      $query = sprintf("INSERT INTO `invoices`(`document_name`, `invoice_number`, `date`, `period`, `action`, `amount`, `status`) VALUES ('$document_name','$invoice_number','$date','$period','$action','$amount','$status')");
+    //   print_r($query);die;
+      $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+   
+      if ($User_re) {
+          $arr = ["status" => 1, "message" => "Invoice Successfully Created"];
+          exit(json_encode($arr));
+      } else {
+          $error_creating = ["Error" => "Invalid operation"];
+          exit(json_encode($error_creating));
+      }
+}
+
+function reservationGrossRevenue($data)
+{
+    //  print_r($data);
+     include "config/index.php";
+     $pull_data = check_db_query_staus("SELECT SUM(total_payment) FROM `hotelReservation` WHERE `property_id`= '{$data}' ", "CHK");
+     exit(json_encode($pull_data));
+
+}
+
+function reservationCommision($data)
+{
+    //  print_r($data);
+     include "config/index.php";
+     $pull_data = check_db_query_staus("SELECT SUM(commission) FROM `hotelReservation` WHERE `property_id`= '{$data}' ", "CHK");
+     exit(json_encode($pull_data));
+
+}
+function VATDetails()
+{
+    include "config/index.php";
+    include "config/enctp.php";
+    $property_id = $_GET['property_id'];
+    $status = $_GET['status'];
+
+    $tin = date("YmdHis").rand(111111,999999);
+  
+    // print_r($property_id ." <br/>". $tin. " ". $status); die;
+
+         //print_r($invoice_number);
+         $query = sprintf("INSERT INTO `VAT_details`(`status`, `tin`, `property_id`) VALUES ('$status','$tin','$property_id')");
+        //    print_r($query);die;
+           $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+        
+           if ($User_re) {
+               $arr = ["status" => 1, "message" => "VAT Details Created"];
+               exit(json_encode($arr));
+           } else {
+               $error_creating = ["Error" => "Invalid operation"];
+               exit(json_encode($error_creating));
+           }
+
+}
+
+function hotelListerAgent($data)
+{
+    //   print_r($data); die;
+      include "config/index.php";
+     
+      $fname =  $data->fname;
+      $lname =  $data->lname;
+      $email =  $data->email;
+      $mobile_number =  $data->mobile_number;
+      $property_id =  $data->property_id;
+      $Homepage =  $data->homepage;
+      $Reservations =  $data->reservations;
+      $Finance =  $data->finance;
+      $Users =  $data->users;
+      $Rates_availability =  $data->rates_availability;
+      $Property =  $data->property;
+      $Messages =  $data->messages;
+      $Reviews =  $data->reviews;
+
+
+        //print_r($invoice_number);
+        $query = sprintf("INSERT INTO `Hotel_lister_agent`(`fname`, `lname`, `email`, `mobile_number`,`property_id`, `homepage_access`, `reservations_access`, `finance_access`, `users_access`, `rates_availability_access`, `property_access`, `messages_access`, `reviews_access`) VALUES ('$fname','$lname','$email','$mobile_number','$property_id','$Homepage','$Reservations','$Finance','$Users','$Rates_availability','$Property','$Messages','$Reviews')");
+        // print_r($query);die;
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+    
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Hotel Lister Agent Successfully Created"];
+            exit(json_encode($arr));
+        } else {
+            $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
+        }
+
+
+}
+function healthAndSafety($data)
+{
+    //   print_r($data); die;
+      include "config/index.php";
+     
+      $value2=$data->value2;
+      $value3=$data->value3;
+      $value4=$data->value4;
+      $value5=$data->value5;
+      $value6=$data->value6;
+      $value7=$data->value7;
+      $value8=$data->value8;
+      $value9=$data->value9;
+      $value10=$data->value10;
+      $value11=$data->value11;
+      $value12=$data->value12;
+      $value13=$data->value13;
+      $value14=$data->value14;
+      $value15=$data->value15;
+      $value16=$data->value16;
+      $value17=$data->value17;
+      $value18=$data->value18;
+      $value19=$data->value19;
+      $value20=$data->value20;
+      $value21=$data->value21;
+      $value22=$data->value22;
+      $value23=$data->value23;
+      $value24=$data->value24;
+      $value25=$data->value25;
+      $value26=$data->value26;
+      $value27=$data->value27;
+      $value28=$data->value28;
+        //print_r($invoice_number);
+        $query = sprintf("INSERT INTO `health_safety_features`(`staff_follow_protocols`, `shared_stationery_removed`, `guestHandSanitizer`, `process_to_check_guests_health`, `first_aid_avail`, `healthCareAccess`, `guest_thermometers`, `guest_face_mask`, `air_purifiers`, `contactless_check_in_out`, `cashless_payment_available`, `physical_distancing_rules_followed`, `mobile_app_for_room_service`, `physical_barriers_between_staff_and_guests_where_necessary`, `Single_room_AC_for_guest_accommodation`, `chemicals_needed_against_coronavirus`, `items_washed_in_accordance_with_local_authority_guidelines`, `guest_accommodation_disinfected_between_stays`, `guest_accommodation_sealed_after_cleaning`, `property_cleaned_by_professional`, `guests_can_cancel_any_cleaning_services_during_stay`, `hand_sanitizer`, `physical_distancing_in_dining_areas`, `food_can_be_delivered_to_guest`, `other_tableware_items_sanitized`, `breakfast_to_go_containers`, `delivered_food_covered_securely`) VALUES ('$value2','$value3','$value4','$value5','$value6','$value7','$value8','$value9','$value10','$value11','$value12','$value13','$value14','$value15','$value16','$value17','$value18','$value19','$value20','$value21','$value22','$value23','$value24','$value25','$value26','$value27','$value28')");
+        // print_r($query);die;
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+    
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Health And Safety Measures Applied Successfully"];
+            exit(json_encode($arr));
+        } else {
+            $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
+        }
+
+
+
+}
+
+function searchFiltering()
+{
+       include "config/index.php";
+    include "config/enctp.php";
+    $property_location = $_GET['property_location'];
+    $checkin = $_GET['checkin'];
+    $checkout = $_GET['checkout'];
+    $room = $_GET['room'];
+    // print_r($property_location); die;
+
+
+    if (!empty($property_location) && !empty($checkin)) 
+    {
+        $pull_data = "SELECT hotelListerProperties.property_name, hotelListerPropertiesLocation.property_location, hotelListerPropertiesLocation.property_country, hotelListerPropertiesLocation.property_city,open_close_rooms.date_from FROM hotelListerProperties LEFT JOIN hotelListerPropertiesLocation ON hotelListerPropertiesLocation.hotelListerProperties_id = hotelListerProperties.id LEFT JOIN open_close_rooms ON open_close_rooms.property_id = hotelListerProperties.id WHERE hotelListerPropertiesLocation.property_location LIKE '%$property_location%' or hotelListerPropertiesLocation.property_country LIKE '%$property_location%' or hotelListerPropertiesLocation.property_city LIKE '%$property_location%' or hotelListerProperties.property_name LIKE '%$property_location%' or open_close_rooms.date_from LIKE '%$checkin%'";
+
+        // where created_at BETWEEN `` AND ``
+
+        $User_re = mysqli_query($alleybookingsConnection, $pull_data) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re > 0) {
+            $all = [];
+            while ($row_User_re = mysqli_fetch_assoc($User_re)) {
+                $all[] = $row_User_re;
+                print_r($row_User_re);
+            };
+        }
+       
+    } elseif (!empty($property_location)) {
+        //   print_r("yes");
+        $pull_data = "SELECT hotelListerPropertiesLocation.property_location, hotelListerPropertiesLocation.property_country, hotelListerPropertiesLocation.property_city, hotelListerProperties.property_name FROM hotelListerPropertiesLocation LEFT JOIN hotelListerProperties ON hotelListerPropertiesLocation.hotelListerProperties_id = hotelListerProperties.id WHERE hotelListerPropertiesLocation.property_location LIKE '%$property_location%' or hotelListerPropertiesLocation.property_country LIKE '%$property_location%' or hotelListerPropertiesLocation.property_city LIKE '%$property_location%' or hotelListerProperties.property_name LIKE '%$property_location%'";
+        $User_re = mysqli_query($alleybookingsConnection, $pull_data) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re > 0) {
+            $all = [];
+            while ($row_User_re = mysqli_fetch_assoc($User_re)) {
+                $all[] = $row_User_re;
+                print_r($row_User_re);
+            };
+        }
+    }
+    
+
+}
+
+
 // select all from user where created_at BETWEEN `` AND ``;
+// SELECT SUM(score) as sum_score FROM game;
+// "SELECT * FROM `member` WHERE `firstname` LIKE '%$keyword%' or `lastname` LIKE '%$keyword%' or `address` LIKE '%$keyword%'"
+// SELECT posts.id, posts.title, posts.content, users.name, categories.name
+// FROM posts
+// LEFT JOIN users
+// ON posts.users_id = users.id
+// LEFT JOIN categories
+// ON posts.category_id = categories.id
+// WHERE posts.id LIKE '%$id%' OR
+// WHERE posts.title LIKE '%$title%' OR
+// WHERE posts.content LIKE '%$content%' OR
+// WHERE users.name LIKE '%$user_name%' OR
+// WHERE categories.name LIKE '%$category_name%'
+
