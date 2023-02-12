@@ -966,10 +966,25 @@ function searchFiltering()
     $checkout = $_GET['checkout'];
     $room = $_GET['room'];
     // print_r($property_location); die;
-
-
     if (!empty($property_location) && !empty($checkin)) {
-        echo $pull_data = "SELECT ";
+        $pull_data = "SELECT
+        hotelListerProperties.property_name,
+        hotelListerProperties.id,
+        hotelListerPropertiesLocation.property_location,
+        hotelListerPropertiesLocation.property_country,
+        hotelListerPropertiesLocation.property_city,
+        open_close_rooms.date_from,
+        open_close_rooms.date_to
+    FROM
+        hotelListerProperties
+    JOIN hotelListerPropertiesLocation ON hotelListerProperties.id = hotelListerPropertiesLocation.hotelListerProperties_id
+    JOIN open_close_rooms ON hotelListerProperties.id = open_close_rooms.property_id
+    WHERE
+        (
+            hotelListerPropertiesLocation.property_location LIKE '%$property_location%' OR hotelListerPropertiesLocation.property_country LIKE '%$property_location%' OR hotelListerPropertiesLocation.property_city LIKE '%$property_location%' OR hotelListerProperties.property_name LIKE '%$property_location%'
+        )
+    AND open_close_rooms.date_from >= '$checkin'";
+
         $User_re = mysqli_query($alleybookingsConnection, $pull_data) or die(mysqli_error($alleybookingsConnection));
         if ($User_re > 0) {
             $all = [];
@@ -997,15 +1012,3 @@ function searchFiltering()
 
 // select all from user where created_at BETWEEN `` AND ``;
 // SELECT SUM(score) as sum_score FROM game;
-// "SELECT * FROM `member` WHERE `firstname` LIKE '%$keyword%' or `lastname` LIKE '%$keyword%' or `address` LIKE '%$keyword%'"
-// SELECT posts.id, posts.title, posts.content, users.name, categories.name
-// FROM posts
-// LEFT JOIN users
-// ON posts.users_id = users.id
-// LEFT JOIN categories
-// ON posts.category_id = categories.id
-// WHERE posts.id LIKE '%$id%' OR
-// WHERE posts.title LIKE '%$title%' OR
-// WHERE posts.content LIKE '%$content%' OR
-// WHERE users.name LIKE '%$user_name%' OR
-// WHERE categories.name LIKE '%$category_name%'
