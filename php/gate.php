@@ -865,8 +865,9 @@ function VATDetails()
     include "config/enctp.php";
     $property_id = $_GET['property_id'];
     $status = $_GET['status'];
+    $tin = $_GET['tin'];
 
-    $tin = date("YmdHis") . rand(111111, 999999);
+    //$tin = date("YmdHis") . rand(111111, 999999);
 
     // print_r($property_id ." <br/>". $tin. " ". $status); die;
 
