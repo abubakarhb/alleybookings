@@ -567,7 +567,7 @@ function reservationDetail()
     include "config/enctp.php";
     $property_id = $_GET['property_id'];
     $user_id = $_GET['user_id'];
-    $room_type = $_GET['room_type'];
+    $room_id = $_GET['room_id'];
     //print_r($property_name ." ". $room_type);
 
     // property lister
@@ -603,10 +603,10 @@ function reservationDetail()
 
 
     //room information
-    $query5 = "SELECT id,roomType_budgetDoubleRoom,roomName_budgetDoubleRoom FROM layoutPrice WHERE roomType_budgetDoubleRoom = '$room_type'";
+    $query5 = "SELECT id,roomType_budgetDoubleRoom,roomName_budgetDoubleRoom FROM layoutPrice WHERE id = '$room_id'";
     $result = mysqli_query($alleybookingsConnection, $query5) or die(mysqli_error($alleybookingsConnection));
     $row5 = mysqli_fetch_assoc($result);
-    $room_id = $row5["id"];
+    
     $roomType = $row5["roomType_budgetDoubleRoom"];
     $roomName = $row5["roomName_budgetDoubleRoom"];
     // print_r($roomType." ".$room_id); die();
