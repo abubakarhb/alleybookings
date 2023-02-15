@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.3
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 12, 2023 at 05:52 PM
+-- Generation Time: Feb 15, 2023 at 06:23 PM
 -- Server version: 10.4.21-MariaDB
--- PHP Version: 7.4.28
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -519,7 +519,9 @@ INSERT INTO `hotelReservation` (`id`, `property_id`, `property_name`, `property_
 (2, 2, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Abubakar Bello', 'Yes', '2023-02-13', '2023-02-14', '1', '4.50', '1674946465', '2023-01-28 22:52:32'),
 (3, 2, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Mohammed Hassan', 'Yes', '2023-02-05', '2023-02-07', '1', '4.50', '1674946409', '2023-01-28 22:52:40'),
 (4, 1, 'City Garden Hotel', 'ui', 'Room for Extended Stay', 'RFE 123', 3, 'Abubakar Bello', 'Yes', '2023-02-15', '2023-02-17', '10', '4.50', '1675004730', '2023-01-29 14:58:05'),
-(5, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'SES-001', 1, 'Mohammed Hassan', 'Yes', '2023-02-08', '2023-02-10', '10', '4.50', '1675005489', '2023-01-29 15:03:13');
+(5, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'SES-001', 1, 'Mohammed Hassan', 'Yes', '2023-02-08', '2023-02-10', '10', '4.50', '1675005489', '2023-01-29 15:03:13'),
+(6, 1, 'City Garden Hotel', 'United Kingdom', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', 'Yes', '2023-02-12', '2023-02-13', '10', '4.50', '1676228936', '2023-02-12 19:10:28'),
+(7, 1, 'City Garden Hotel', 'United Kingdom', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', 'Yes', '2023-02-12', '2023-02-14', '10', '4.50', '1676229345', '2023-02-12 19:11:21');
 
 -- --------------------------------------------------------
 
@@ -691,6 +693,8 @@ INSERT INTO `open_close_rooms` (`id`, `room_id`, `property_id`, `date_from`, `da
 
 CREATE TABLE `otherPropertyDescription` (
   `id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `language` varchar(200) NOT NULL,
   `propertyDescription` text NOT NULL,
   `roomDescription` text NOT NULL,
   `property_id` int(11) NOT NULL,
@@ -701,9 +705,10 @@ CREATE TABLE `otherPropertyDescription` (
 -- Dumping data for table `otherPropertyDescription`
 --
 
-INSERT INTO `otherPropertyDescription` (`id`, `propertyDescription`, `roomDescription`, `property_id`, `created_at`) VALUES
-(1, 'Double', 'NULLY updated', 1, '2023-02-09 20:09:20'),
-(2, 'As you can see we are using', 'to get the age range and', 2, '2023-02-10 06:55:48');
+INSERT INTO `otherPropertyDescription` (`id`, `room_id`, `language`, `propertyDescription`, `roomDescription`, `property_id`, `created_at`) VALUES
+(1, 1, 'English', 'Double', 'NULLY updated', 1, '2023-02-09 20:09:20'),
+(2, 1, 'French', 'As you can see we are using', 'to get the age range and', 2, '2023-02-10 06:55:48'),
+(3, 2, 'English', 'As you can see we are using', 'to get the age range and', 2, '2023-02-15 14:31:54');
 
 -- --------------------------------------------------------
 
@@ -1118,7 +1123,7 @@ ALTER TABLE `hotelListerUsers`
 -- AUTO_INCREMENT for table `hotelReservation`
 --
 ALTER TABLE `hotelReservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `Hotel_lister_agent`
@@ -1154,7 +1159,7 @@ ALTER TABLE `open_close_rooms`
 -- AUTO_INCREMENT for table `otherPropertyDescription`
 --
 ALTER TABLE `otherPropertyDescription`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `policies`

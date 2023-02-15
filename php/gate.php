@@ -779,6 +779,8 @@ function propertyRoomAndOtherDescription($data)
 {
     // print_r($data);
     include "config/index.php";
+    $room_id = $data->room_id;
+    $language = $data->language;
     $propertyDescription = $data->propertyDescription;
 
     $roomDescription = $data->roomDescription;
@@ -787,10 +789,10 @@ function propertyRoomAndOtherDescription($data)
     if (isset($data)) {
         //print_r($data); 
         include "config/index.php";
-        $row = check_db_query_staus("SELECT * FROM `otherPropertyDescription` WHERE `property_id`= {$property_id}", "CHK");
+        $row = check_db_query_staus("SELECT * FROM `otherPropertyDescription` WHERE `room_id`= {$room_id}", "CHK");
         //print_r($row);
         if ($row['status'] == 1) {
-            $query =  "UPDATE `otherPropertyDescription` SET  `propertyDescription`='{$propertyDescription}',`roomDescription`='{$roomDescription}' WHERE `property_id` = {$property_id}";
+            $query =  "UPDATE `otherPropertyDescription` SET  `room_id`='{$room_id}',`language`='{$language}',`propertyDescription`='{$propertyDescription}',`roomDescription`='{$roomDescription}' WHERE `property_id` = {$property_id}";
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
             if ($User_re) {
                 $arr = ["status" => 1, "message" => "Description Updated successfully"];
@@ -800,8 +802,8 @@ function propertyRoomAndOtherDescription($data)
                 exit(json_encode($error_updating));
             }
         } else {
-            $query = sprintf("  INSERT INTO `otherPropertyDescription`(`propertyDescription`, `roomDescription`,  `property_id`) VALUES ('$propertyDescription','$roomDescription','$property_id')");
-            //print_r($query);die;
+            $query = sprintf("INSERT INTO `otherPropertyDescription`(`room_id`,`language`,`propertyDescription`, `roomDescription`,  `property_id`) VALUES ('$room_id','$language','$propertyDescription','$roomDescription','$property_id')");
+            // print_r($query);die;
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
 
             if ($User_re) {
@@ -1048,10 +1050,19 @@ function propertiesPhotos($data)
     $pull_data = check_db_query_staus1("SELECT * FROM `propertiesPhotos` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
     exit(json_encode($pull_data));
 }
-function otherPropertyDescription($data)
+function otherPropertyDescription()
 {
-    $pull_data = check_db_query_staus1("SELECT * FROM `otherPropertyDescription` WHERE `property_id`= '{$data}' ", "CHK");
+
+    include "config/index.php";
+    include "config/enctp.php";
+    $property_id = $_GET['property_id'];
+    $room_id = $_GET['room_id'];
+
+    $pull_data = check_db_query_staus1("SELECT otherPropertyDescription.room_id, otherPropertyDescription.language, otherPropertyDescription.propertyDescription, otherPropertyDescription.roomDescription, otherPropertyDescription.property_id, hotelListerProperties.property_name, hotelListerProperties.id, hotelListerPropertiesLocation.hotelListerProperties_id, hotelListerPropertiesLocation.property_location, hotelListerPropertiesLocation.property_country, hotelListerPropertiesLocation.property_city, layoutPrice.id, layoutPrice.roomType_budgetDoubleRoom, layoutPrice.roomName_budgetDoubleRoom, layoutPrice.hotelListerPropertiesId FROM otherPropertyDescription JOIN hotelListerProperties ON otherPropertyDescription.property_id = hotelListerProperties.id JOIN hotelListerPropertiesLocation ON hotelListerProperties.id = hotelListerPropertiesLocation.hotelListerProperties_id JOIN layoutPrice ON otherPropertyDescription.room_id = layoutPrice.id WHERE otherPropertyDescription.property_id = '$property_id' AND otherPropertyDescription.room_id = '$room_id'", "CHK");
     exit(json_encode($pull_data));
+
+
+
 }
 
 // select all from user where created_at BETWEEN `` AND ``;
