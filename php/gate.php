@@ -599,18 +599,22 @@ function reservationDetail()
     $row4 = mysqli_fetch_assoc($result);
     $total_payment = $row4["chargeCreditProperty_guestPaymentOptions"];
     $commission = $row4["commissionPercentage_commissionPayments"];
+    // print_r($total_payment.$commission);
 
 
     //room information
-    $query5 = "SELECT roomType_budgetDoubleRoom,roomName_budgetDoubleRoom FROM layoutPrice WHERE roomType_budgetDoubleRoom = '$room_type'";
+    $query5 = "SELECT id,roomType_budgetDoubleRoom,roomName_budgetDoubleRoom FROM layoutPrice WHERE roomType_budgetDoubleRoom = '$room_type'";
     $result = mysqli_query($alleybookingsConnection, $query5) or die(mysqli_error($alleybookingsConnection));
     $row5 = mysqli_fetch_assoc($result);
+    $room_id = $row5["id"];
     $roomType = $row5["roomType_budgetDoubleRoom"];
     $roomName = $row5["roomName_budgetDoubleRoom"];
-    //print_r($roomType." ".$roomName); die();
+    // print_r($roomType." ".$room_id); die();
 
     //check in time
-    $check_in = date('m/d/Y h:i a', time());
+    // $check_in = date('m/d/Y h:i a', time());
+    $check_in = $_GET['check_in'];
+    $check_out = $_GET['check_out'];
     //echo $date;
 
     //reservation number
@@ -620,8 +624,8 @@ function reservationDetail()
 
 
     // Insert the new  table
-    $sql2 = "INSERT INTO `hotelReservation`(`property_id`, `property_name`, `property_location`, `room_type`, `room_name`,  `guest_name`, `check_in`, `status`, `total_payment`, `commission`, `reservation_no`) VALUES ('$property_id','$property_name','$property_location','$roomType','$roomName','$guest_name','$check_in','Yes','$total_payment','$commission','$reservation_no')";
-    //print_r($sql2);
+    $sql2 = "INSERT INTO `hotelReservation`(`property_id`, `property_name`, `property_location`, `room_type`, `room_name`, `room_id`, `guest_name`, `status`, `check_in`, `check_out`, `total_payment`, `commission`, `reservation_no`) VALUES ('$property_id','$property_name','$property_location','$roomType','$roomName','$room_id','$guest_name','Yes','$check_in','$check_out','$total_payment','$commission','$reservation_no')";
+    // print_r($sql2);
     $result = mysqli_query($alleybookingsConnection, $sql2) or die(mysqli_error($alleybookingsConnection));
     if ($result) {
         $arr = ["status" => 1, "message" => "Created successfully!"];
@@ -1051,4 +1055,4 @@ function otherPropertyDescription($data)
 }
 
 // select all from user where created_at BETWEEN `` AND ``;
-// SELECT SUM(score) as sum_score FROM game;
+// SELECT SUM(score) as sum_score FROM game;/Applications/XAMPP/xamppfiles/htdocs/alleybookings/php/gate.php
