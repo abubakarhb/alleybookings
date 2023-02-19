@@ -53,6 +53,57 @@ function check_db_query_staus($db_state, $db_actions)
             break;
     }
 }
+
+function check_db_query_staus1($db_state, $db_actions)
+{
+    include "config/index.php";
+    $query_User_re = sprintf($db_state);
+    $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+
+    $totalRows_User_re = mysqli_num_rows($User_re);
+    switch ($db_actions) {
+        case 'DEL':
+            if ($User_re) {
+                $returnResponse = ['status' => 1, 'message' => "Deleted successfully"];
+                return ($returnResponse);
+            } else {
+                $returnResponse = ['status' => 0, 'message' => "try again"];
+                return ($returnResponse);
+            }
+            break;
+        case 'UPD':
+            if ($User_re) {
+                $returnResponse = ['status' => 1, 'message' => "Updated successfully"];
+                return ($returnResponse);
+            } else {
+                $returnResponse = ['status' => 0, 'message' => "try again"];
+                return ($returnResponse);
+            }
+            break;
+        case 'CHK':
+            if ($User_re) {
+                if ($totalRows_User_re > 0) {
+                    $all = [];
+                    while ($row_User_re = mysqli_fetch_assoc($User_re)) {
+                        $all[] = $row_User_re;
+                        // $User_re11 = mysqli_query($ibsConnection, "INSERT INTO mda(`fullname`) VALUE('{$row_User_re['COL_3']}')") or die(mysqli_error($ibsConnection));
+                    };
+                    $arr = ['status' => 1, 'message' => $all];
+                    return ($arr);
+                } else {
+                    $returnResponse = ['status' => 0, 'message' => "try again"];
+                    return ($returnResponse);
+                }
+            } else {
+                $returnResponse = ['status' => 0, 'message' => "try again"];
+                return ($returnResponse);
+            }
+            break;
+
+        default:
+            break;
+    }
+}
 function login($username, $password)
 {
     include "config/index.php";
@@ -62,7 +113,7 @@ function login($username, $password)
     $totalRows_User_re = mysqli_num_rows($User_re);
     if ($totalRows_User_re > 0) {
         if ($row_User_re['password'] == $password) {
-            $arr = ['status' => 1, 'message' => 'Buzzing you in 😎', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']];
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']];
             exit(json_encode($arr));
         }
     } else {
@@ -77,7 +128,7 @@ function createUser()
     $password = $_GET['password'];
     $firstname = $_GET['firstname'];
     $lastname = $_GET['lastname'];
-    $verification = encripted_data($email . "£" . "30" . "_");
+    $verification = encripted_data($email . "Â£" . "30" . "_");
     $query_User_re = sprintf("INSERT INTO `endUsers`(`first_name`, `last_name`, `email`, `password`,`verification_status`) 
                     VALUES ('$firstname', '$lastname', '$email', '$password','$verification')");
     $check_exist = check_db_query_staus("SELECT email FROM endUsers WHERE email='{$email}'", "CHK");
@@ -87,27 +138,70 @@ function createUser()
         exit(json_encode($returnResponse));
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
-
+        // ?" . $verification . "
 
         $mail = new PHPMailer(true);
 
-        if ($User_re) {
-            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully"];
-            exit(json_encode($returnResponse));
-        } else {
-            $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
-            exit(json_encode($returnResponse));
+        try {
+            //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
+            $mail->Password   = 'snqwdcnibuxrxxnd';                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+            //Recipients
+            $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
+            $mail->addAddress($email);     //Add a recipient
+
+
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = "Alleybookings Account Verification";
+            $mail->Body    = "
+      Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
+         <br/>
+         http://localhost:3000/verifyemail
+          <br/>       
+
+          This link is only valid for 3 day, so please make sure to click on it as soon as possible.
+          <br/>
+          Thank you,<br>
+          Alleybookings
+          <br/>
+          <br/>
+          I hope this helps! Let me know if you have any questions or need further assistance.
+      \n
+      ";
+            // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
+            // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+
+            $mail->send();
+            if ($User_re) {
+                $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "message sent successfully"];
+                exit(json_encode($returnResponse));
+            }
+            //   $returnResponse = ['message' => "message sent successfully"];
+            //   exit(json_encode($returnResponse));
+        } catch (Exception $e) {
+            if ($User_re < 1) {
+                $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "{$mail->ErrorInfo} Message could not be sent. Mailer Error"];
+                exit(json_encode($returnResponse));
+            }
         }
     }
 }
-
 
 
 function createListerUser($email, $firstname, $lastname, $phone)
 {
     include "config/index.php";
     include "config/enctp.php";
-    $verification = encripted_data($email . "££" . "30" . "_");
+    $verification = encripted_data($email . "Â£Â£" . "30" . "_");
     $query_User_re = sprintf("INSERT INTO `hotelListerUsers`(`first_name`, `last_name`, `email`, `phone_number`) 
                         VALUES ('$firstname','$lastname','$email','$phone')");
     $check_exist = check_db_query_staus("SELECT email FROM hotelListerUsers WHERE email='{$email}'", "CHK");
@@ -404,7 +498,7 @@ function hotelOpenAndCloseRoom($data)
         $row = check_db_query_staus("SELECT * FROM `open_close_rooms` WHERE `room_id`= {$data->openClose->room_id}", "CHK");
         //print_r($row);
         if ($row['status'] == 1) {
-            $query =  "UPDATE `open_close_rooms` SET `room_id`='{$data->openClose->room_id}',`date_from`='{$data->openClose->date_from}',`date_to`='{$data->openClose->date_to}',`room_type`='{$data->openClose->room_type}',`room_selling_amount`='{$data->openClose->room_selling_amount}',`standard_rate`='{$data->openClose->standard_rate}',`non_refundable_rates`='{$data->openClose->non_refundable_rates}',`open_close_booking_status`='{$data->openClose->open_close_booking_status}',`standard_rate_status`='{$data->openClose->standard_rate_status}',`non_refundable_rates_status`='{$data->openClose->non_refundable_rates_status}' WHERE `room_id` = {$data->openClose->room_id}";
+            $query =  "UPDATE `open_close_rooms` SET `room_id`='{$data->openClose->room_id}',`property_id`='{$data->openClose->property_id}',`date_from`='{$data->openClose->date_from}',`date_to`='{$data->openClose->date_to}',`room_type`='{$data->openClose->room_type}',`room_selling_amount`='{$data->openClose->room_selling_amount}',`standard_rate`='{$data->openClose->standard_rate}',`non_refundable_rates`='{$data->openClose->non_refundable_rates}',`open_close_booking_status`='{$data->openClose->open_close_booking_status}',`standard_rate_status`='{$data->openClose->standard_rate_status}',`non_refundable_rates_status`='{$data->openClose->non_refundable_rates_status}' WHERE `room_id` = {$data->openClose->room_id}";
 
 
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
@@ -416,7 +510,7 @@ function hotelOpenAndCloseRoom($data)
                 exit(json_encode($error_updating));
             }
         } else {
-            $query = sprintf("INSERT INTO `open_close_rooms`(`room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) VALUES ('{$data->openClose->room_id}','{$data->openClose->date_from}','{$data->openClose->date_to}','{$data->openClose->room_type}','{$data->openClose->room_selling_amount}','{$data->openClose->standard_rate}','{$data->openClose->non_refundable_rates}','{$data->openClose->open_close_booking_status}','{$data->openClose->standard_rate_status}','{$data->openClose->non_refundable_rates_status}')");
+            $query = sprintf("INSERT INTO `open_close_rooms`(`room_id`, `property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) VALUES ('{$data->openClose->room_id}','{$data->openClose->property_id}','{$data->openClose->date_from}','{$data->openClose->date_to}','{$data->openClose->room_type}','{$data->openClose->room_selling_amount}','{$data->openClose->standard_rate}','{$data->openClose->non_refundable_rates}','{$data->openClose->open_close_booking_status}','{$data->openClose->standard_rate_status}','{$data->openClose->non_refundable_rates_status}')");
 
 
 
@@ -451,7 +545,7 @@ function newsletter($data)
             $error_sub = ["Error" => "You're already a subscriber!"];
             exit(json_encode($error_sub));
         } else {
-            // Insert email address into the database
+             // Insert email address into the database
             $query = sprintf("INSERT INTO `newsletter`(`firstname`, `lastName`, `phoneNumber`, `email`) VALUES ('{$data->firstname}','{$data->lastName}','{$data->phoneNumber}','{$data->email}')");
 
             $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
@@ -466,81 +560,6 @@ function newsletter($data)
         }
     }
 }
-function reservationDetail()
-{
-    include "config/index.php";
-    include "config/enctp.php";
-    $property_id = $_GET['property_id'];
-    $user_id = $_GET['user_id'];
-    $room_type = $_GET['room_type'];
-    //print_r($property_name ." ". $room_type);
 
-    // property lister
-    $query1 = "SELECT id, property_name FROM hotelListerProperties WHERE id = '$property_id'";
-    $result = mysqli_query($alleybookingsConnection, $query1) or die(mysqli_error($alleybookingsConnection));
-    $row1 = mysqli_fetch_assoc($result);
-    $property_id = $row1["id"];
-    $property_name = $row1["property_name"];
-    // print_r($property_name); 
-
-    //property location
-    $query2 = "SELECT property_location FROM hotelListerPropertiesLocation WHERE hotelListerProperties_id = '$property_id'";
-    $result = mysqli_query($alleybookingsConnection, $query2) or die(mysqli_error($alleybookingsConnection));
-    $row2 = mysqli_fetch_assoc($result);
-    $property_location = $row2["property_location"];
-    // print_r($property_location);
-
-    //End User
-    $query3 = "SELECT first_name,last_name FROM endUsers WHERE id = '$user_id'";
-    $result = mysqli_query($alleybookingsConnection, $query3) or die(mysqli_error($alleybookingsConnection));
-    $row3 = mysqli_fetch_assoc($result);
-    $guest_name = $row3["first_name"] . " " . $row3["last_name"];
-    // print_r($guest_name);
-
-
-    //payment and commision
-    $query4 = "SELECT chargeCreditProperty_guestPaymentOptions,commissionPercentage_commissionPayments FROM hotelListerPayments WHERE hotelListerPropertiesId = '$property_id'";
-    $result = mysqli_query($alleybookingsConnection, $query4) or die(mysqli_error($alleybookingsConnection));
-    $row4 = mysqli_fetch_assoc($result);
-    $total_payment = $row4["chargeCreditProperty_guestPaymentOptions"];
-    $commission = $row4["commissionPercentage_commissionPayments"];
-    
-    
-    //room information
-    $query5 = "SELECT roomType_budgetDoubleRoom,roomName_budgetDoubleRoom FROM layoutPrice WHERE roomType_budgetDoubleRoom = '$room_type'";
-    $result = mysqli_query($alleybookingsConnection, $query5) or die(mysqli_error($alleybookingsConnection));
-    $row5 = mysqli_fetch_assoc($result);
-    $roomType = $row5["roomType_budgetDoubleRoom"];
-    $roomName = $row5["roomName_budgetDoubleRoom"];
-    //print_r($roomType." ".$roomName); die();
-
-    //check in time
-    $check_in = date('m/d/Y h:i a', time());
-    //echo $date;
-
-    //reservation number
-    $reservation_no = (time() + rand(1, 1000));
-    // print_r($reservation);
-
-
-
-    // Insert the new  table
-    $sql2 = "INSERT INTO `hotelReservation`(`property_id`, `property_name`, `property_location`, `room_type`, `room_name`,  `guest_name`, `check_in`, `status`, `total_payment`, `commission`, `reservation_no`) VALUES ('$property_id','$property_name','$property_location','$roomType','$roomName','$guest_name','$check_in','Yes','$total_payment','$commission','$reservation_no')";
-    //print_r($sql2);
-    $result = mysqli_query($alleybookingsConnection, $sql2) or die(mysqli_error($alleybookingsConnection));
-    if ($result) {
-        $arr = ["status" => 1, "message" => "Created successfully!"];
-        exit(json_encode($arr));
-    } else {
-        $error_resv = ["Error" => "Failed"];
-        exit(json_encode($error_resv));
-    }
-
-
-
-    
-    // INSERT INTO invoices (invoice_number, payer_id, revenue_head, due_date, payment_status) 
-    //                   VALUES ('$invoice_number', $payer_id, $revenue_head_id,'$due_date', 2)";
-    
-}
 // select all from user where created_at BETWEEN `` AND ``;
+// SELECT SUM(score) as sum_score FROM game;/Applications/XAMPP/xamppfiles/htdocs/alleybookings/php/gate.php
