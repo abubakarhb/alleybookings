@@ -5,33 +5,34 @@ header('Content-type:application/json;charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header('Content-Type: application/json');
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     include 'gate.php';
     if (isset($_GET['login'])) {
         $username = (string) $_GET['email'];
         $password = (string) $_GET['password'];
         login($username, $password);
-    }   elseif (isset($_GET['createEndUser'])) {
+    } elseif (isset($_GET['createEndUser'])) {
         createUser();
-    }   elseif (isset($_GET['reservationDetail'])) {;
+    } elseif (isset($_GET['reservationDetail'])) {;
         reservationDetail($_GET);
-    }   elseif (isset($_GET['singleHotelReservation'])) {
+    } elseif (isset($_GET['singleHotelReservation'])) {
         singleHotelReservation($_GET['property_id']);
-    }   elseif (isset($_GET['singleUserReservation'])) {
+    } elseif (isset($_GET['singleUserReservation'])) {
         singleUserReservation($_GET['id']);
-    }   elseif (isset($_GET['HotelReservationStatement'])) {
+    } elseif (isset($_GET['HotelReservationStatement'])) {
         HotelReservationStatement($_GET);
-    }   elseif (isset($_GET['getAllRoom'])) {
+    } elseif (isset($_GET['getAllRoom'])) {
         getAllRoom($_GET['hotelListerPropertiesId']);
-    }   elseif (isset($_GET['getSingleRoom'])) {
+    } elseif (isset($_GET['getSingleRoom'])) {
         getSingleRoom($_GET['id']);
-    }   elseif (isset($_GET['getAllRoomType'])) {
+    } elseif (isset($_GET['getAllRoomType'])) {
         getAllRoomType($_GET['hotelListerPropertiesId']);
-    }   elseif (isset($_GET['reservationGrossRevenue'])) {
+    } elseif (isset($_GET['reservationGrossRevenue'])) {
         reservationGrossRevenue($_GET['property_id']);
-    }   elseif (isset($_GET['reservationCommision'])) {
+    } elseif (isset($_GET['reservationCommision'])) {
         reservationCommision($_GET['property_id']);
-    }   elseif (isset($_GET['VATDetails'])) {
+    } elseif (isset($_GET['VATDetails'])) {
         VATDetails($_GET);
     } elseif (isset($_GET['searchFiltering'])) {
         searchFiltering($_GET);
@@ -61,31 +62,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "hotelGeneralNotification") {
             // hotelGeneralRoomAmenities($data['data']);
             // print_r($data['data']);
-        }  elseif ($data['endpoint'] == "hotelOpenAndCloseRoom") {
+        } elseif ($data['endpoint'] == "hotelOpenAndCloseRoom") {
             hotelOpenAndCloseRoom($data['data']);
             // print_r($data['data']);
-        }  elseif ($data['endpoint'] == "newsletter") {
+        } elseif ($data['endpoint'] == "newsletter") {
             newsletter($data['data']);
             // print_r($data['data']);
-        }  elseif ($data['endpoint'] == "copyYearlyRate") {
+        } elseif ($data['endpoint'] == "copyYearlyRate") {
             copyYearlyRate($data['data']);
-             //print_r($data['data']);
+            //print_r($data['data']);
         } elseif ($data['endpoint'] == "insertRoomDetails") {
             insertRoomDetails($data['data']);
-             //print_r($data['data']);
+            //print_r($data['data']);
         } elseif ($data['endpoint'] == "propertyRoomAndOtherDiscription") {
             propertyRoomAndOtherDescription($data['data']);
-             //print_r($data['data']);
+            //print_r($data['data']);
         } elseif ($data['endpoint'] == "invoice") {
             invoice($data['data']);
-             //print_r($data['data']);
+            //print_r($data['data']);
         } elseif ($data['endpoint'] == "hotelListerAgent") {
             hotelListerAgent($data['data']);
-             //print_r($data['data']);
+            //print_r($data['data']);
         } elseif ($data['endpoint'] == "healthAndSafety") {
             healthAndSafety($data['data']);
-             //print_r($data['data']);
-        } 
+            //print_r($data['data']);
+        }
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     include 'gate.php';

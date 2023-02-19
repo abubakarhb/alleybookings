@@ -1,11 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.3
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 12, 2023 at 05:52 PM
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+-- Generation Time: Jan 29, 2023 at 12:03 AM
+=======
+-- Generation Time: Feb 15, 2023 at 06:23 PM
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
 -- Server version: 10.4.21-MariaDB
--- PHP Version: 7.4.28
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -404,9 +408,15 @@ CREATE TABLE `hotelListerPropertiesLocation` (
 --
 
 INSERT INTO `hotelListerPropertiesLocation` (`id`, `property_location`, `property_country`, `property_street_address`, `property_unit_number`, `property_city`, `zip_code`, `hotelListerProperties_id`, `time_in`) VALUES
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+(1, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 1, '2023-01-27 22:51:49'),
+(2, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 2, '2023-01-28 05:59:32'),
+(3, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 18, '2023-01-03 13:20:45'),
+=======
 (1, 'United Kingdom', 'United Kingdom', 'ui', 2, 'London', 'Z10', 1, '2023-02-12 11:04:54'),
 (2, 'Nigeria', 'Nigeria', 'ui', 2, 'kano', 'Z10', 2, '2023-02-12 11:05:11'),
 (3, 'Nigeria', 'Nigeria', 'ui', 2, 'Niger', 'Z10', 18, '2023-02-12 11:16:35'),
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
 (4, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 19, '2023-01-03 13:21:17'),
 (5, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 20, '2023-01-03 13:21:54'),
 (6, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 21, '2023-01-03 13:22:36'),
@@ -499,11 +509,18 @@ CREATE TABLE `hotelReservation` (
   `property_location` varchar(200) NOT NULL,
   `room_type` varchar(200) NOT NULL,
   `room_name` varchar(200) NOT NULL,
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+  `guest_name` varchar(300) NOT NULL,
+  `check_in` varchar(200) NOT NULL,
+  `check_out` varchar(200) NOT NULL DEFAULT 'Not Specified yet',
+  `status` enum('Yes','No') NOT NULL,
+=======
   `room_id` int(255) NOT NULL,
   `guest_name` varchar(300) NOT NULL,
   `status` enum('Yes','No') NOT NULL,
   `check_in` date NOT NULL,
   `check_out` date NOT NULL,
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
   `total_payment` varchar(200) NOT NULL,
   `commission` varchar(300) NOT NULL,
   `reservation_no` varchar(300) NOT NULL,
@@ -514,12 +531,20 @@ CREATE TABLE `hotelReservation` (
 -- Dumping data for table `hotelReservation`
 --
 
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+INSERT INTO `hotelReservation` (`id`, `property_id`, `property_name`, `property_location`, `room_type`, `room_name`, `guest_name`, `check_in`, `check_out`, `status`, `total_payment`, `commission`, `reservation_no`, `book_on`) VALUES
+(1, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Abubakar Bello', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '10', '4.50', '1674947209', '2023-01-28 22:52:03'),
+(2, 2, 'Royal Guest Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Abubakar Bello', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '1', '4.50', '1674946465', '2023-01-28 22:52:32'),
+(3, 2, 'Royal Guest Hotel', 'ui', 'Presidential Suite', 'CHF-125', 'Mohammed Hassan', '01/28/2023 11:52 pm', 'Not Specified yet', 'Yes', '1', '4.50', '1674946409', '2023-01-28 22:52:40');
+=======
 INSERT INTO `hotelReservation` (`id`, `property_id`, `property_name`, `property_location`, `room_type`, `room_name`, `room_id`, `guest_name`, `status`, `check_in`, `check_out`, `total_payment`, `commission`, `reservation_no`, `book_on`) VALUES
 (1, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'CHF-125', 1, 'Abubakar Bello', 'Yes', '2023-02-12', '2023-02-13', '10', '4.50', '1674947209', '2023-01-28 22:52:03'),
 (2, 2, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Abubakar Bello', 'Yes', '2023-02-13', '2023-02-14', '1', '4.50', '1674946465', '2023-01-28 22:52:32'),
 (3, 2, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Mohammed Hassan', 'Yes', '2023-02-05', '2023-02-07', '1', '4.50', '1674946409', '2023-01-28 22:52:40'),
 (4, 1, 'City Garden Hotel', 'ui', 'Room for Extended Stay', 'RFE 123', 3, 'Abubakar Bello', 'Yes', '2023-02-15', '2023-02-17', '10', '4.50', '1675004730', '2023-01-29 14:58:05'),
-(5, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'SES-001', 1, 'Mohammed Hassan', 'Yes', '2023-02-08', '2023-02-10', '10', '4.50', '1675005489', '2023-01-29 15:03:13');
+(5, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'SES-001', 1, 'Mohammed Hassan', 'Yes', '2023-02-08', '2023-02-10', '10', '4.50', '1675005489', '2023-01-29 15:03:13'),
+(6, 1, 'City Garden Hotel', 'United Kingdom', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', 'Yes', '2023-02-12', '2023-02-13', '10', '4.50', '1676228936', '2023-02-12 19:10:28'),
+(7, 1, 'City Garden Hotel', 'United Kingdom', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', 'Yes', '2023-02-12', '2023-02-14', '10', '4.50', '1676229345', '2023-02-12 19:11:21');
 
 -- --------------------------------------------------------
 
@@ -576,6 +601,7 @@ CREATE TABLE `invoices` (
 INSERT INTO `invoices` (`id`, `document_name`, `invoice_number`, `date`, `period`, `action`, `amount`, `status`) VALUES
 (1, 'Double', '63e55e661d6dd', '2023-01-12', '2days', 'none', '10', 'unpaid'),
 (2, 'Double', '63e5d4910b63e', '2023-01-12', '2days', 'none', '10', 'unpaid');
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
 
 -- --------------------------------------------------------
 
@@ -593,10 +619,13 @@ CREATE TABLE `layoutPrice` (
   `bedKind_bedOptions` varchar(255) NOT NULL,
   `numGuest_bedOptions` int(255) NOT NULL,
   `pricePerPerson_basePricePerNight` double(10,2) NOT NULL,
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+=======
   `roomLocation` varchar(200) NOT NULL,
   `totalOccupant` varchar(200) NOT NULL,
   `maxAdultOccupants` varchar(200) NOT NULL,
   `maxChildrenOccupants` varchar(200) NOT NULL,
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
   `hotelListerPropertiesId` int(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -605,6 +634,28 @@ CREATE TABLE `layoutPrice` (
 -- Dumping data for table `layoutPrice`
 --
 
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `hotelListerPropertiesId`, `created_at`) VALUES
+(1, 'Presidential Suite', 'CHF-125', 'string', 'string', 1, 'string', 2, 2.50, 1, '2023-01-28 22:49:17'),
+(2, 'Suite / Executive Suite', 'SES-001', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:49:24'),
+(3, 'Room for Extended Stay', 'RFE 123', 'string', 'string', 1, 'string', 2, 2.50, 1, '2023-01-28 22:29:44'),
+(4, 'King', 'string', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:29:49'),
+(5, 'Queen', 'string', 'string', 'string', 1, 'string', 2, 2.50, 2, '2023-01-28 22:29:53'),
+(6, 'Single', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-28 06:31:12'),
+(7, 'Double', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-28 06:31:33'),
+(8, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-18 23:00:00'),
+(9, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-18 23:00:00'),
+(10, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '2023-01-25 07:37:28'),
+(11, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(12, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(13, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(14, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(15, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(16, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(17, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(18, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00'),
+(19, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, 24, '0000-00-00 00:00:00');
+=======
 INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `roomLocation`, `totalOccupant`, `maxAdultOccupants`, `maxChildrenOccupants`, `hotelListerPropertiesId`, `created_at`) VALUES
 (1, 'Presidential Suite', 'CHF-125', 'string', 'string', 3, 'string', 2, 2.50, 'string', '', '', '', 1, '2023-02-09 14:50:29'),
 (2, 'Suite / Executive Suite', 'SES-001', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 2, '2023-01-28 22:49:24'),
@@ -626,6 +677,7 @@ INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDo
 (18, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
 (19, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
 (20, 'Double Room Updadted and Again', 'CHA-1', 'NULLY Updated', 'Created Policy Updadte', 8, 'full Updadted', 5, 200.00, 'Estate Around', '2', '7', '3', 1, '2023-02-10 05:53:58');
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
 
 -- --------------------------------------------------------
 
@@ -657,10 +709,16 @@ INSERT INTO `newsletter` (`id`, `firstname`, `lastName`, `phoneNumber`, `email`)
 
 CREATE TABLE `open_close_rooms` (
   `id` int(11) NOT NULL,
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+  `room_id` tinyint(11) NOT NULL,
+  `date_from` varchar(200) NOT NULL,
+  `date_to` varchar(200) NOT NULL,
+=======
   `room_id` int(255) NOT NULL,
   `property_id` int(11) NOT NULL,
   `date_from` date NOT NULL,
   `date_to` date NOT NULL,
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
   `room_type` varchar(300) NOT NULL,
   `room_selling_amount` float NOT NULL,
   `standard_rate` float NOT NULL,
@@ -675,6 +733,10 @@ CREATE TABLE `open_close_rooms` (
 -- Dumping data for table `open_close_rooms`
 --
 
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+INSERT INTO `open_close_rooms` (`id`, `room_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`, `created_at`) VALUES
+(1, 1, '2023-01-17', '2023-01-17', 'string', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-01-24 09:38:47');
+=======
 INSERT INTO `open_close_rooms` (`id`, `room_id`, `property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`, `created_at`) VALUES
 (1, 1, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:08:50'),
 (2, 2, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:08:52'),
@@ -691,6 +753,8 @@ INSERT INTO `open_close_rooms` (`id`, `room_id`, `property_id`, `date_from`, `da
 
 CREATE TABLE `otherPropertyDescription` (
   `id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `language` varchar(200) NOT NULL,
   `propertyDescription` text NOT NULL,
   `roomDescription` text NOT NULL,
   `property_id` int(11) NOT NULL,
@@ -701,9 +765,11 @@ CREATE TABLE `otherPropertyDescription` (
 -- Dumping data for table `otherPropertyDescription`
 --
 
-INSERT INTO `otherPropertyDescription` (`id`, `propertyDescription`, `roomDescription`, `property_id`, `created_at`) VALUES
-(1, 'Double', 'NULLY updated', 1, '2023-02-09 20:09:20'),
-(2, 'As you can see we are using', 'to get the age range and', 2, '2023-02-10 06:55:48');
+INSERT INTO `otherPropertyDescription` (`id`, `room_id`, `language`, `propertyDescription`, `roomDescription`, `property_id`, `created_at`) VALUES
+(1, 1, 'English', 'Double', 'NULLY updated', 1, '2023-02-09 20:09:20'),
+(2, 1, 'French', 'As you can see we are using', 'to get the age range and', 2, '2023-02-10 06:55:48'),
+(3, 2, 'English', 'As you can see we are using', 'to get the age range and', 2, '2023-02-15 14:31:54');
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
 
 -- --------------------------------------------------------
 
@@ -960,6 +1026,8 @@ ALTER TABLE `hotelReservation`
   ADD PRIMARY KEY (`id`);
 
 --
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+=======
 -- Indexes for table `Hotel_lister_agent`
 --
 ALTER TABLE `Hotel_lister_agent`
@@ -972,6 +1040,7 @@ ALTER TABLE `invoices`
   ADD PRIMARY KEY (`id`);
 
 --
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
 -- Indexes for table `layoutPrice`
 --
 ALTER TABLE `layoutPrice`
@@ -990,12 +1059,15 @@ ALTER TABLE `open_close_rooms`
   ADD PRIMARY KEY (`id`);
 
 --
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+=======
 -- Indexes for table `otherPropertyDescription`
 --
 ALTER TABLE `otherPropertyDescription`
   ADD PRIMARY KEY (`id`);
 
 --
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
 -- Indexes for table `policies`
 --
 ALTER TABLE `policies`
@@ -1118,7 +1190,10 @@ ALTER TABLE `hotelListerUsers`
 -- AUTO_INCREMENT for table `hotelReservation`
 --
 ALTER TABLE `hotelReservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+<<<<<<< HEAD:php/db/alleybookings (1).sql
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+=======
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `Hotel_lister_agent`
@@ -1131,6 +1206,7 @@ ALTER TABLE `Hotel_lister_agent`
 --
 ALTER TABLE `invoices`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> 228905dcc80750d2ccc2174a5727aebcef4f6024:php/db/alleybookings.sql
 
 --
 -- AUTO_INCREMENT for table `layoutPrice`
@@ -1154,7 +1230,19 @@ ALTER TABLE `open_close_rooms`
 -- AUTO_INCREMENT for table `otherPropertyDescription`
 --
 ALTER TABLE `otherPropertyDescription`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `newsletter`
+--
+ALTER TABLE `newsletter`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `open_close_rooms`
+--
+ALTER TABLE `open_close_rooms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `policies`
