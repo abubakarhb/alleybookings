@@ -117,6 +117,8 @@ function login($username, $password)
             exit(json_encode($arr));
         }
     } else {
+        $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
+            exit(json_encode($arr));
     }
 }
 
@@ -136,24 +138,22 @@ function createUser()
     if ($check_exist['status'] == 1) {
         $returnResponse = ['status' => 2, 'message' => "{$email} exists already"];
         exit(json_encode($returnResponse));
-    } else {
+    } else{
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
-        // ?" . $verification . "
 
         $mail = new PHPMailer(true);
 
-        try {
             //Enable verbose debug output
             $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
+            $mail->Host       = 'alleybookings.com';               //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
-            $mail->Password   = 'snqwdcnibuxrxxnd';                               //SMTP password
+            $mail->Username   = 'info@alleybookings.com';                   //SMTP username
+            $mail->Password   = 'info@2022';                               //SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
             $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
             //Recipients
-            $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
+            $mail->setFrom('info@alleybookings.com', 'alleybookings');
             $mail->addAddress($email);     //Add a recipient
 
 
@@ -164,7 +164,7 @@ function createUser()
             $mail->Body    = "
       Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
          <br/>
-         http://localhost:3000/verifyemail
+         https://alleyy.vercel.app/verifyemail
           <br/>       
 
           This link is only valid for 3 day, so please make sure to click on it as soon as possible.
@@ -175,25 +175,19 @@ function createUser()
           <br/>
           I hope this helps! Let me know if you have any questions or need further assistance.
       \n
-      ";
-            // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
-            // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-
-            $mail->send();
+      ";   
             if ($User_re) {
+                $mail->send();
                 $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "message sent successfully"];
                 exit(json_encode($returnResponse));
-            }
-            //   $returnResponse = ['message' => "message sent successfully"];
-            //   exit(json_encode($returnResponse));
-        } catch (Exception $e) {
-            if ($User_re < 1) {
-                $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "{$mail->ErrorInfo} Message could not be sent. Mailer Error"];
+            }else{
+                $returnResponse = ['status' => 0, 'message' => "email not registered"];
                 exit(json_encode($returnResponse));
             }
-        }
-    }
+    
+       
+        }   
+    
 }
 
 
@@ -967,8 +961,8 @@ function searchFiltering()
     include "config/enctp.php";
     $property_location = $_GET['property_location'];
     $checkin = $_GET['checkin'];
-    $checkout = $_GET['checkout'];
-    $room = $_GET['room'];
+    // $checkout = $_GET['checkout'];
+    // $room = $_GET['room'];
     // print_r($property_location); die;
     if (!empty($property_location) && !empty($checkin)) {
         $pull_data = "SELECT
@@ -978,11 +972,14 @@ function searchFiltering()
         hotelListerPropertiesLocation.property_country,
         hotelListerPropertiesLocation.property_city,
         open_close_rooms.date_from,
-        open_close_rooms.date_to
+        open_close_rooms.date_to,
+        propertiesPhotos.content
     FROM
         hotelListerProperties
     JOIN hotelListerPropertiesLocation ON hotelListerProperties.id = hotelListerPropertiesLocation.hotelListerProperties_id
     JOIN open_close_rooms ON hotelListerProperties.id = open_close_rooms.property_id
+    JOIN propertiesPhotos ON hotelListerProperties.id = propertiesPhotos.hotelListerPropertiesId
+
     WHERE
         (
             hotelListerPropertiesLocation.property_location LIKE '%$property_location%' OR hotelListerPropertiesLocation.property_country LIKE '%$property_location%' OR hotelListerPropertiesLocation.property_city LIKE '%$property_location%' OR hotelListerProperties.property_name LIKE '%$property_location%'
@@ -990,9 +987,11 @@ function searchFiltering()
     AND open_close_rooms.date_from >= '$checkin'";
 
         $User_re = mysqli_query($alleybookingsConnection, $pull_data) or die(mysqli_error($alleybookingsConnection));
-        if ($User_re > 0) {
+        if ($User_re) {
             $all = [];
             while ($row_User_re = mysqli_fetch_assoc($User_re)) {
+                $row_User_re['photos'] = explode("~", $row_User_re['content']);
+                unset($row_User_re['content']);
                 $all[] = $row_User_re;
             };
             $existence_hotels_index = [];
@@ -1005,16 +1004,15 @@ function searchFiltering()
                 }
             }
             foreach ($existence_hotels_index as $keys => $value2) {
-                $getAllRooms = check_db_query_staus1("SELECT * FROM layoutPrice WHERE `hotelListerPropertiesId` = {$value2}", "CHK");
+                $getAllRooms = check_db_query_staus1("SELECT * FROM layoutPrice WHERE `hotelListerPropertiesId` = {$value2} ORDER BY pricePerPerson_basePricePerNight DESC LIMIT 1", "CHK");
                 // print_r($getAllRooms);
                 foreach ($existence_hotels as $key3 => $value3) {
-                    if($value3['id'] == $value2) {
-                        $value3['rooms'] = $getAllRooms['message'];
+                    if ($value3['id'] == $value2) {
+                        $existence_hotels[$key3]['rooms'] = $getAllRooms['message'];
                     }
                 }
             }
-            print_r($existence_hotels);
-
+            exit(json_encode($existence_hotels));
         }
     } elseif (!empty($property_location)) {
         //   print_r("yes");
@@ -1025,7 +1023,7 @@ function searchFiltering()
             while ($row_User_re = mysqli_fetch_assoc($User_re)) {
                 $all[] = $row_User_re;
             };
-            print_r($all);
+            exit(json_encode($all));
         }
     }
 }
@@ -1050,5 +1048,4 @@ function otherPropertyDescription($data)
     exit(json_encode($pull_data));
 }
 
-// select all from user where created_at BETWEEN `` AND ``;
-// SELECT SUM(score) as sum_score FROM game;/Applications/XAMPP/xamppfiles/htdocs/alleybookings/php/gate.php
+
