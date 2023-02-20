@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 20, 2023 at 05:51 PM
+-- Generation Time: Feb 20, 2023 at 06:42 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.1.6
 
@@ -31,17 +31,12 @@ CREATE TABLE `rating_reviews` (
   `id` int(11) NOT NULL,
   `property_id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
-  `staff_reviews` varchar(350) NOT NULL,
+  `users_reviews` varchar(350) NOT NULL,
   `staff_ratings` bigint(20) NOT NULL,
-  `freeWifi_reviews` varchar(350) NOT NULL,
   `freeWifi_ratings` bigint(20) NOT NULL,
-  `clealiness_reviews` varchar(350) NOT NULL,
   `clealiness_ratings` bigint(20) NOT NULL,
-  `location_reviews` varchar(350) NOT NULL,
   `location_ratings` bigint(20) NOT NULL,
-  `comfort_reviews` varchar(350) NOT NULL,
   `comfort_ratings` bigint(20) NOT NULL,
-  `facilities_reviews` varchar(350) NOT NULL,
   `facilities_ratings` bigint(20) NOT NULL,
   `status` enum('Yes','No') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -51,11 +46,11 @@ CREATE TABLE `rating_reviews` (
 -- Dumping data for table `rating_reviews`
 --
 
-INSERT INTO `rating_reviews` (`id`, `property_id`, `user_id`, `staff_reviews`, `staff_ratings`, `freeWifi_reviews`, `freeWifi_ratings`, `clealiness_reviews`, `clealiness_ratings`, `location_reviews`, `location_ratings`, `comfort_reviews`, `comfort_ratings`, `facilities_reviews`, `facilities_ratings`, `status`, `created_at`) VALUES
-(1, 1, 1, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:29:20'),
-(2, 2, 1, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:31:17'),
-(3, 2, 2, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:31:46'),
-(4, 1, 2, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 16:30:41');
+INSERT INTO `rating_reviews` (`id`, `property_id`, `user_id`, `users_reviews`, `staff_ratings`, `freeWifi_ratings`, `clealiness_ratings`, `location_ratings`, `comfort_ratings`, `facilities_ratings`, `status`, `created_at`) VALUES
+(1, 1, 1, 'string', 5, 6, 4, 5, 7, 5, 'Yes', '2023-02-20 10:29:20'),
+(2, 2, 1, 'string', 8, 6, 4, 5, 7, 5, 'Yes', '2023-02-20 10:31:17'),
+(3, 2, 2, 'string', 4, 6, 4, 5, 7, 5, 'Yes', '2023-02-20 17:41:46');
+(4, 2, 3, 'string', 8, 5, 4, 5, 7, 5, 'Yes', '2023-02-20 17:41:46');
 
 --
 -- Indexes for dumped tables
@@ -75,7 +70,7 @@ ALTER TABLE `rating_reviews`
 -- AUTO_INCREMENT for table `rating_reviews`
 --
 ALTER TABLE `rating_reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

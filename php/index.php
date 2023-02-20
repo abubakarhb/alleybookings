@@ -95,7 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "healthAndSafety") {
             healthAndSafety($data['data']);
             //print_r($data['data']);
-        }
+        }elseif ($data['endpoint'] == "addRatingsAndReviews") {
+            addRatingsAndReviews($data['data']);
+            //  print_r($data['data']);
+        } 
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     include 'gate.php';

@@ -1071,30 +1071,26 @@ function addRatingsAndReviews($data)
     include "config/enctp.php";
     $property_id = $data->property_id;
     $user_id = $data->user_id;
-    $staff_reviews = $data->staff_reviews;
+    $users_reviews = $data->users_reviews;
     $staff_ratings = $data->staff_ratings;
-    $freeWifi_reviews = $data->freeWifi_reviews;
     $freeWifi_ratings = $data->freeWifi_ratings;
-    $clealiness_reviews = $data->clealiness_reviews;
     $clealiness_ratings = $data->clealiness_ratings;
-    $location_reviews = $data->location_reviews;
     $location_ratings = $data->location_ratings;
-    $comfort_reviews = $data->comfort_reviews;
     $comfort_ratings = $data->comfort_ratings;
-    $facilities_reviews = $data->facilities_reviews;
     $facilities_ratings = $data->facilities_ratings;
     $status = "Yes";
 
     // Check if data exists in the database
     $row22 = check_db_query_staus("SELECT *  FROM `rating_reviews` WHERE `property_id`= '{$property_id}' AND `user_id`= '{$user_id}'", "CHK");
-    // print_r($row2); die;
+    // print_r($row22); die;
 
     if ($row22['status'] == 1) {
         $error_sub = ["Error" => "Your rating already exist for this Hotel"];
         exit(json_encode($error_sub));
     } else {
         // Insert email address into the database
-        $query = sprintf(" INSERT INTO `rating_reviews`(`property_id`, `user_id`, `staff_reviews`, `staff_ratings`, `freeWifi_reviews`, `freeWifi_ratings`, `clealiness_reviews`, `clealiness_ratings`, `location_reviews`, `location_ratings`, `comfort_reviews`, `comfort_ratings`, `facilities_reviews`, `facilities_ratings`, `status`) VALUES ('$property_id','$user_id','$staff_reviews','$staff_ratings','$freeWifi_reviews','$freeWifi_ratings','$clealiness_reviews','$clealiness_ratings','$location_reviews','$location_ratings','$comfort_reviews','$comfort_ratings','$facilities_reviews','$facilities_ratings','$status')");
+        $query = sprintf(" INSERT INTO `rating_reviews`(`property_id`, `user_id`, `users_reviews`, `staff_ratings`, `freeWifi_ratings`, `clealiness_ratings`, `location_ratings`, `comfort_ratings`, `facilities_ratings`, `status`) VALUES ('$property_id','$user_id','$users_reviews','$staff_ratings','$freeWifi_ratings','$clealiness_ratings','$location_ratings','$comfort_ratings','$facilities_ratings','$status')");
+        //  print_r($query); die;
 
         $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
 
@@ -1112,10 +1108,9 @@ function getRatingsAndReviews($data)
 {
     include "config/index.php";
     include "config/enctp.php";
-
     // Rating all
-    $pull_data = check_db_query_staus1("SELECT rating_reviews.staff_reviews, rating_reviews.staff_ratings, rating_reviews.freeWifi_reviews, rating_reviews.freeWifi_ratings, rating_reviews.clealiness_reviews, rating_reviews.clealiness_ratings, rating_reviews.location_reviews, rating_reviews.location_ratings, rating_reviews.comfort_reviews, rating_reviews.comfort_ratings, rating_reviews.facilities_reviews, rating_reviews.facilities_ratings, rating_reviews.status,endUsers.id,endUsers.first_name,endUsers.last_name FROM rating_reviews JOIN endUsers ON rating_reviews.user_id = endUsers.id WHERE rating_reviews.property_id= '{$data}' AND rating_reviews.status = 1 ORDER BY id DESC", "CHK");
-    exit(json_encode($pull_data));
+    $pull_data = check_db_query_staus1("SELECT rating_reviews.users_reviews, rating_reviews.staff_ratings, rating_reviews.freeWifi_ratings,rating_reviews.clealiness_ratings,rating_reviews.location_ratings, rating_reviews.comfort_ratings,rating_reviews.facilities_ratings, rating_reviews.status,endUsers.id,endUsers.first_name,endUsers.last_name FROM rating_reviews JOIN endUsers ON rating_reviews.user_id = endUsers.id WHERE rating_reviews.property_id= '{$data}' AND rating_reviews.status = 1 ORDER BY id DESC", "CHK");
+    // exit(json_encode($pull_data));
 
     // Rating sum
     $query1 = check_db_query_staus1("SELECT AVG(staff_ratings) FROM `rating_reviews` WHERE `property_id` = '{$data}' AND `status` = 1", "CHK");
@@ -1137,14 +1132,14 @@ function getRatingsAndReviews($data)
     // exit(json_encode("Facility Ratings". " " .$query6));
 
     $arr = [];
-    $arr[] = $pull_data['message'][0];
+    $arr[] = $pull_data['message'];
     $arr[] = $query1['message'][0];
     $arr[] = $query2['message'][0];
     $arr[] = $query3['message'][0];
     $arr[] = $query4['message'][0];
     $arr[] = $query5['message'][0];
     $arr[] = $query6['message'][0];
-    // exit(json_encode($arr));
+    exit(json_encode($arr));
 
 
 }
