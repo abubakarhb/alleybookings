@@ -123,6 +123,8 @@ function login($username, $password)
             exit(json_encode($arr));
         }
     } else {
+        $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
+            exit(json_encode($arr));
     }
 }
 
@@ -143,24 +145,22 @@ function createUser()
     if ($check_exist['status'] == 1) {
         $returnResponse = ['status' => 2, 'message' => "{$email} exists already"];
         exit(json_encode($returnResponse));
-    } else {
+    } else{
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
-        // ?" . $verification . "
 
         $mail = new PHPMailer(true);
 
-        try {
             //Enable verbose debug output
             $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';               //Set the SMTP server to send through
+            $mail->Host       = 'alleybookings.com';               //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
-            $mail->Password   = 'snqwdcnibuxrxxnd';                               //SMTP password
+            $mail->Username   = 'info@alleybookings.com';                   //SMTP username
+            $mail->Password   = 'info@2022';                               //SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
             $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
             //Recipients
-            $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
+            $mail->setFrom('info@alleybookings.com', 'alleybookings');
             $mail->addAddress($email);     //Add a recipient
 
 
@@ -171,7 +171,7 @@ function createUser()
             $mail->Body    = "
       Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
          <br/>
-         http://localhost:3000/verifyemail
+         https://alleyy.vercel.app/verifyemail
           <br/>       
 
           This link is only valid for 3 day, so please make sure to click on it as soon as possible.
@@ -182,25 +182,19 @@ function createUser()
           <br/>
           I hope this helps! Let me know if you have any questions or need further assistance.
       \n
-      ";
-            // $mail->Body += 'https://steamledge.com/allonfasaha/admin/index.html';
-            // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-
-            $mail->send();
+      ";   
             if ($User_re) {
+                $mail->send();
                 $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "message sent successfully"];
                 exit(json_encode($returnResponse));
-            }
-            //   $returnResponse = ['message' => "message sent successfully"];
-            //   exit(json_encode($returnResponse));
-        } catch (Exception $e) {
-            if ($User_re < 1) {
-                $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "{$mail->ErrorInfo} Message could not be sent. Mailer Error"];
+            }else{
+                $returnResponse = ['status' => 0, 'message' => "email not registered"];
                 exit(json_encode($returnResponse));
             }
-        }
-    }
+    
+       
+        }   
+    
 }
 
 
@@ -977,8 +971,8 @@ function searchFiltering()
     include "config/enctp.php";
     $property_location = $_GET['property_location'];
     $checkin = $_GET['checkin'];
-    $checkout = $_GET['checkout'];
-    $room = $_GET['room'];
+    // $checkout = $_GET['checkout'];
+    // $room = $_GET['room'];
     // print_r($property_location); die;
     if (!empty($property_location) && !empty($checkin)) {
         $pull_data = "SELECT
@@ -1039,7 +1033,7 @@ function searchFiltering()
             while ($row_User_re = mysqli_fetch_assoc($User_re)) {
                 $all[] = $row_User_re;
             };
-            print_r($all);
+            exit(json_encode($all));
         }
     }
 }
@@ -1068,6 +1062,7 @@ function otherPropertyDescription()
 
     $pull_data = check_db_query_staus1("SELECT otherPropertyDescription.room_id, otherPropertyDescription.language, otherPropertyDescription.propertyDescription, otherPropertyDescription.roomDescription, otherPropertyDescription.property_id, hotelListerProperties.property_name, hotelListerProperties.id, hotelListerPropertiesLocation.hotelListerProperties_id, hotelListerPropertiesLocation.property_location, hotelListerPropertiesLocation.property_country, hotelListerPropertiesLocation.property_city, layoutPrice.id, layoutPrice.roomType_budgetDoubleRoom, layoutPrice.roomName_budgetDoubleRoom, layoutPrice.hotelListerPropertiesId FROM otherPropertyDescription JOIN hotelListerProperties ON otherPropertyDescription.property_id = hotelListerProperties.id JOIN hotelListerPropertiesLocation ON hotelListerProperties.id = hotelListerPropertiesLocation.hotelListerProperties_id JOIN layoutPrice ON otherPropertyDescription.room_id = layoutPrice.id WHERE otherPropertyDescription.property_id = '$property_id' AND otherPropertyDescription.room_id = '$room_id'", "CHK");
     exit(json_encode($pull_data));
+
 }
 
 function addRatingsAndReviews($data)
@@ -1193,12 +1188,13 @@ function UpdatePersonalInfor($data)
     }
 }
 
-function resetPassword($data)
+function resetPassword()
 {
     //   print_r($data); die;
     include "config/index.php";
-    $user_id = $data->user_id;
-    $email = $data->email;
+    $user_id = $_GET['user_id'];
+    $email = $_GET['email'];
+
 
 
     // Check if email exists in the database
@@ -1279,7 +1275,6 @@ function changePassword($data)
 }
 
 
-    
-
 // select all from user where created_at BETWEEN `` AND ``;
 // SELECT SUM(score) as sum_score FROM game;/Applications/XAMPP/xamppfiles/htdocs/alleybookings/php/gate.php
+
