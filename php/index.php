@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } elseif (isset($_GET['singleHotelReservation'])) {
         singleHotelReservation($_GET['property_id']);
     } elseif (isset($_GET['singleUserReservation'])) {
-        singleUserReservation($_GET['id']);
+        singleUserReservation($_GET['user_id']);
     } elseif (isset($_GET['HotelReservationStatement'])) {
         HotelReservationStatement($_GET);
     } elseif (isset($_GET['getAllRoom'])) {
@@ -52,6 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         policies($_GET['property_id']);
     } elseif (isset($_GET['resetPassword'])) {
         resetPassword($_GET);
+        // print_r($data['data']);
+    }elseif (isset($_GET['cancelHotelReservation'])) {
+        cancelHotelReservation($_GET['id']);
         // print_r($data['data']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {

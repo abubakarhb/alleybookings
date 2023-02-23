@@ -625,7 +625,7 @@ function reservationDetail()
 
 
     // Insert the new  table
-    $sql2 = "INSERT INTO `hotelReservation`(`property_id`, `property_name`, `property_location`, `room_type`, `room_name`, `room_id`, `guest_name`, `status`, `check_in`, `check_out`, `total_payment`, `commission`, `reservation_no`) VALUES ('$property_id','$property_name','$property_location','$roomType','$roomName','$room_id','$guest_name','Yes','$check_in','$check_out','$total_payment','$commission','$reservation_no')";
+    $sql2 = "INSERT INTO `hotelReservation`(`property_id`, `user_id`, `property_name`, `property_location`, `room_type`, `room_name`, `room_id`, `guest_name`, `check_in`, `check_out`, `total_payment`, `commission`, `reservation_no`, `status`) VALUES ('$property_id', '$user_id','$property_name','$property_location','$roomType','$roomName','$room_id','$guest_name','$check_in','$check_out','$total_payment','$commission','$reservation_no','active')";
     // print_r($sql2);
     $result = mysqli_query($alleybookingsConnection, $sql2) or die(mysqli_error($alleybookingsConnection));
     if ($result) {
@@ -645,12 +645,12 @@ function reservationDetail()
 }
 function singleHotelReservation($data)
 {
-    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE `property_id`= '{$data}' ", "CHK");
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE `property_id`= '{$data}' AND `status` = 'active' ORDER BY id DESC", "CHK");
     exit(json_encode($pull_data));
 }
 function singleUserReservation($data)
 {
-    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE `id`= '{$data}' ", "CHK");
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE `user_id`= '{$data}' AND `status` = 'active' ORDER BY id DESC", "CHK");
     exit(json_encode($pull_data));
 }
 
@@ -663,7 +663,7 @@ function HotelReservationStatement()
     $date_to = $_GET['date_to'];
     // print_r($property_id ." ". $date_to); die;
 
-    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE book_on BETWEEN '{$date_from}' AND '{$date_to}' AND `property_id`= '{$property_id}'  ", "CHK");
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE book_on BETWEEN '{$date_from}' AND '{$date_to}' AND `property_id`= '{$property_id}' AND `status` = 'active' ORDER BY id DESC ", "CHK");
     exit(json_encode($pull_data));
 }
 
@@ -849,7 +849,7 @@ function reservationGrossRevenue($data)
 {
     //  print_r($data);
     include "config/index.php";
-    $pull_data = check_db_query_staus("SELECT SUM(total_payment) FROM `hotelReservation` WHERE `property_id`= '{$data}' ", "CHK");
+    $pull_data = check_db_query_staus("SELECT SUM(total_payment) FROM `hotelReservation` WHERE `property_id`= '{$data}' AND `status` = 'active'", "CHK");
     exit(json_encode($pull_data));
 }
 
@@ -857,7 +857,7 @@ function reservationCommision($data)
 {
     //  print_r($data);
     include "config/index.php";
-    $pull_data = check_db_query_staus("SELECT SUM(commission) FROM `hotelReservation` WHERE `property_id`= '{$data}' ", "CHK");
+    $pull_data = check_db_query_staus("SELECT SUM(commission) FROM `hotelReservation` WHERE `property_id`= '{$data}' AND `status` = 'active' ", "CHK");
     exit(json_encode($pull_data));
 }
 function VATDetails()
@@ -1267,6 +1267,35 @@ function changePassword($data)
         $error_updating = ["Error" => "Comfirm Pasword not the same"];
         exit(json_encode($error_updating));
     }
+}
+function cancelHotelReservation($data)
+{
+    //   print_r($data); die;
+    include "config/index.php";
+
+    $row22 = check_db_query_staus("SELECT *  FROM `hotelReservation` WHERE `id`= '{$data}'", "CHK");
+    // print_r($row22); die;
+
+    if ($row22['status'] == 1) {
+
+        $query =  "UPDATE `hotelReservation` SET `status`='inactive' WHERE `id` = {$data}";
+
+        //   print_r($query);die;
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Revservation Booking Cancelled Successfully "];
+            exit(json_encode($arr));
+        } else {
+            $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
+        }
+    } else {
+        $error_creating = ["Error" => "No Data for this Record"];
+        exit(json_encode($error_creating));
+    }
+
+   
 }
 
 
