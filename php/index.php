@@ -56,6 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }elseif (isset($_GET['cancelHotelReservation'])) {
         cancelHotelReservation($_GET['id']);
         // print_r($data['data']);
+    }elseif (isset($_GET['singleReservation'])) {
+        singleReservation($_GET['id']);
+        // print_r($data['data']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';

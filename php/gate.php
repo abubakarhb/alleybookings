@@ -124,7 +124,7 @@ function login($username, $password)
         }
     } else {
         $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
-            exit(json_encode($arr));
+        exit(json_encode($arr));
     }
 }
 
@@ -145,30 +145,30 @@ function createUser()
     if ($check_exist['status'] == 1) {
         $returnResponse = ['status' => 2, 'message' => "{$email} exists already"];
         exit(json_encode($returnResponse));
-    } else{
+    } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
 
         $mail = new PHPMailer(true);
 
-            //Enable verbose debug output
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'alleybookings.com';               //Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'info@alleybookings.com';                   //SMTP username
-            $mail->Password   = 'info@2022';                               //SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'alleybookings.com';               //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'info@alleybookings.com';                   //SMTP username
+        $mail->Password   = 'info@2022';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-            //Recipients
-            $mail->setFrom('info@alleybookings.com', 'alleybookings');
-            $mail->addAddress($email);     //Add a recipient
+        //Recipients
+        $mail->setFrom('info@alleybookings.com', 'alleybookings');
+        $mail->addAddress($email);     //Add a recipient
 
 
 
-            //Content
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = "Alleybookings Account Verification";
-            $mail->Body    = "
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = "Alleybookings Account Verification";
+        $mail->Body    = "
       Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
          <br/>
          https://alleyy.vercel.app/verifyemail
@@ -182,19 +182,16 @@ function createUser()
           <br/>
           I hope this helps! Let me know if you have any questions or need further assistance.
       \n
-      ";   
-            if ($User_re) {
-                $mail->send();
-                $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "message sent successfully"];
-                exit(json_encode($returnResponse));
-            }else{
-                $returnResponse = ['status' => 0, 'message' => "email not registered"];
-                exit(json_encode($returnResponse));
-            }
-    
-       
-        }   
-    
+      ";
+        if ($User_re) {
+            $mail->send();
+            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "message sent successfully"];
+            exit(json_encode($returnResponse));
+        } else {
+            $returnResponse = ['status' => 0, 'message' => "email not registered"];
+            exit(json_encode($returnResponse));
+        }
+    }
 }
 
 
@@ -587,10 +584,11 @@ function reservationDetail()
     // print_r($property_location);
 
     //End User
-    $query3 = "SELECT first_name,last_name FROM endUsers WHERE id = '$user_id'";
+    $query3 = "SELECT first_name,last_name, email FROM endUsers WHERE id = '$user_id'";
     $result = mysqli_query($alleybookingsConnection, $query3) or die(mysqli_error($alleybookingsConnection));
     $row3 = mysqli_fetch_assoc($result);
     $guest_name = $row3["first_name"] . " " . $row3["last_name"];
+    $email = $row3["email"];
     // print_r($guest_name);
 
 
@@ -629,7 +627,46 @@ function reservationDetail()
     // print_r($sql2);
     $result = mysqli_query($alleybookingsConnection, $sql2) or die(mysqli_error($alleybookingsConnection));
     if ($result) {
-        $arr = ["status" => 1, "message" => "Created successfully!"];
+
+        $mail = new PHPMailer(true);
+        try {
+
+            //Server settings
+            $mail->SMTPDebug = 1;
+            $mail->isSMTP();
+            $mail->Host       = 'sandbox.smtp.mailtrap.io';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'a3d7643a5e2648';
+            $mail->Password   = '7a57e1373e5d6b';
+            $mail->Port       = 2525;
+
+            //Recipients
+            $mail->setFrom('support@alleybookings.com', 'Mailer');
+            $mail->addAddress($email, $guest_name);
+
+
+            //Attachments
+            // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+            // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+            $name = $row11['guest_name'];
+            $body = '<p> Dear <strong>' . $guest_name . ' </strong>Your Reservation has been booked Successfully</p>';
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Here is the subject';
+            $mail->Body    = $body;
+            $mail->AltBody = strip_tags($body);
+
+            $mail->send();
+            // print_r('Message has been sent');
+        } catch (Exception $e) {
+            // print_r("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        }
+
+
+        $last_id = mysqli_insert_id($alleybookingsConnection);
+        $arr = ["status" => 1, "message" =>  "Created successfully!" , "reservation_id" => $last_id];
         exit(json_encode($arr));
     } else {
         $error_resv = ["Error" => "Failed"];
@@ -1062,7 +1099,6 @@ function otherPropertyDescription()
 
     $pull_data = check_db_query_staus1("SELECT otherPropertyDescription.room_id, otherPropertyDescription.language, otherPropertyDescription.propertyDescription, otherPropertyDescription.roomDescription, otherPropertyDescription.property_id, hotelListerProperties.property_name, hotelListerProperties.id, hotelListerPropertiesLocation.hotelListerProperties_id, hotelListerPropertiesLocation.property_location, hotelListerPropertiesLocation.property_country, hotelListerPropertiesLocation.property_city, layoutPrice.id, layoutPrice.roomType_budgetDoubleRoom, layoutPrice.roomName_budgetDoubleRoom, layoutPrice.hotelListerPropertiesId FROM otherPropertyDescription JOIN hotelListerProperties ON otherPropertyDescription.property_id = hotelListerProperties.id JOIN hotelListerPropertiesLocation ON hotelListerProperties.id = hotelListerPropertiesLocation.hotelListerProperties_id JOIN layoutPrice ON otherPropertyDescription.room_id = layoutPrice.id WHERE otherPropertyDescription.property_id = '$property_id' AND otherPropertyDescription.room_id = '$room_id'", "CHK");
     exit(json_encode($pull_data));
-
 }
 
 function addRatingsAndReviews($data)
@@ -1140,8 +1176,6 @@ function getRatingsAndReviews($data)
     $arr[] = $query5['message'][0];
     $arr[] = $query6['message'][0];
     exit(json_encode($arr));
-
-
 }
 
 function facilitiesServices($data)
@@ -1202,7 +1236,7 @@ function resetPassword()
     // print_r($row_User_re); die;
     if ($totalRows_User_re > 0) {
         if ($row_User_re['email'] == $email) {
-          
+
             $mail = new PHPMailer(true);
             try {
 
@@ -1273,10 +1307,21 @@ function cancelHotelReservation($data)
     //   print_r($data); die;
     include "config/index.php";
 
-    $row22 = check_db_query_staus("SELECT *  FROM `hotelReservation` WHERE `id`= '{$data}'", "CHK");
-    // print_r($row22); die;
+    $row22 = "SELECT *  FROM `hotelReservation` WHERE `id`= '{$data}'";
+    $result22 = mysqli_query($alleybookingsConnection, $row22) or die(mysqli_error($alleybookingsConnection));
+    $row11 = mysqli_fetch_assoc($result22);
+    $user_id = $row11['user_id'];
+    // print_r($user_id); die;
 
-    if ($row22['status'] == 1) {
+    if ($row11 > 1) {
+
+        //End User email for sending mail
+        $query3 = "SELECT email FROM endUsers WHERE id = '$user_id'";
+        $result = mysqli_query($alleybookingsConnection, $query3) or die(mysqli_error($alleybookingsConnection));
+        $row3 = mysqli_fetch_assoc($result);
+        $email = $row3["email"];
+        // print_r($email); die;
+
 
         $query =  "UPDATE `hotelReservation` SET `status`='inactive' WHERE `id` = {$data}";
 
@@ -1284,21 +1329,58 @@ function cancelHotelReservation($data)
         $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
 
         if ($User_re) {
-            $arr = ["status" => 1, "message" => "Revservation Booking Cancelled Successfully "];
-            exit(json_encode($arr));
-        } else {
-            $error_creating = ["Error" => "Invalid operation"];
-            exit(json_encode($error_creating));
+
+                $mail = new PHPMailer(true);
+                try {
+
+                    //Server settings
+                    $mail->SMTPDebug = 1;
+                    $mail->isSMTP();
+                    $mail->Host       = 'sandbox.smtp.mailtrap.io';
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = 'a3d7643a5e2648';
+                    $mail->Password   = '7a57e1373e5d6b';
+                    $mail->Port       = 2525;
+
+                    //Recipients
+                    $mail->setFrom('support@alleybookings.com', 'Mailer');
+                    $mail->addAddress($email, 'Joe User');
+
+
+                    //Attachments
+                    // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+                    // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+                    $name = $row11['guest_name'];
+                    $body = '<p> Dear <strong>' . $name . ' </strong>Your Reservation Booking was Cancelled</p>';
+
+                    //Content
+                    $mail->isHTML(true);                                  //Set email format to HTML
+                    $mail->Subject = 'Here is the subject';
+                    $mail->Body    = $body;
+                    $mail->AltBody = strip_tags($body);
+
+                    $mail->send();
+                    // print_r('Message has been sent');
+                } catch (Exception $e) {
+                    // print_r("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+                }
+            } else {
+                $error_creating = ["Error" => "Invalid operation"];
+                exit(json_encode($error_creating));
         }
     } else {
         $error_creating = ["Error" => "No Data for this Record"];
         exit(json_encode($error_creating));
     }
+}
 
-   
+function singleReservation($data)
+{
+    $pull_data = check_db_query_staus("SELECT * FROM `hotelReservation` WHERE `id`= '{$data}'", "CHK");
+    exit(json_encode($pull_data));
 }
 
 
 // select all from user where created_at BETWEEN `` AND ``;
 // SELECT SUM(score) as sum_score FROM game;/Applications/XAMPP/xamppfiles/htdocs/alleybookings/php/gate.php
-
