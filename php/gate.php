@@ -119,7 +119,8 @@ function login($username, $password)
     $totalRows_User_re = mysqli_num_rows($User_re);
     if ($totalRows_User_re > 0) {
         if ($row_User_re['password'] == $password) {
-            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']];
+            
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "userID" => $row_User_re['id']];
             exit(json_encode($arr));
         }
     } else {
@@ -194,14 +195,21 @@ function createUser()
     }
 }
 
+function singleUserInfor($data)
+{
+    $pull_data = check_db_query_staus("SELECT * FROM `endUsers` WHERE `id`= '{$data}'", "CHK");
+    exit(json_encode($pull_data));
+}
+
 
 function createListerUser($email, $firstname, $lastname, $phone)
 {
     include "config/index.php";
     include "config/enctp.php";
     $verification = encripted_data($email . "Â£Â£" . "30" . "_");
-    $query_User_re = sprintf("INSERT INTO `hotelListerUsers`(`first_name`, `last_name`, `email`, `phone_number`) 
-                        VALUES ('$firstname','$lastname','$email','$phone')");
+    $status = "active";
+    $query_User_re = sprintf("INSERT INTO `hotelListerUsers`(`first_name`, `last_name`, `email`, `phone_number`, `status`) 
+                        VALUES ('$firstname','$lastname','$email','$phone','$status')");
     $check_exist = check_db_query_staus("SELECT email FROM hotelListerUsers WHERE email='{$email}'", "CHK");
 
     if ($check_exist['status'] == 1) {
@@ -257,8 +265,9 @@ function hotelListerPropertiesLocation($property_location, $property_country, $p
 function hotelListerProperties($property_name, $property_type, $property_currency, $zip_code, $property_chain_status, $property_channel_manager_status, $hotelListerProperties_id)
 {
     include "config/index.php";
-    $query_User_re = sprintf("INSERT INTO `hotelListerProperties`(`property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`) 
-                     VALUES ('$property_name', '$property_type', '$property_currency', '$zip_code', '$property_chain_status', '$property_channel_manager_status', $hotelListerProperties_id)");
+    $status = "active";
+    $query_User_re = sprintf("INSERT INTO `hotelListerProperties`(`property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`, `status`) 
+                     VALUES ('$property_name', '$property_type', '$property_currency', '$zip_code', '$property_chain_status', '$property_channel_manager_status', '$hotelListerProperties_id','$status')");
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
         $returnResponse = ['status' => 1];
@@ -300,8 +309,9 @@ function hotelListerUserCall001($data)
 function hotelListerPropertie($property_name, $property_type, $property_currency, $zip_code, $property_chain_status, $property_channel_manager_status, $hotelListerProperties_id)
 {
     include "config/index.php";
-    $query_User_re = sprintf("INSERT INTO `hotelListerProperties`(`property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`) 
-                     VALUES ('$property_name', '$property_type', '$property_currency', '$zip_code', '$property_chain_status', '$property_channel_manager_status', $hotelListerProperties_id)");
+    $status = "active";
+    $query_User_re = sprintf("INSERT INTO `hotelListerProperties`(`property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`,`status`) 
+                     VALUES ('$property_name', '$property_type', '$property_currency', '$zip_code', '$property_chain_status', '$property_channel_manager_status', '$hotelListerProperties_id','$status')");
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
         $returnResponse = ['status' => 1];
@@ -569,7 +579,7 @@ function reservationDetail()
     //print_r($property_name ." ". $room_type);
 
     // property lister
-    $query1 = "SELECT id, property_name FROM hotelListerProperties WHERE id = '$property_id'";
+    $query1 = "SELECT id, property_name FROM hotelListerProperties WHERE `id` = '$property_id' AND `status` = 'active'";
     $result = mysqli_query($alleybookingsConnection, $query1) or die(mysqli_error($alleybookingsConnection));
     $row1 = mysqli_fetch_assoc($result);
     $property_id = $row1["id"];
@@ -666,7 +676,7 @@ function reservationDetail()
 
 
         $last_id = mysqli_insert_id($alleybookingsConnection);
-        $arr = ["status" => 1, "message" =>  "Created successfully!" , "reservation_id" => $last_id];
+        $arr = ["status" => 1, "message" =>  "Created successfully!", "reservation_id" => $last_id];
         exit(json_encode($arr));
     } else {
         $error_resv = ["Error" => "Failed"];
@@ -1330,44 +1340,44 @@ function cancelHotelReservation($data)
 
         if ($User_re) {
 
-                $mail = new PHPMailer(true);
-                try {
+            $mail = new PHPMailer(true);
+            try {
 
-                    //Server settings
-                    $mail->SMTPDebug = 1;
-                    $mail->isSMTP();
-                    $mail->Host       = 'sandbox.smtp.mailtrap.io';
-                    $mail->SMTPAuth   = true;
-                    $mail->Username   = 'a3d7643a5e2648';
-                    $mail->Password   = '7a57e1373e5d6b';
-                    $mail->Port       = 2525;
+                //Server settings
+                $mail->SMTPDebug = 1;
+                $mail->isSMTP();
+                $mail->Host       = 'sandbox.smtp.mailtrap.io';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'a3d7643a5e2648';
+                $mail->Password   = '7a57e1373e5d6b';
+                $mail->Port       = 2525;
 
-                    //Recipients
-                    $mail->setFrom('support@alleybookings.com', 'Mailer');
-                    $mail->addAddress($email, 'Joe User');
+                //Recipients
+                $mail->setFrom('support@alleybookings.com', 'Mailer');
+                $mail->addAddress($email, 'Joe User');
 
 
-                    //Attachments
-                    // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-                    // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+                //Attachments
+                // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+                // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
 
-                    $name = $row11['guest_name'];
-                    $body = '<p> Dear <strong>' . $name . ' </strong>Your Reservation Booking was Cancelled</p>';
+                $name = $row11['guest_name'];
+                $body = '<p> Dear <strong>' . $name . ' </strong>Your Reservation Booking was Cancelled</p>';
 
-                    //Content
-                    $mail->isHTML(true);                                  //Set email format to HTML
-                    $mail->Subject = 'Here is the subject';
-                    $mail->Body    = $body;
-                    $mail->AltBody = strip_tags($body);
+                //Content
+                $mail->isHTML(true);                                  //Set email format to HTML
+                $mail->Subject = 'Here is the subject';
+                $mail->Body    = $body;
+                $mail->AltBody = strip_tags($body);
 
-                    $mail->send();
-                    // print_r('Message has been sent');
-                } catch (Exception $e) {
-                    // print_r("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
-                }
-            } else {
-                $error_creating = ["Error" => "Invalid operation"];
-                exit(json_encode($error_creating));
+                $mail->send();
+                // print_r('Message has been sent');
+            } catch (Exception $e) {
+                // print_r("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+            }
+        } else {
+            $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
         }
     } else {
         $error_creating = ["Error" => "No Data for this Record"];
@@ -1380,6 +1390,135 @@ function singleReservation($data)
     $pull_data = check_db_query_staus("SELECT * FROM `hotelReservation` WHERE `id`= '{$data}'", "CHK");
     exit(json_encode($pull_data));
 }
+
+
+// Admin section
+
+// admin login
+function adminLogin()
+{
+    include "config/index.php";
+    $username = $_GET['username'];
+    $password = $_GET['password'];
+    $query_User_re = sprintf("SELECT * FROM admin WHERE email='{$username}' || username='{$username}'");
+    $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+    $row_User_re = mysqli_fetch_assoc($User_re);
+    $totalRows_User_re = mysqli_num_rows($User_re);
+    if ($totalRows_User_re > 0) {
+        if ($row_User_re['password'] == $password) {
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['fullname']];
+            exit(json_encode($arr));
+        }
+    } else {
+        $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
+        exit(json_encode($arr));
+    }
+}
+
+// Hotel Listers User Management
+function hotelListersUserManagement()
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelListerUsers` ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+// Hotel Listers User deactivation
+function deactivateHotelListersUser($data)
+{
+    include "config/index.php";
+
+
+    $row22 = "SELECT *  FROM `hotelListerUsers` WHERE `id`= '{$data}'";
+    $result22 = mysqli_query($alleybookingsConnection, $row22) or die(mysqli_error($alleybookingsConnection));
+    $row11 = mysqli_fetch_assoc($result22);
+    $owner = $row11['id'];
+    // print_r($user_id); die;
+
+    if ($row11 > 1) {
+
+        // deactivate owner
+        $query =  "UPDATE `hotelListerUsers` SET `status`='inactive' WHERE `id` = {$data}";
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+        if ($User_re) {
+            // deactivate property
+            $query =  "UPDATE `hotelListerProperties` SET `status`='inactive' WHERE `owner_id` = {$owner}";
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+
+            $arr = ["status" => 1, "message" => "Account has been deactivated Successfully together with the Properties"];
+            exit(json_encode($arr));
+        } else {
+            $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
+        }
+    } else {
+        print_r('no');
+    }
+}
+
+// End Users Management
+function endUserManagement()
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `endUsers` ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+// End Users deactivation
+function deactivateEndUser($data)
+{
+    include "config/index.php";
+    $row2 = check_db_query_staus1("SELECT * FROM `endUsers`  WHERE `id`= '{$data}' ", "CHK");
+    // print_r($row2); die;
+    if ($row2['status'] == 1) {
+        $query =  "UPDATE `endUsers` SET `user_status`='inactive' WHERE `id` = {$data}";
+
+        //   print_r($query);die;
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Account has been deactivated Successfully"];
+            exit(json_encode($arr));
+        } else {
+            $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
+        }
+    } else {
+        print_r('no');
+    }
+}
+// Reservation Management
+function hotelReservationManagement()
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+// End Users deactivation
+function deactivateHotelReservation($data)
+{
+    include "config/index.php";
+    $row2 = check_db_query_staus1("SELECT * FROM `hotelReservation`  WHERE `id`= '{$data}' ", "CHK");
+    // print_r($row2); die;
+    if ($row2['status'] == 1) {
+        $query =  "UPDATE `hotelReservation` SET `status`='inactive' WHERE `id` = {$data}";
+
+        //   print_r($query);die;
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Account has been deactivated Successfully"];
+            exit(json_encode($arr));
+        } else {
+            $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
+        }
+    } else {
+        print_r('no');
+    }
+}
+
+
 
 
 // select all from user where created_at BETWEEN `` AND ``;

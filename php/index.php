@@ -59,6 +59,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }elseif (isset($_GET['singleReservation'])) {
         singleReservation($_GET['id']);
         // print_r($data['data']);
+    }elseif (isset($_GET['adminLogin'])) {
+        adminLogin($_GET);
+        // print_r($data['data']);
+    }  elseif (isset($_GET['hotelListersUserManagement'])) {
+        hotelListersUserManagement($_GET);
+        // print_r($data['data']);
+    }elseif (isset($_GET['deactivateHotelListersUser'])) {
+        deactivateHotelListersUser($_GET['id']);
+        // print_r($data['data']);
+    } elseif (isset($_GET['endUserManagement'])) {
+        endUserManagement($_GET);
+        // print_r($data['data']);
+    }elseif (isset($_GET['deactivateEndUser'])) {
+        deactivateEndUser($_GET['id']);
+        // print_r($data['data']);
+    } elseif (isset($_GET['hotelReservationManagement'])) {
+        hotelReservationManagement($_GET);
+        // print_r($data['data']);
+    }elseif (isset($_GET['singleUserInfor'])) {
+        singleUserInfor($_GET['id']);
+        // print_r($data['data']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
