@@ -327,8 +327,12 @@ function CreateHotelPropertyDetails($data)
             VALUES ('{$data->basicInfo->propertyLocation->address1}', '{$data->basicInfo->propertyLocation->address2}', '{$data->basicInfo->propertyLocation->country}', '{$data->basicInfo->propertyLocation->city}', '{$data->basicInfo->propertyLocation->zip}', {$data->accountInfo->propertyId})");
             $User_re_propertyLocation = mysqli_query($alleybookingsConnection, $query_User_re_propertyLocation) or die(mysqli_error($alleybookingsConnection));
             //2 layoutPrice
-            $query_User_re_layoutPrice = sprintf("INSERT INTO `layoutPrice`(`roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `hotelListerPropertiesId`) 
-            VALUES ('{$data->layoutPrice->budgetDoubleRoom->roomType}', '{$data->layoutPrice->budgetDoubleRoom->roomName}', '{$data->layoutPrice->budgetDoubleRoom->customName}', '{$data->layoutPrice->budgetDoubleRoom->smokingPolicy}', '{$data->layoutPrice->budgetDoubleRoom->numRoom}', '{$data->layoutPrice->bedOptions->bedKinds}', '{$data->layoutPrice->bedOptions->numGuest}', '{$data->layoutPrice->basePricePerNight->pricePerPerson}', {$data->accountInfo->propertyId})");
+            $roomLocation = "kano";
+            $totalOccupant = "2";
+            $maxAdultOccupants = "4";
+            $maxChildrenOccupants = "2";
+            $query_User_re_layoutPrice = sprintf("INSERT INTO `layoutPrice`(`roomType_budgetDoubleRoom`, `roomName_budgetDoubleRoom`, `customName_budgetDoubleRoom`, `smokingPolicy_budgetDoubleRoom`, `numRoom_budgetDoubleRoom`, `bedKind_bedOptions`, `numGuest_bedOptions`, `pricePerPerson_basePricePerNight`, `hotelListerPropertiesId`,`roomLocation`, `totalOccupant`, `maxAdultOccupants`, `maxChildrenOccupants`) 
+            VALUES ('{$data->layoutPrice->budgetDoubleRoom->roomType}', '{$data->layoutPrice->budgetDoubleRoom->roomName}', '{$data->layoutPrice->budgetDoubleRoom->customName}', '{$data->layoutPrice->budgetDoubleRoom->smokingPolicy}', '{$data->layoutPrice->budgetDoubleRoom->numRoom}', '{$data->layoutPrice->bedOptions->bedKinds}', '{$data->layoutPrice->bedOptions->numGuest}', '{$data->layoutPrice->basePricePerNight->pricePerPerson}', '{$data->accountInfo->propertyId}', '$roomLocation', '$totalOccupant ', '$maxAdultOccupants', '$maxChildrenOccupants')");
             $User_re_layoutPrice = mysqli_query($alleybookingsConnection, $query_User_re_layoutPrice) or die(mysqli_error($alleybookingsConnection));
 
             $query_User_re_facilitiesServices = sprintf("INSERT INTO `facilitiesServices`(`avaibleForGuest_parking`, `type_parking`, `needToReserve_parking`, `availability_breakfast`, `price_breakfast`, `typeOfBreakfast_breakfast`, `languagesSpoken`, `facilities`, `hotelListerPropertiesId`) 
@@ -900,9 +904,14 @@ function hotelListerAgent($data)
 
 
     //print_r($invoice_number);
-    $query = sprintf("INSERT INTO `Hotel_lister_agent`(`fname`, `lname`, `email`, `mobile_number`,`property_id`, `homepage_access`, `reservations_access`, `finance_access`, `users_access`, `rates_availability_access`, `property_access`, `messages_access`, `reviews_access`) VALUES ('$fname','$lname','$email','$mobile_number','$property_id','$Homepage','$Reservations','$Finance','$Users','$Rates_availability','$Property','$Messages','$Reviews')");
+    $query_User_re = sprintf("INSERT INTO `Hotel_lister_agent`(`fname`, `lname`, `email`, `mobile_number`,`property_id`, `homepage_access`, `reservations_access`, `finance_access`, `users_access`, `rates_availability_access`, `property_access`, `messages_access`, `reviews_access`) VALUES ('$fname','$lname','$email','$mobile_number','$property_id','$Homepage','$Reservations','$Finance','$Users','$Rates_availability','$Property','$Messages','$Reviews')");
     // print_r($query);die;
-    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+    $check_exist = check_db_query_staus("SELECT email FROM Hotel_lister_agent WHERE email='{$email}'", "CHK");
+    if ($check_exist['status'] == 1) {
+        $returnResponse = ['status' => 2, 'message' => "{$email} exists already"];
+        exit(json_encode($returnResponse));
+    } else{
+        $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
 
     if ($User_re) {
         $arr = ["status" => 1, "message" => "Hotel Lister Agent Successfully Created"];
@@ -912,6 +921,8 @@ function hotelListerAgent($data)
         exit(json_encode($error_creating));
     }
 }
+}
+
 function healthAndSafety($data)
 {
     //   print_r($data); die;
@@ -1057,9 +1068,3 @@ function otherPropertyDescription()
     exit(json_encode($pull_data));
 }
 
-<<<<<<< HEAD
-
-=======
-// select all from user where created_at BETWEEN `` AND ``;
-// SELECT SUM(score) as sum_score FROM game;/Applications/XAMPP/xamppfiles/htdocs/alleybookings/php/gate.php
->>>>>>> 563a80f7b2c255f4bd9cef6335c30a14849472d5
