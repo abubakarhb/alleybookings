@@ -296,7 +296,7 @@ function hotelListerUserCall001($data)
                     $arr['hotelListerProperties'] = $pListedDetail->status;
                 }
                 if ($pLocation->status == 1) {
-                    $arr['hotelListerPropertiesLocation'] = json_decode($pLocation)->status;
+                    $arr['hotelListerPropertiesLocation'] = $pLocation->status;
                 }
                 $arr= ["message"=>"Successfully created an account", "id"=>$dd ] ;
                 echo json_encode($arr);
