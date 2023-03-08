@@ -4,6 +4,7 @@ declare(strict_types=1);
 header('Content-type:application/json;charset=utf-8');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {

@@ -5,8 +5,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require 'phpmailer/vendor/autoload.php';
-
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
@@ -137,10 +135,14 @@ function createUser()
     $password = $_GET['password'];
     $firstname = $_GET['firstname'];
     $lastname = $_GET['lastname'];
-    $user_status = $_GET['user_status'];
+    $phone_number = "";
+    $address = "";
+    $gender = "";
+    $nationality = "";
+    $user_status = "0";
     $verification = encripted_data($email . "Â£" . "30" . "_");
-    $query_User_re = sprintf("INSERT INTO `endUsers`(`first_name`, `last_name`, `email`, `password`,`verification_status`,`user_status`) 
-                    VALUES ('$firstname', '$lastname', '$email', '$password','$verification','$user_status')");
+    $query_User_re = sprintf("INSERT INTO `endUsers`(`first_name`, `last_name`, `email`, `phone_number`, `nationality`, `gender`, `address`, `password`, `verification_status`, `user_status`) 
+                    VALUES ('$firstname', '$lastname', '$email', '$phone_number','$nationality', '$gender', '$address', '$password', '$verification', '$user_status')");
     $check_exist = check_db_query_staus("SELECT email FROM endUsers WHERE email='{$email}'", "CHK");
 
     if ($check_exist['status'] == 1) {
@@ -270,29 +272,33 @@ function hotelListerProperties($property_name, $property_type, $property_currenc
                      VALUES ('$property_name', '$property_type', '$property_currency', '$zip_code', '$property_chain_status', '$property_channel_manager_status', '$hotelListerProperties_id','$status')");
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
-        $returnResponse = ['status' => 1];
+        $last_idi = mysqli_insert_id($alleybookingsConnection);
+        $returnResponse = ['status' => 1, "property_id"=>$last_idi];
         return (json_encode($returnResponse));
     } else {
         $returnResponse = ['status' => 0];
         return (json_encode($returnResponse));
     }
 }
+
 function hotelListerUserCall001($data)
 {
     if (count(get_object_vars($data->hotelListerUsers)) == 4) {
         if (filter_var($data->hotelListerUsers->email, FILTER_VALIDATE_EMAIL)) {
             $user_creation = json_decode(createListerUser($data->hotelListerUsers->email, $data->hotelListerUsers->first_name, $data->hotelListerUsers->last_name, $data->hotelListerUsers->phone));
             if ($user_creation->status == 1) {
-                $pLocation = hotelListerPropertiesLocation($data->hotelListerPropertiesLocation->property_location, $data->hotelListerPropertiesLocation->property_country, $data->hotelListerPropertiesLocation->property_street_address, $data->hotelListerPropertiesLocation->property_unit_number, $data->hotelListerPropertiesLocation->property_city, $data->hotelListerPropertiesLocation->zip_code, $user_creation->user);
-                $pListedDetail = hotelListerProperties($data->hotelListerProperties->property_name, $data->hotelListerProperties->property_type, $data->hotelListerProperties->property_currency, $data->hotelListerProperties->zip_code, $data->hotelListerProperties->property_chain_status, $data->hotelListerProperties->property_channel_manager_status, $user_creation->user);
+                $pLocation = json_decode(hotelListerPropertiesLocation($data->hotelListerPropertiesLocation->property_location, $data->hotelListerPropertiesLocation->property_country, $data->hotelListerPropertiesLocation->property_street_address, $data->hotelListerPropertiesLocation->property_unit_number, $data->hotelListerPropertiesLocation->property_city, $data->hotelListerPropertiesLocation->zip_code, $user_creation->user));
+                $pListedDetail = json_decode(hotelListerProperties($data->hotelListerProperties->property_name, $data->hotelListerProperties->property_type, $data->hotelListerProperties->property_currency, $data->hotelListerProperties->zip_code, $data->hotelListerProperties->property_chain_status, $data->hotelListerProperties->property_channel_manager_status, $user_creation->user));
                 $arr = [];
-                if (json_decode($pListedDetail)->status == 1) {
-                    $arr['hotelListerProperties'] = json_decode($pListedDetail)->status;
+                $dd = null;
+                if ($pListedDetail->status == 1) {
+                    $dd =$pListedDetail->property_id;
+                    $arr['hotelListerProperties'] = $pListedDetail->status;
                 }
                 if (json_decode($pLocation)->status == 1) {
                     $arr['hotelListerPropertiesLocation'] = json_decode($pLocation)->status;
                 }
-                $arr['message'] = "Successfully created an account";
+                $arr= ["message"=>"Successfully created an account", "id"=>$dd ] ;
                 echo json_encode($arr);
             } else {
             }
@@ -321,6 +327,7 @@ function hotelListerPropertie($property_name, $property_type, $property_currency
         return (json_encode($returnResponse));
     }
 }
+
 
 function CreateHotelPropertyDetails($data)
 {
@@ -372,12 +379,25 @@ function CreateHotelPropertyDetails($data)
             $query_User_re_hotelListerrights = sprintf("INSERT INTO `hotelListerrights`(`rights`, `right2`, `hotelListerPropertiesId`) 
             VALUES ('{$data->rights[0]}', '{$data->rights[1]}', {$data->accountInfo->propertyId})");
             $User_re_hotelListerrights = mysqli_query($alleybookingsConnection, $query_User_re_hotelListerrights) or die(mysqli_error($alleybookingsConnection));
-
+            $date_from = "2023-01-16";
+            $room_id = "7";
+            $date_to = "2023-01-20";
+            $room_selling_amount = "1.32";
+            $standard_rate = "1.32";
+            $non_refundable_rates = "1.33";
+            $open_close_booking_status = "active";
+            $standard_rate_status = "active";
+            $non_refundable_rates_status = "active";
+            $query_User_re_openandclose = sprintf("INSERT INTO `open_close_rooms`(`room_id`,`property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) 
+            VALUES ('$room_id','{$data->accountInfo->propertyId})', '$date_from' ,'$date_to', '{$data->layoutPrice->budgetDoubleRoom->roomType}', '$room_selling_amount', '$standard_rate', '$non_refundable_rates', '$open_close_booking_status', '$standard_rate_status', '$non_refundable_rates_status')");
+            $User_re_hotelListerrights = mysqli_query($alleybookingsConnection, $query_User_re_openandclose) or die(mysqli_error($alleybookingsConnection));
+            
             $arr = ["status" => 1, "message" => "Hotel information successfully created, your rooms should be ready for reservations"];
             exit(json_encode($arr));
         }
     }
 }
+
 
 function updateHotelHostType($data)
 {
@@ -958,14 +978,9 @@ function hotelListerAgent($data)
 
 
     //print_r($invoice_number);
-    $query_User_re = sprintf("INSERT INTO `Hotel_lister_agent`(`fname`, `lname`, `email`, `mobile_number`,`property_id`, `homepage_access`, `reservations_access`, `finance_access`, `users_access`, `rates_availability_access`, `property_access`, `messages_access`, `reviews_access`) VALUES ('$fname','$lname','$email','$mobile_number','$property_id','$Homepage','$Reservations','$Finance','$Users','$Rates_availability','$Property','$Messages','$Reviews')");
+    $query = sprintf("INSERT INTO `Hotel_lister_agent`(`fname`, `lname`, `email`, `mobile_number`,`property_id`, `homepage_access`, `reservations_access`, `finance_access`, `users_access`, `rates_availability_access`, `property_access`, `messages_access`, `reviews_access`) VALUES ('$fname','$lname','$email','$mobile_number','$property_id','$Homepage','$Reservations','$Finance','$Users','$Rates_availability','$Property','$Messages','$Reviews')");
     // print_r($query);die;
-    $check_exist = check_db_query_staus("SELECT email FROM Hotel_lister_agent WHERE email='{$email}'", "CHK");
-    if ($check_exist['status'] == 1) {
-        $returnResponse = ['status' => 2, 'message' => "{$email} exists already"];
-        exit(json_encode($returnResponse));
-    } else{
-        $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
+    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
 
     if ($User_re) {
         $arr = ["status" => 1, "message" => "Hotel Lister Agent Successfully Created"];
@@ -975,8 +990,6 @@ function hotelListerAgent($data)
         exit(json_encode($error_creating));
     }
 }
-}
-
 function healthAndSafety($data)
 {
     //   print_r($data); die;
