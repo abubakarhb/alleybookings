@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 4.9.11
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Mar 08, 2023 at 08:02 PM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Host: localhost:3306
+-- Generation Time: Mar 08, 2023 at 08:05 PM
+-- Server version: 10.2.44-MariaDB
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `alleybookings`
+-- Database: `alleyboo_alleybookings`
 --
 
 -- --------------------------------------------------------
@@ -30,28 +31,38 @@ SET time_zone = "+00:00";
 CREATE TABLE `amenties` (
   `id` int(11) NOT NULL,
   `extra_extraBedOptions` varchar(5) NOT NULL,
-  `numberOfExtra_extraBedOptions` int(255) NOT NULL,
+  `numberOfExtra_extraBedOptions` varchar(255) NOT NULL,
   `amenities` longtext NOT NULL,
-  `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `hotelListerPropertiesId` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `amenties`
 --
 
 INSERT INTO `amenties` (`id`, `extra_extraBedOptions`, `numberOfExtra_extraBedOptions`, `amenities`, `hotelListerPropertiesId`) VALUES
-(1, '1', 2, '', 24),
-(2, '1', 2, 'string', 24),
-(3, '1', 2, 'string', 24),
-(4, '1', 2, 'string', 24),
-(5, '1', 2, 'string', 24),
-(6, '1', 2, 'string', 24),
-(7, '1', 2, 'string', 24),
-(8, '1', 2, 'string', 24),
-(9, '1', 2, 'string', 24),
-(10, '1', 2, 'string', 24),
-(11, '1', 2, 'string', 24),
-(12, '1', 2, 'string', 24);
+(1, '1', '2', '', '24'),
+(2, '1', '2', 'string', '24'),
+(3, '1', '2', 'string', '24'),
+(4, '1', '2', 'string', '24'),
+(5, '1', '2', 'string', '24'),
+(6, '1', '2', 'string', '24'),
+(7, '1', '2', 'string', '24'),
+(8, '1', '2', 'string', '24'),
+(9, '1', '2', 'string', '24'),
+(10, '1', '2', 'string', '24'),
+(11, '1', '2', 'string', '24'),
+(12, '1', '2', 'string', '24'),
+(13, '', '', '', '0'),
+(14, '', '', '', '0'),
+(15, '', '', '', '5'),
+(16, '', '', '', '5'),
+(17, '', '', '', '29'),
+(18, '', '', '', '1'),
+(19, '', '', '', '34'),
+(20, '', '', '', '559'),
+(21, '', '', '', '32'),
+(22, '', '', '', '33');
 
 -- --------------------------------------------------------
 
@@ -64,7 +75,7 @@ CREATE TABLE `channelManager` (
   `status` varchar(5) NOT NULL,
   `content` varchar(50) NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `channelManager`
@@ -95,7 +106,36 @@ INSERT INTO `channelManager` (`id`, `status`, `content`, `hotelListerPropertiesI
 (22, '1', 'string', 24),
 (23, '1', 'string', 24),
 (24, '1', 'string', 24),
-(25, '1', 'string', 24);
+(25, '1', 'string', 24),
+(26, '1', 'nothing', 0),
+(27, '1', 'nothing', 0),
+(28, '1', 'nothing', 0),
+(29, '1', 'nothing', 0),
+(30, '1', 'nothing', 0),
+(31, '1', 'nothing', 0),
+(32, '1', 'nothing', 0),
+(33, '1', 'nothing', 0),
+(34, '1', 'nothing', 0),
+(35, '1', 'nothing', 0),
+(36, '1', 'nothing', 0),
+(37, '1', 'nothing', 0),
+(38, '1', 'nothing', 0),
+(39, '1', 'nothing', 0),
+(40, '1', 'nothing', 0),
+(41, '1', 'nothing', 0),
+(42, '1', 'nothing', 0),
+(43, '1', 'nothing', 0),
+(44, '1', 'nothing', 0),
+(45, '1', 'nothing', 0),
+(46, '1', 'nothing', 0),
+(47, '1', 'nothing', 5),
+(48, '1', 'nothing', 5),
+(49, '1', 'nothing', 29),
+(50, '1', 'nothing', 1),
+(51, '1', 'nothing', 34),
+(52, '1', 'nothing', 559),
+(53, '1', '', 32),
+(54, '1', '', 33);
 
 -- --------------------------------------------------------
 
@@ -113,7 +153,7 @@ CREATE TABLE `copy_of_yearly_rate` (
   `rate_changes` varchar(200) NOT NULL,
   `restriction` varchar(200) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `copy_of_yearly_rate`
@@ -133,22 +173,29 @@ CREATE TABLE `endUsers` (
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(30) NOT NULL,
   `email` varchar(50) NOT NULL,
+  `phone_number` varchar(100) NOT NULL,
+  `nationality` varchar(100) NOT NULL,
+  `gender` varchar(100) NOT NULL,
+  `address` varchar(100) NOT NULL,
   `password` varchar(1000) NOT NULL,
   `verification_status` longtext NOT NULL,
+  `user_status` varchar(100) NOT NULL,
   `time_in` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `endUsers`
 --
 
-INSERT INTO `endUsers` (`id`, `first_name`, `last_name`, `email`, `password`, `verification_status`, `time_in`) VALUES
-(31, 'abu', 'ab', 'assadeeq543@gmail.com', '12345', 'TFBKTW82MTFlWk1XSlhXeTVDUkpKR0NHZDJyME1WeE5QVXREMGpTN1RSQT0=', '2023-01-03 15:36:40'),
-(32, 'abu', 'ab', 'assadee2q543@gmail.com', '12345', 'TVBQQzUzMnFXSDhMVWFzc2FHWk5UUlJVOHlLeGx1M0QwV1Y2aHdLd0JQQT0=', '2023-01-03 17:04:13'),
-(33, 'Mohammed', 'Hassan', 'fgsgrs@sss.von', 'sdfwfrw', 'Zzd0blBLVUxyMDU2WjVkaGovd0UwUTZUNFU0SHlPaHZVZ2Q0Q0F3Y1lJUT0=', '2023-01-28 05:56:49'),
-(34, 'Abubakar', 'Bello', 'assadeeq543a@gmail.com', '1234', 'dHBpT0ZQWjRpR0RZVkhFQ24yUVVUVWhJOERHMTlHckVJRmpJSXZ4SEZicz0=', '2023-01-03 18:10:49'),
-(35, 'Abubakar', 'Bello', 'assadeeq543sa@gmail.com', '1234', 'Ulhlc1J3R2xFaUVIMW9OLzhTSlhQODR1UU5qcldTSGQ5RnFQbVVPTnNmUT0=', '2023-01-03 18:10:59'),
-(36, 'Aliyu', 'kamilu', 'deen.aliyu40@gmail.com', '12345', 'WWhjejE3NkJLazhQRUlaQWlOQzZJZzdiNGpyK2tzUGZMdHNjNkR1L0pQbz0=', '2023-02-19 20:43:38');
+INSERT INTO `endUsers` (`id`, `first_name`, `last_name`, `email`, `phone_number`, `nationality`, `gender`, `address`, `password`, `verification_status`, `user_status`, `time_in`) VALUES
+(31, 'Abubakar', 'Bellos', 'assadeeq543@gmail.com', '2345678', '', '', '', '12345', 'TFBKTW82MTFlWk1XSlhXeTVDUkpKR0NHZDJyME1WeE5QVXREMGpTN1RSQT0=', '', '2023-03-01 19:36:43'),
+(32, 'abu', 'ab', 'assadee2q543@gmail.com', '', '', '', '', '12345', 'TVBQQzUzMnFXSDhMVWFzc2FHWk5UUlJVOHlLeGx1M0QwV1Y2aHdLd0JQQT0=', '', '2023-01-03 17:04:13'),
+(33, 'Mohammed', 'Hassan', 'fgsgrs@sss.von', '', '', '', '', 'sdfwfrw', 'Zzd0blBLVUxyMDU2WjVkaGovd0UwUTZUNFU0SHlPaHZVZ2Q0Q0F3Y1lJUT0=', '', '2023-01-28 05:56:49'),
+(34, 'Abubakar', 'Bello', 'assadeeq543a@gmail.com', '', '', '', '', '1234', 'dHBpT0ZQWjRpR0RZVkhFQ24yUVVUVWhJOERHMTlHckVJRmpJSXZ4SEZicz0=', '', '2023-01-03 18:10:49'),
+(35, 'Abubakar', 'Bello', 'assadeeq543sa@gmail.com', '', '', '', '', '1234', 'Ulhlc1J3R2xFaUVIMW9OLzhTSlhQODR1UU5qcldTSGQ5RnFQbVVPTnNmUT0=', '', '2023-01-03 18:10:59'),
+(36, 'Aliyu', 'kamilu', 'aliyukamilu009@gmail.com', '', '', '', '', '12345', 'T3prOHVPWE05TTFxa2tCZmhIZTdmSXNmMFVOVmc2NFI4SllDV3RGeUQ1MD0=', '0', '2023-03-03 09:57:03'),
+(37, 'George', 'Manger', 'mangergeorgepraise@gmail.com', '', '', '', '', '@ggeorgielee', 'MXprZi93cFJ4aDdzMVlFYzgrbjZJOGlZRTdCTkxpZ3hHMVFLSUVNeW5FZEo3MzZjd2dIRUh0VzlPZEh4SVNVNA==', '0', '2023-03-03 10:09:35'),
+(38, 'Michael', 'DAVID', 'michaelboy@live.fr', '', '', '', '', 'lhhlil', 'NmVzY3VmTGxpK1ZHRUhlR0NEQW4rMG5reWh5ZGFMZGZrMldaRElZTHdlOD0=', '0', '2023-03-06 10:39:49');
 
 -- --------------------------------------------------------
 
@@ -168,7 +215,7 @@ CREATE TABLE `facilitiesServices` (
   `facilities` longtext NOT NULL,
   `more_facilities` longtext DEFAULT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `facilitiesServices`
@@ -194,7 +241,20 @@ INSERT INTO `facilitiesServices` (`id`, `avaibleForGuest_parking`, `type_parking
 (17, 'string', 'string', '1', '1', 2.50, 'string', 'string', 'string', '{\"cancellations\":{\"daysOfCancellations\":\"33\",\"PercenToChargeCancellations\":\"23.43\"},\"checks\":{\"checkInTime\":\"from1~to1\",\"checkOutTime\":\"from1~to1\"},\"accomondations\":{\"accomondateChildren\":0,\"accomondatePet\":1},\"accountId\":\"24\"}', 24),
 (18, 'string', 'string', '1', '1', 2.50, 'string', 'string', 'string', '{\"cancellations\":{\"daysOfCancellations\":\"33\",\"PercenToChargeCancellations\":\"23.43\"},\"checks\":{\"checkInTime\":\"from1~to1\",\"checkOutTime\":\"from1~to1\"},\"accomondations\":{\"accomondateChildren\":0,\"accomondatePet\":1},\"accountId\":\"24\"}', 24),
 (19, 'string', 'string', '1', '1', 2.50, 'string', 'string', 'string', '{\"cancellations\":{\"daysOfCancellations\":\"33\",\"PercenToChargeCancellations\":\"23.43\"},\"checks\":{\"checkInTime\":\"from1~to1\",\"checkOutTime\":\"from1~to1\"},\"accomondations\":{\"accomondateChildren\":0,\"accomondatePet\":1},\"accountId\":\"24\"}', 24),
-(20, 'string', 'string', '1', '1', 2.50, 'string', 'string', 'string', '{\"cancellations\":{\"daysOfCancellations\":\"33\",\"PercenToChargeCancellations\":\"23.43\"},\"checks\":{\"checkInTime\":\"from1~to1\",\"checkOutTime\":\"from1~to1\"},\"accomondations\":{\"accomondateChildren\":0,\"accomondatePet\":1},\"accountId\":\"24\"}', 24);
+(20, 'string', 'string', '1', '1', 2.50, 'string', 'string', 'string', '{\"cancellations\":{\"daysOfCancellations\":\"33\",\"PercenToChargeCancellations\":\"23.43\"},\"checks\":{\"checkInTime\":\"from1~to1\",\"checkOutTime\":\"from1~to1\"},\"accomondations\":{\"accomondateChildren\":0,\"accomondatePet\":1},\"accountId\":\"24\"}', 24),
+(21, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 0),
+(22, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 0),
+(23, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 0),
+(24, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 0),
+(25, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 0),
+(26, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 5),
+(27, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 5),
+(28, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 29),
+(29, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 1),
+(30, 'Yes, free', 'Private', 'On site', 'true', 40.00, 'coffe', 'English', 'Array', NULL, 34),
+(31, 'Yes, free', 'Private', 'In-Premises', 'true', 40.00, 'coffee', 'English', 'Array', NULL, 559),
+(32, 'Yes, free', 'Private', 'In-Premises', 'true', 23.00, 'coffee', 'Arabic', 'Array', NULL, 32),
+(33, 'Yes, free', 'Private', 'In-Premises', 'true', 30.00, 'coffee', 'English', 'Array', NULL, 33);
 
 -- --------------------------------------------------------
 
@@ -208,7 +268,7 @@ CREATE TABLE `generalRoomAmenities` (
   `size` int(255) NOT NULL,
   `other_amenities` longtext NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `generalRoomAmenities`
@@ -252,14 +312,15 @@ CREATE TABLE `health_safety_features` (
   `other_tableware_items_sanitized` enum('Yes','No') NOT NULL,
   `breakfast_to_go_containers` enum('Yes','No') NOT NULL,
   `delivered_food_covered_securely` enum('Yes','No') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `health_safety_features`
 --
 
 INSERT INTO `health_safety_features` (`id`, `staff_follow_protocols`, `shared_stationery_removed`, `guestHandSanitizer`, `process_to_check_guests_health`, `first_aid_avail`, `healthCareAccess`, `guest_thermometers`, `guest_face_mask`, `air_purifiers`, `contactless_check_in_out`, `cashless_payment_available`, `physical_distancing_rules_followed`, `mobile_app_for_room_service`, `physical_barriers_between_staff_and_guests_where_necessary`, `Single_room_AC_for_guest_accommodation`, `chemicals_needed_against_coronavirus`, `items_washed_in_accordance_with_local_authority_guidelines`, `guest_accommodation_disinfected_between_stays`, `guest_accommodation_sealed_after_cleaning`, `property_cleaned_by_professional`, `guests_can_cancel_any_cleaning_services_during_stay`, `hand_sanitizer`, `physical_distancing_in_dining_areas`, `food_can_be_delivered_to_guest`, `other_tableware_items_sanitized`, `breakfast_to_go_containers`, `delivered_food_covered_securely`) VALUES
-(1, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes');
+(1, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+(2, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes');
 
 -- --------------------------------------------------------
 
@@ -273,7 +334,7 @@ CREATE TABLE `HotelListerNotifications` (
   `automatic_reply` enum('true','false') NOT NULL,
   `reminder` enum('true','false') NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `HotelListerNotifications`
@@ -295,7 +356,7 @@ CREATE TABLE `hotelListerPayments` (
   `commissionPercentage_commissionPayments` double(10,2) NOT NULL,
   `invoiceCompanyTitle_commissionPayments` varchar(255) NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hotelListerPayments`
@@ -304,7 +365,12 @@ CREATE TABLE `hotelListerPayments` (
 INSERT INTO `hotelListerPayments` (`id`, `chargeCreditProperty_guestPaymentOptions`, `methods_guestPaymentOptions`, `commissionPercentage_commissionPayments`, `invoiceCompanyTitle_commissionPayments`, `hotelListerPropertiesId`) VALUES
 (1, '10', 'string', 4.50, 'string', 1),
 (2, '1', 'string', 4.50, 'string', 2),
-(3, '1', 'string', 4.50, 'string', 24);
+(3, '1', 'string', 4.50, 'string', 24),
+(4, '', 'American Express~Euro/Mastercard~JCB~Visa~Maestro~', 15.00, 'Grand square Hotel', 29),
+(5, '', 'American Express~Euro/Mastercard~JCB~Visa~Maestro~', 15.00, 'Grand square Hotel', 34),
+(6, '1', 'American Express~JCB~Discover~', 15.00, 'Grand square Hotel', 559),
+(7, '1', 'American Express~JCB~UnionPay credit card~', 15.00, 'Mr Eric Hotels', 32),
+(8, '1', 'American Express~Euro/Mastercard~JCB~UnionPay credit card~', 15.00, 'Houston Hotels', 33);
 
 -- --------------------------------------------------------
 
@@ -315,24 +381,34 @@ INSERT INTO `hotelListerPayments` (`id`, `chargeCreditProperty_guestPaymentOptio
 CREATE TABLE `hotelListerProperties` (
   `id` int(11) NOT NULL,
   `property_name` varchar(50) NOT NULL,
-  `property_type` int(1) NOT NULL,
+  `property_type` varchar(100) NOT NULL,
   `property_currency` varchar(10) NOT NULL,
   `zip_code` varchar(15) NOT NULL,
   `property_chain_status` int(1) NOT NULL,
   `property_channel_manager_status` int(1) NOT NULL,
   `owner_id` int(255) NOT NULL,
+  `status` varchar(100) NOT NULL,
   `time_in` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hotelListerProperties`
 --
 
-INSERT INTO `hotelListerProperties` (`id`, `property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`, `time_in`) VALUES
-(1, 'City Garden Hotel', 1, 'NG', '564ED', 1, 1, 24, '2023-01-28 22:35:05'),
-(2, 'Royal Guest Hotel', 1, 'NG', 'z12', 1, 1, 25, '2023-01-28 05:58:41'),
-(3, 'ee', 1, 'NG', 'z12', 1, 1, 26, '2023-01-03 15:32:40'),
-(4, 'ee', 1, 'NG', 'z12', 1, 1, 27, '2023-01-20 16:09:03');
+INSERT INTO `hotelListerProperties` (`id`, `property_name`, `property_type`, `property_currency`, `zip_code`, `property_chain_status`, `property_channel_manager_status`, `owner_id`, `status`, `time_in`) VALUES
+(1, 'City Garden Hotel', '1', 'NG', '564ED', 1, 1, 24, '', '2023-01-28 22:35:05'),
+(2, 'Royal Guest Hotel', '1', 'NG', 'z12', 1, 1, 25, '', '2023-01-28 05:58:41'),
+(3, 'ee', '1', 'NG', 'z12', 1, 1, 26, '', '2023-01-03 15:32:40'),
+(4, 'ee', '1', 'NG', 'z12', 1, 1, 27, '', '2023-01-20 16:09:03'),
+(26, 'Broski Hotels', 'Hotel', 'USD', '3432', 1, 1, 29, 'active', '2023-03-08 14:51:01'),
+(27, 'Broski Hotels', 'Hotel', 'USD', '3432', 1, 1, 30, 'active', '2023-03-08 15:08:07'),
+(28, 'Broski Hotels', 'Hotel', 'USD', '3432', 1, 1, 31, 'active', '2023-03-08 15:09:02'),
+(29, 'mr Erick Hotels', 'Hotel', 'NGN', '70012', 1, 1, 32, 'active', '2023-03-08 15:20:54'),
+(30, 'nurudeen hotels', 'Hotel', 'USD', '231', 1, 1, 33, 'active', '2023-03-08 16:00:14'),
+(31, 'New york Hotels', 'Hotel', 'USD', '70012', 1, 1, 34, 'active', '2023-03-08 17:19:23'),
+(32, 'Chicago Hotels', 'Hotel', 'USD', '70012', 1, 1, 35, 'active', '2023-03-08 17:23:12'),
+(33, 'Houston Hotels', 'Hotel', 'USD', '70012', 1, 1, 36, 'active', '2023-03-08 17:25:16'),
+(34, 'Kaduna hotels', 'Hotel', 'USD', '70012', 1, 1, 37, 'active', '2023-03-08 19:01:05');
 
 -- --------------------------------------------------------
 
@@ -346,7 +422,7 @@ CREATE TABLE `hotelListerPropertiesBasicInfo` (
   `name` varchar(100) NOT NULL,
   `startRate` varchar(50) NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hotelListerPropertiesBasicInfo`
@@ -380,7 +456,36 @@ INSERT INTO `hotelListerPropertiesBasicInfo` (`id`, `property_host_type`, `name`
 (25, 'Professional', 'string', 'string', 24),
 (26, 'Professional', 'string', 'string', 24),
 (27, 'Professional', 'string', 'string', 24),
-(28, 'Professional', 'string', 'string', 24);
+(28, 'Professional', 'string', 'string', 24),
+(29, 'Professional', 'Gues Hotel', '4', 0),
+(30, 'Professional', 'Gues Hotel', '4', 0),
+(31, 'Professional', 'Gues Hotel', '4', 0),
+(32, 'Professional', 'Gues Hotel', '4', 0),
+(33, 'Professional', 'Gues Hotel', '4', 0),
+(34, 'Professional', 'Gues Hotel', '4', 0),
+(35, 'Professional', 'Gues Hotel', '4', 0),
+(36, 'Professional', 'Gues Hotel', '4', 0),
+(37, 'Professional', 'Gues Hotel', '4', 0),
+(38, 'Professional', 'Gues Hotel', '4', 0),
+(39, 'Professional', 'Gues Hotel', '4', 0),
+(40, 'Professional', 'Gues Hotel', '4', 0),
+(41, 'Professional', 'Gues Hotel', '4', 0),
+(42, 'Professional', 'Gues Hotel', '4', 0),
+(43, 'Professional', 'Gues Hotel', '4', 0),
+(44, 'Professional', 'Gues Hotel', '4', 0),
+(45, 'Professional', 'Gues Hotel', '4', 0),
+(46, 'Professional', 'Gues Hotel', '4', 0),
+(47, 'Professional', 'Gues Hotel', '4', 0),
+(48, 'Professional', 'Gues Hotel', '4', 0),
+(49, 'Professional', 'Gues Hotel', '4', 0),
+(50, 'Professional', 'Gues Hotel', '4', 5),
+(51, 'Professional', 'Gues Hotel', '4', 5),
+(52, 'Professional', 'Gues Hotel', '4', 29),
+(53, 'Professional', 'Gues Hotel', '4', 1),
+(54, 'Professional', 'Gues Hotel', '4', 34),
+(55, 'Professional', 'Grand square hotel', '5', 559),
+(56, 'Professional', '', '2', 32),
+(57, 'Professional', 'Houston hotels', '4', 33);
 
 -- --------------------------------------------------------
 
@@ -398,7 +503,7 @@ CREATE TABLE `hotelListerPropertiesLocation` (
   `zip_code` varchar(15) NOT NULL,
   `hotelListerProperties_id` int(255) NOT NULL,
   `time_in` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hotelListerPropertiesLocation`
@@ -416,7 +521,17 @@ INSERT INTO `hotelListerPropertiesLocation` (`id`, `property_location`, `propert
 (9, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 24, '2023-01-03 13:29:47'),
 (10, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 25, '2023-01-03 13:30:08'),
 (11, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 26, '2023-01-03 15:32:40'),
-(12, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 27, '2023-01-06 16:02:10');
+(12, 'ui', 'jk', 'ui', 2, 'kano', 'Z10', 27, '2023-01-06 16:02:10'),
+(13, 'Kano', 'Albania', 'Gidan Buhari, Zoo road kano, Nigeria.', 677676, 'kano', '70012', 28, '2023-03-08 14:37:51'),
+(14, 'Albania', 'Albania', 'Gidan Buhari, Zoo road kano, Nigeria.', 677676, 'kano', '70012', 29, '2023-03-08 14:54:31'),
+(15, 'Kano', 'Albania', 'Gidan Buhari, Zoo road kano, Nigeria.', 677676, 'kano', '70012', 30, '2023-03-08 15:08:07'),
+(16, 'Kano', 'Albania', 'Gidan Buhari, Zoo road kano, Nigeria.', 677676, 'kano', '70012', 31, '2023-03-08 15:09:02'),
+(17, 'Kano', 'Nigeria', 'Gidan Buhari, Zoo road kano, Nigeria.', 3343, 'kano', '70012', 32, '2023-03-08 15:20:54'),
+(18, 'usa', 'United States of America (the)', 'Gidan Buhari, Zoo road kano, Nigeria.', 332, 'new york', '70012', 33, '2023-03-08 16:00:14'),
+(19, 'New york', 'United States of America (the)', 'Gidan Buhari, Zoo road kano, Nigeria.', 5332, 'New york', '70012', 34, '2023-03-08 17:19:23'),
+(20, 'Chicago', 'United States of America (the)', 'Gidan Buhari, Zoo road kano, Nigeria.', 3223, 'Chicago', '700012', 35, '2023-03-08 17:23:12'),
+(21, 'Houston', 'United States of America (the)', 'Gidan Buhari, Zoo road kano, Nigeria.', 434, 'Houston', '700012', 36, '2023-03-08 17:25:16'),
+(22, 'Kaduna', 'Nigeria', '1047, Kawo Dan Gaya Street. Kano, Nassarawa.', 4221, 'Kano', '700213', 37, '2023-03-08 19:01:05');
 
 -- --------------------------------------------------------
 
@@ -426,18 +541,22 @@ INSERT INTO `hotelListerPropertiesLocation` (`id`, `property_location`, `propert
 
 CREATE TABLE `hotelListerrights` (
   `id` int(11) NOT NULL,
-  `rights` int(1) NOT NULL,
-  `right2` int(1) NOT NULL,
-  `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `rights` varchar(100) NOT NULL,
+  `right2` varchar(100) NOT NULL,
+  `hotelListerPropertiesId` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hotelListerrights`
 --
 
 INSERT INTO `hotelListerrights` (`id`, `rights`, `right2`, `hotelListerPropertiesId`) VALUES
-(1, 1, 0, 24),
-(2, 1, 0, 24);
+(1, '1', '0', '24'),
+(2, '1', '0', '24'),
+(3, 't', 'r', '34'),
+(4, 't', 'r', '559'),
+(5, 't', 'r', '32'),
+(6, 't', 'r', '33');
 
 -- --------------------------------------------------------
 
@@ -451,41 +570,52 @@ CREATE TABLE `hotelListerUsers` (
   `last_name` varchar(20) NOT NULL,
   `email` varchar(50) NOT NULL,
   `phone_number` varchar(15) NOT NULL,
+  `status` varchar(100) NOT NULL,
   `time_in` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hotelListerUsers`
 --
 
-INSERT INTO `hotelListerUsers` (`id`, `first_name`, `last_name`, `email`, `phone_number`, `time_in`) VALUES
-(1, 'abu', 'ab', 'assadeeq543@gmail.com', '12345', '2023-01-03 08:12:07'),
-(2, 'first_name', 'last_name', 'assadeeq5423@gmail.com', 'phone', '2023-01-03 10:24:28'),
-(3, 'first_name', 'last_name', 'assadeeq5543@gmail.com', 'phone', '2023-01-03 10:41:42'),
-(4, 'first_name', 'last_name', 'assadeeq55543@gmail.com', 'phone', '2023-01-03 10:46:55'),
-(5, 'first_name', 'last_name', 'assadeeq552543@gmail.com', 'phone', '2023-01-03 11:19:36'),
-(6, 'first_name', 'last_name', 'assadeeq5352543@gmail.com', 'phone', '2023-01-03 11:20:42'),
-(7, 'first_name', 'last_name', 'assadeeq535s2543@gmail.com', 'phone', '2023-01-03 11:21:09'),
-(8, 'first_name', 'last_name', 'assadeeq5354s2543@gmail.com', 'phone', '2023-01-03 11:21:39'),
-(9, 'first_name', 'last_name', 'assadeeq5354s23543@gmail.com', 'phone', '2023-01-03 11:22:23'),
-(10, 'first_name', 'last_name', 'assadeeq5354s233543@gmail.com', 'phone', '2023-01-03 11:22:59'),
-(11, 'abu', 'sam', 'sam456@gmail.com', '12345678', '2023-01-03 12:07:58'),
-(12, 'abu', 'sam', 'sam4456@gmail.com', '12345678', '2023-01-03 12:17:10'),
-(13, 'abu', 'sam', 'sam44456@gmail.com', '12345678', '2023-01-03 12:18:55'),
-(14, 'abu', 'sam', 'sam444456@gmail.com', '12345678', '2023-01-03 12:34:36'),
-(15, 'abu', 'sam', 'sam4544456@gmail.com', '12345678', '2023-01-03 12:45:41'),
-(16, 'abu', 'sam', 'sam45444556@gmail.com', '12345678', '2023-01-03 12:46:20'),
-(17, 'abu', 'sam', 'sam4544s4556@gmail.com', '12345678', '2023-01-03 13:11:07'),
-(18, 'abu', 'sam', 'sam44544s4556@gmail.com', '12345678', '2023-01-03 13:20:45'),
-(19, 'abu', 'sam', 'sam4454334s4556@gmail.com', '12345678', '2023-01-03 13:21:17'),
-(20, 'abu', 'sam', 'sam44544334s4556@gmail.com', '12345678', '2023-01-03 13:21:54'),
-(21, 'abu', 'sam', 'sam445443344s4556@gmail.com', '12345678', '2023-01-03 13:22:36'),
-(22, 'abu', 'sam', 'sam4454443344s4556@gmail.com', '12345678', '2023-01-03 13:27:01'),
-(23, 'abu', 'sam', 'sam44544463344s4556@gmail.com', '12345678', '2023-01-03 13:28:53'),
-(24, 'abu', 'sam', 'sam445445463344s4556@gmail.com', '12345678', '2023-01-03 13:29:47'),
-(25, 'abu', 'sam', 'sam4454454633446s4556@gmail.com', '12345678', '2023-01-03 13:30:08'),
-(26, 'abu', 'sam', 'sam445445433446s4556@gmail.com', '12345678', '2023-01-03 15:32:40'),
-(27, 'abu', 'sam', 'sam4454ee45433446s4556@gmail.com', '12345678', '2023-01-06 16:02:10');
+INSERT INTO `hotelListerUsers` (`id`, `first_name`, `last_name`, `email`, `phone_number`, `status`, `time_in`) VALUES
+(1, 'abu', 'ab', 'assadeeq543@gmail.com', '12345', '', '2023-01-03 08:12:07'),
+(2, 'first_name', 'last_name', 'assadeeq5423@gmail.com', 'phone', '', '2023-01-03 10:24:28'),
+(3, 'first_name', 'last_name', 'assadeeq5543@gmail.com', 'phone', '', '2023-01-03 10:41:42'),
+(4, 'first_name', 'last_name', 'assadeeq55543@gmail.com', 'phone', '', '2023-01-03 10:46:55'),
+(5, 'first_name', 'last_name', 'assadeeq552543@gmail.com', 'phone', '', '2023-01-03 11:19:36'),
+(6, 'first_name', 'last_name', 'assadeeq5352543@gmail.com', 'phone', '', '2023-01-03 11:20:42'),
+(7, 'first_name', 'last_name', 'assadeeq535s2543@gmail.com', 'phone', '', '2023-01-03 11:21:09'),
+(8, 'first_name', 'last_name', 'assadeeq5354s2543@gmail.com', 'phone', '', '2023-01-03 11:21:39'),
+(9, 'first_name', 'last_name', 'assadeeq5354s23543@gmail.com', 'phone', '', '2023-01-03 11:22:23'),
+(10, 'first_name', 'last_name', 'assadeeq5354s233543@gmail.com', 'phone', '', '2023-01-03 11:22:59'),
+(11, 'abu', 'sam', 'sam456@gmail.com', '12345678', '', '2023-01-03 12:07:58'),
+(12, 'abu', 'sam', 'sam4456@gmail.com', '12345678', '', '2023-01-03 12:17:10'),
+(13, 'abu', 'sam', 'sam44456@gmail.com', '12345678', '', '2023-01-03 12:18:55'),
+(14, 'abu', 'sam', 'sam444456@gmail.com', '12345678', '', '2023-01-03 12:34:36'),
+(15, 'abu', 'sam', 'sam4544456@gmail.com', '12345678', '', '2023-01-03 12:45:41'),
+(16, 'abu', 'sam', 'sam45444556@gmail.com', '12345678', '', '2023-01-03 12:46:20'),
+(17, 'abu', 'sam', 'sam4544s4556@gmail.com', '12345678', '', '2023-01-03 13:11:07'),
+(18, 'abu', 'sam', 'sam44544s4556@gmail.com', '12345678', '', '2023-01-03 13:20:45'),
+(19, 'abu', 'sam', 'sam4454334s4556@gmail.com', '12345678', '', '2023-01-03 13:21:17'),
+(20, 'abu', 'sam', 'sam44544334s4556@gmail.com', '12345678', '', '2023-01-03 13:21:54'),
+(21, 'abu', 'sam', 'sam445443344s4556@gmail.com', '12345678', '', '2023-01-03 13:22:36'),
+(22, 'abu', 'sam', 'sam4454443344s4556@gmail.com', '12345678', '', '2023-01-03 13:27:01'),
+(23, 'abu', 'sam', 'sam44544463344s4556@gmail.com', '12345678', '', '2023-01-03 13:28:53'),
+(24, 'abu', 'sam', 'sam445445463344s4556@gmail.com', '12345678', '', '2023-01-03 13:29:47'),
+(25, 'abu', 'sam', 'sam4454454633446s4556@gmail.com', '12345678', '', '2023-01-03 13:30:08'),
+(26, 'abu', 'sam', 'sam445445433446s4556@gmail.com', '12345678', '', '2023-01-03 15:32:40'),
+(27, 'abu', 'sam', 'sam4454ee45433446s4556@gmail.com', '12345678', '', '2023-01-06 16:02:10'),
+(28, 'Aliyu', 'kamilu', 'aliyukamilu002@gmail.com', '08135719391', 'active', '2023-03-08 14:37:49'),
+(29, 'Aliyu', 'kamilu', 'aliyukamilu20@gmail.com', '08135719391', 'active', '2023-03-08 14:50:59'),
+(30, 'Aliyu', 'kamilu', 'aliyukamilu200@gmail.com', '08135719391', 'active', '2023-03-08 15:08:05'),
+(31, 'Aliyu', 'kamilu', 'aliyukamilu2300@gmail.com', '08135719391', 'active', '2023-03-08 15:09:00'),
+(32, 'Aliyu', 'kamilu', 'aliyukamilu2@gmail.com', '08135719391', 'active', '2023-03-08 15:20:53'),
+(33, 'Aliyu', 'Kamilu', 'aliyukamilu8@gmail.com', '08135719391', 'active', '2023-03-08 16:00:14'),
+(34, 'Aliyu', 'kamilu', 'newyorkhotels@usa.com', '08135719391', 'active', '2023-03-08 17:19:23'),
+(35, 'Chicago', 'hotel', 'Chicago@hotel.com', '090548943', 'active', '2023-03-08 17:23:11'),
+(36, 'Houston', 'Kamilu', 'Houston@gmail.com', '08135719391', 'active', '2023-03-08 17:25:15'),
+(37, 'Kaduna', 'Holts', 'Kaduna@gmail.com', '08135719391', 'active', '2023-03-08 19:01:02');
 
 -- --------------------------------------------------------
 
@@ -496,31 +626,39 @@ INSERT INTO `hotelListerUsers` (`id`, `first_name`, `last_name`, `email`, `phone
 CREATE TABLE `hotelReservation` (
   `id` int(11) NOT NULL,
   `property_id` bigint(20) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `property_name` varchar(300) NOT NULL,
   `property_location` varchar(200) NOT NULL,
   `room_type` varchar(200) NOT NULL,
   `room_name` varchar(200) NOT NULL,
   `room_id` int(255) NOT NULL,
   `guest_name` varchar(300) NOT NULL,
-  `status` enum('Yes','No') NOT NULL,
   `check_in` date NOT NULL,
   `check_out` date NOT NULL,
   `total_payment` varchar(200) NOT NULL,
   `commission` varchar(300) NOT NULL,
   `reservation_no` varchar(300) NOT NULL,
+  `status` enum('active','inactive') NOT NULL,
   `book_on` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hotelReservation`
 --
 
-INSERT INTO `hotelReservation` (`id`, `property_id`, `property_name`, `property_location`, `room_type`, `room_name`, `room_id`, `guest_name`, `status`, `check_in`, `check_out`, `total_payment`, `commission`, `reservation_no`, `book_on`) VALUES
-(1, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'CHF-125', 1, 'Abubakar Bello', 'Yes', '2023-02-12', '2023-02-13', '10', '4.50', '1674947209', '2023-01-28 22:52:03'),
-(2, 2, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Abubakar Bello', 'Yes', '2023-02-13', '2023-02-14', '1', '4.50', '1674946465', '2023-01-28 22:52:32'),
-(3, 2, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Mohammed Hassan', 'Yes', '2023-02-05', '2023-02-07', '1', '4.50', '1674946409', '2023-01-28 22:52:40'),
-(4, 1, 'City Garden Hotel', 'ui', 'Room for Extended Stay', 'RFE 123', 3, 'Abubakar Bello', 'Yes', '2023-02-15', '2023-02-17', '10', '4.50', '1675004730', '2023-01-29 14:58:05'),
-(5, 1, 'City Garden Hotel', 'ui', 'Presidential Suite', 'SES-001', 1, 'Mohammed Hassan', 'Yes', '2023-02-08', '2023-02-10', '10', '4.50', '1675005489', '2023-01-29 15:03:13');
+INSERT INTO `hotelReservation` (`id`, `property_id`, `user_id`, `property_name`, `property_location`, `room_type`, `room_name`, `room_id`, `guest_name`, `check_in`, `check_out`, `total_payment`, `commission`, `reservation_no`, `status`, `book_on`) VALUES
+(1, 1, 34, 'City Garden Hotel', 'ui', 'Presidential Suite', 'CHF-125', 1, 'Abubakar Bello', '2023-02-12', '2023-02-13', '10', '4.50', '1674947209', 'active', '2023-01-28 22:52:03'),
+(2, 2, 34, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Abubakar Bello', '2023-02-13', '2023-02-14', '1', '4.50', '1674946465', 'inactive', '2023-01-28 22:52:32'),
+(3, 2, 33, 'Royal Guest Hotel', 'ui', 'Suite / Executive Suite', 'CHF-125', 2, 'Mohammed Hassan', '2023-02-05', '2023-02-07', '1', '4.50', '1674946409', 'inactive', '2023-01-28 22:52:40'),
+(4, 1, 34, 'City Garden Hotel', 'ui', 'Room for Extended Stay', 'RFE 123', 3, 'Abubakar Bello', '2023-02-15', '2023-02-17', '10', '4.50', '1675004730', 'inactive', '2023-01-29 14:58:05'),
+(5, 1, 33, 'City Garden Hotel', 'ui', 'Presidential Suite', 'SES-001', 1, 'Mohammed Hassan', '2023-02-08', '2023-02-10', '10', '4.50', '1675005489', 'inactive', '2023-01-29 15:03:13'),
+(6, 1, 33, 'City Garden Hotel', 'United Kingdom', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', '2023-02-12', '2023-02-13', '10', '4.50', '1676228936', 'active', '2023-02-12 19:10:28'),
+(7, 1, 33, 'City Garden Hotel', 'United Kingdom', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', '2023-02-12', '2023-02-14', '10', '4.50', '1676229345', 'inactive', '2023-02-12 19:11:21'),
+(8, 2, 33, 'Royal Guest Hotel', 'Nigeria', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', '2023-02-12', '2023-02-14', '1', '4.50', '1676482803', 'inactive', '2023-02-15 17:34:44'),
+(9, 2, 33, 'Royal Guest Hotel', 'Nigeria', 'Presidential Suite', 'CHF-125', 1, 'Mohammed Hassan', '2023-02-12', '2023-02-14', '1', '4.50', '1676486654', 'active', '2023-02-15 18:30:10'),
+(10, 3, 33, 'ee', '', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', '2023-02-12', '2023-02-14', '', '', '1676485998', 'active', '2023-02-15 18:30:59'),
+(11, 1, 33, 'City Garden Hotel', 'United Kingdom', 'Suite / Executive Suite', 'SES-001', 2, 'Mohammed Hassan', '2023-02-16', '2023-02-17', '10', '4.50', '1677153776', 'active', '2023-02-23 11:53:10'),
+(12, 2, 34, 'Royal Guest Hotel', 'Nigeria', 'Presidential Suite', 'CHF-125', 1, 'Abubakar Bello', '2023-02-16', '2023-02-17', '1', '4.50', '1677154194', 'active', '2023-02-23 12:01:02');
 
 -- --------------------------------------------------------
 
@@ -535,15 +673,15 @@ CREATE TABLE `Hotel_lister_agent` (
   `email` varchar(200) NOT NULL,
   `mobile_number` varchar(300) NOT NULL,
   `property_id` bigint(20) NOT NULL,
-  `homepage_access` enum('Yes','No') NOT NULL,
-  `reservations_access` enum('Yes','No') NOT NULL,
-  `finance_access` enum('Yes','No') NOT NULL,
-  `users_access` enum('Yes','No') NOT NULL,
-  `rates_availability_access` enum('Yes','No') NOT NULL,
-  `property_access` enum('Yes','No') NOT NULL,
-  `messages_access` enum('Yes','No') NOT NULL,
-  `reviews_access` enum('Yes','No') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `homepage_access` varchar(10) NOT NULL,
+  `reservations_access` varchar(10) NOT NULL,
+  `finance_access` varchar(10) NOT NULL,
+  `users_access` varchar(10) NOT NULL,
+  `rates_availability_access` varchar(10) NOT NULL,
+  `property_access` varchar(10) NOT NULL,
+  `messages_access` varchar(10) NOT NULL,
+  `reviews_access` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `Hotel_lister_agent`
@@ -552,8 +690,9 @@ CREATE TABLE `Hotel_lister_agent` (
 INSERT INTO `Hotel_lister_agent` (`id`, `fname`, `lname`, `email`, `mobile_number`, `property_id`, `homepage_access`, `reservations_access`, `finance_access`, `users_access`, `rates_availability_access`, `property_access`, `messages_access`, `reviews_access`) VALUES
 (1, 'Double', 'string', 'string@gmail', '070989687', 1, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
 (2, 'Double11', 'string11', 'string11@gmail', '070989687', 1, 'No', 'No', 'Yes', 'Yes', 'No', 'Yes', 'Yes', 'Yes'),
-(3, 'Double11', 'string11', 'string11@gmail', '070989687', 1, 'No', 'No', 'Yes', 'Yes', 'No', 'Yes', 'Yes', 'Yes'),
-(4, 'nurudeen', 'ali', 'deen@gmail', '070989687', 1, 'No', 'No', 'Yes', 'Yes', 'No', 'Yes', 'Yes', 'Yes');
+(3, 'Aliyu', 'Nurudeen', 'deen.aliyu401@gmail.com', '+2348162248564', 1, '', '', '', '', '', '', '', ''),
+(4, 'Aliyu', 'Nurudeen', 'deen.aliyu401@gmail.com', '+2348162248564', 1, 'Yes', 'Yes', 'Yes', 'No', '', 'Yes', 'Yes', 'No'),
+(5, 'Aliyu', 'Nurudeen', 'deen.aliyu401@gmail.com', '+2348162248564', 1, 'Yes', 'No', 'No', 'No', 'Yes', 'Yes', 'No', 'No');
 
 -- --------------------------------------------------------
 
@@ -570,7 +709,7 @@ CREATE TABLE `invoices` (
   `action` varchar(200) NOT NULL,
   `amount` varchar(200) NOT NULL,
   `status` enum('paid','unpaid') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `invoices`
@@ -578,7 +717,8 @@ CREATE TABLE `invoices` (
 
 INSERT INTO `invoices` (`id`, `document_name`, `invoice_number`, `date`, `period`, `action`, `amount`, `status`) VALUES
 (1, 'Double', '63e55e661d6dd', '2023-01-12', '2days', 'none', '10', 'unpaid'),
-(2, 'Double', '63e5d4910b63e', '2023-01-12', '2days', 'none', '10', 'unpaid');
+(2, 'Double', '63e5d4910b63e', '2023-01-12', '2days', 'none', '10', 'unpaid'),
+(3, 'Double', '64088b99d3183', '2023-01-12', '2days', 'none', '10', 'unpaid');
 
 -- --------------------------------------------------------
 
@@ -602,7 +742,7 @@ CREATE TABLE `layoutPrice` (
   `maxChildrenOccupants` varchar(200) NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `layoutPrice`
@@ -628,7 +768,25 @@ INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDo
 (17, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
 (18, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
 (19, 'string', 'string', 'string', 'string', 1, 'string', 2, 2.50, '', '', '', '', 24, '0000-00-00 00:00:00'),
-(20, 'Double Room Updadted and Again', 'CHA-1', 'NULLY Updated', 'Created Policy Updadte', 8, 'full Updadted', 5, 200.00, 'Estate Around', '2', '7', '3', 1, '2023-02-10 05:53:58');
+(20, 'Double Room Updadted and Again', 'CHA-1', 'NULLY Updated', 'Created Policy Updadte', 8, 'full Updadted', 5, 200.00, 'Estate Around', '2', '7', '3', 1, '2023-02-10 05:53:58'),
+(21, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 1, 30.00, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:14:47'),
+(22, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 1, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:16:36'),
+(23, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 1, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:18:36'),
+(24, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 1, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:18:42'),
+(25, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 1, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:20:27'),
+(26, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 1, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:20:49'),
+(27, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 1, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:22:00'),
+(28, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 2, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:22:25'),
+(29, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 2, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:23:32'),
+(30, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 2, 2.50, 'kano', '2 ', '4', '2', 0, '2023-03-05 19:24:24'),
+(31, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 2, 2.50, 'kano', '2 ', '4', '2', 5, '2023-03-05 19:25:45'),
+(32, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 2, 2.50, 'kano', '2 ', '4', '2', 5, '2023-03-05 19:26:39'),
+(33, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 2, 2.50, 'kano', '2 ', '4', '2', 29, '2023-03-05 19:34:49'),
+(34, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 2, 2.50, 'kano', '2 ', '4', '2', 1, '2023-03-05 19:36:14'),
+(35, 'Single', 'Budget Double Room', '', 'No smoking', 3, 'Latex', 2, 2.50, 'kano', '2 ', '4', '2', 34, '2023-03-05 19:36:18'),
+(36, 'Suite', 'Budget Double Room', 'name', 'Please select', 1, 'Memory foam', 2, 2.50, 'kano', '2 ', '4', '2', 559, '2023-03-05 19:43:37'),
+(37, 'Presidential Suites', 'Budget Double Room', 'name', 'No smoking', 1, 'Memory foam', 2, 2.50, 'kano', '2 ', '4', '2', 32, '2023-03-08 15:37:54'),
+(38, 'Single', 'Budget Double Room', '', 'No smoking', 1, 'Memory foam', 2, 2.50, 'kano', '2 ', '4', '2', 33, '2023-03-08 17:27:59');
 
 -- --------------------------------------------------------
 
@@ -641,20 +799,16 @@ CREATE TABLE `newsletter` (
   `firstname` varchar(200) NOT NULL,
   `lastName` varchar(200) NOT NULL,
   `phoneNumber` varchar(200) NOT NULL,
-  `email` varchar(300) NOT NULL,
-  `country` varchar(100) NOT NULL,
-  `city` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `email` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `newsletter`
 --
 
-INSERT INTO `newsletter` (`id`, `firstname`, `lastName`, `phoneNumber`, `email`, `country`, `city`) VALUES
-(1, 'First Name', 'Last Name', '070896875', 'ccc@gmail.com', '', ''),
-(2, 'First Name of another', 'Last Name of another', '070896875345', 'string@gmail.com', '', ''),
-(3, 'First Name of another', 'Last Name of another', '070896875345', 'strins@gmail.com', 'nigeria', 'niger'),
-(4, 'Aliyu', 'Nurudeen', '+2348162248564', 'deen.aliyu40@gmail.com', 'Vero Beach', 'Florida');
+INSERT INTO `newsletter` (`id`, `firstname`, `lastName`, `phoneNumber`, `email`) VALUES
+(1, 'First Name', 'Last Name', '070896875', 'ccc@gmail.com'),
+(2, 'First Name of another', 'Last Name of another', '070896875345', 'string@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -676,7 +830,7 @@ CREATE TABLE `open_close_rooms` (
   `standard_rate_status` enum('active','inactive') NOT NULL,
   `non_refundable_rates_status` enum('active','inactive') DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `open_close_rooms`
@@ -688,7 +842,8 @@ INSERT INTO `open_close_rooms` (`id`, `room_id`, `property_id`, `date_from`, `da
 (3, 3, 1, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:08:55'),
 (4, 4, 1, '2023-01-16', '2023-01-18', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:08:57'),
 (5, 5, 2, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:09:01'),
-(6, 6, 2, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:09:04');
+(6, 6, 2, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:09:04'),
+(7, 6, 33, '2023-01-16', '2023-01-17', 'Double', 1.32, 1.32, 1.33, 'active', 'active', 'active', '2023-02-12 15:09:04');
 
 -- --------------------------------------------------------
 
@@ -702,7 +857,7 @@ CREATE TABLE `otherPropertyDescription` (
   `roomDescription` text NOT NULL,
   `property_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `otherPropertyDescription`
@@ -720,24 +875,29 @@ INSERT INTO `otherPropertyDescription` (`id`, `propertyDescription`, `roomDescri
 
 CREATE TABLE `policies` (
   `id` int(11) NOT NULL,
-  `daysInAdvance_cancellations` int(11) NOT NULL,
-  `guestPay_cancellations` double(10,2) NOT NULL,
-  `hotelListerPropertiesId` int(255) NOT NULL,
+  `daysInAdvance_cancellations` varchar(255) NOT NULL,
+  `guestPay_cancellations` varchar(255) NOT NULL,
+  `hotelListerPropertiesId` varchar(255) NOT NULL,
   `checkIn_checkTime` varchar(50) NOT NULL,
   `checkOut_checkTime` varchar(50) NOT NULL,
   `accomondateChildren` varchar(5) NOT NULL,
   `accomondatePet` varchar(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `policies`
 --
 
 INSERT INTO `policies` (`id`, `daysInAdvance_cancellations`, `guestPay_cancellations`, `hotelListerPropertiesId`, `checkIn_checkTime`, `checkOut_checkTime`, `accomondateChildren`, `accomondatePet`) VALUES
-(1, 33, 23.43, 24, 'from1~to1', 'from1~to1', '0', '1'),
-(2, 33, 23.43, 24, 'from1~to1', 'from1~to1', '0', '1'),
-(3, 33, 23.43, 24, 'from1~to1', 'from1~to1', '0', '1'),
-(4, 33, 23.43, 24, 'from1~to1', 'from1~to1', '0', '1');
+(1, '33', '23.43', '24', 'from1~to1', 'from1~to1', '0', '1'),
+(2, '33', '23.43', '24', 'from1~to1', 'from1~to1', '0', '1'),
+(3, '33', '23.43', '24', 'from1~to1', 'from1~to1', '0', '1'),
+(4, '33', '23.43', '24', 'from1~to1', 'from1~to1', '0', '1'),
+(5, 'Day of Arrival', 'string', '29', '04:06~~~04:23~~~', '23:03~~~04:05~~~', '1', '1'),
+(6, 'Day of Arrival', 'string', '34', '04:06~~~04:23~~~', '23:03~~~04:05~~~', '1', '1'),
+(7, 'Day of Arrival', 'string', '559', '23:01~~~23:03~~~', '02:02~~~23:02~~~', '1', '1'),
+(8, 'Day of Arrival', 'string', '32', '23:02~~03:02~23:02~~~', '23:03~~~23:02~~~', '1', '1'),
+(9, 'Day of Arrival', 'string', '33', '23:02~23:04~~04:03~~~', '23:02~~~03:43~~~', '1', '1');
 
 -- --------------------------------------------------------
 
@@ -749,14 +909,22 @@ CREATE TABLE `propertiesPhotos` (
   `id` int(11) NOT NULL,
   `content` longtext NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `propertiesPhotos`
 --
 
 INSERT INTO `propertiesPhotos` (`id`, `content`, `hotelListerPropertiesId`) VALUES
-(1, 'hi~hi~hi', 24);
+(1, 'https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=~https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg~https://cf.bstatic.com/static/img/theme-index/carousel_320x240/bg_resorts/6f87c6143fbd51a0bb5d15ca3b9cf84211ab0884.jpg~https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg~https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-chalet_300/8ee014fcc493cb3334e25893a1dee8c6d36ed0ba.jpg', 2),
+(8, 'https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-chalet_300/8ee014fcc493cb3334e25893a1dee8c6d36ed0ba.jpg~https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg~https://cf.bstatic.com/static/img/theme-index/carousel_320x240/bg_resorts/6f87c6143fbd51a0bb5d15ca3b9cf84211ab0884.jpg~https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg~https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o=', 1),
+(9, 'https://media.publit.io/file/73e13ccbf4594231a00bc9b21eaf5bd9.jpg~', 0),
+(11, 'https://media.publit.io/file/73e13ccbf4594231a00bc9b21eaf5bd9.jpg~', 5),
+(13, 'https://media.publit.io/file/73e13ccbf4594231a00bc9b21eaf5bd9.jpg~', 29),
+(15, 'https://media.publit.io/file/73e13ccbf4594231a00bc9b21eaf5bd9.jpg~', 34),
+(16, 'https://media.publit.io/file/4f56b047bededb574f8d10472948836e.jpg~', 559),
+(17, 'https://media.publit.io/file/4f56b047bededb574f8d10472948836e-o.jpg~', 32),
+(18, 'https://media.publit.io/file/1a676d658fd9b78fdaea59bb1bfeb83d-g.jpg~', 33);
 
 -- --------------------------------------------------------
 
@@ -771,40 +939,19 @@ CREATE TABLE `propertyContactDetails` (
   `phone1` varchar(15) NOT NULL,
   `phone2` varchar(15) NOT NULL,
   `company` varchar(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `propertyContactDetails`
 --
 
 INSERT INTO `propertyContactDetails` (`id`, `hotelListerPropertiesId`, `name`, `phone1`, `phone2`, `company`) VALUES
-(1, 24, 'string', 'string', 'string', '1'),
-(2, 24, 'string', 'string', 'string', '1'),
-(3, 24, 'string', 'string', 'string', '1'),
-(4, 24, 'string', 'string', 'string', '1'),
-(5, 24, 'string', 'string', 'string', '1'),
-(6, 24, 'string', 'string', 'string', '1'),
-(7, 24, 'string', 'string', 'string', '1'),
-(8, 24, 'string', 'string', 'string', '1'),
-(9, 24, 'string', 'string', 'string', '1'),
-(10, 24, 'string', 'string', 'string', '1'),
-(11, 24, 'string', 'string', 'string', '1'),
-(12, 24, 'string', 'string', 'string', '1'),
-(13, 24, 'string', 'string', 'string', '1'),
-(14, 24, 'string', 'string', 'string', '1'),
-(15, 24, 'string', 'string', 'string', '1'),
-(16, 24, 'string', 'string', 'string', '1'),
-(17, 24, 'string', 'string', 'string', '1'),
-(18, 24, 'string', 'string', 'string', '1'),
-(19, 24, 'string', 'string', 'string', '1'),
-(20, 24, 'string', 'string', 'string', '1'),
-(21, 24, 'string', 'string', 'string', '1'),
-(22, 24, 'string', 'string', 'string', '1'),
-(23, 24, 'string', 'string', 'string', '1'),
-(24, 24, 'string', 'string', 'string', '1'),
-(25, 24, 'string', 'string', 'string', '1'),
-(26, 24, 'string', 'string', 'string', '1'),
-(27, 24, 'string', 'string', 'string', '1');
+(51, 29, 'Aliyu kamilu', '+2348135719391', '', '1'),
+(52, 1, 'Aliyu kamilu', '+2348135719391', '', '1'),
+(53, 34, 'Aliyu kamilu', '+2348135719391', '', '1'),
+(54, 559, 'Aliyu kamilu', '08135719391', '', '1'),
+(55, 32, 'Aliyu kamilu', '+2348135719391', '', '1'),
+(56, 33, 'Aliyu kamilu', '+2348135719391', '', '1');
 
 -- --------------------------------------------------------
 
@@ -820,7 +967,7 @@ CREATE TABLE `propertyLocation` (
   `city` varchar(50) NOT NULL,
   `zip` varchar(10) NOT NULL,
   `hotelListerPropertiesId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `propertyLocation`
@@ -849,7 +996,36 @@ INSERT INTO `propertyLocation` (`id`, `address1`, `address2`, `country`, `city`,
 (20, 'string', 'string', 'string', 'string', 'string', 24),
 (21, 'string', 'string', 'string', 'string', 'string', 24),
 (22, 'string', 'string', 'string', 'string', 'string', 24),
-(23, 'string', 'string', 'string', 'string', 'string', 24);
+(23, 'string', 'string', 'string', 'string', 'string', 24),
+(24, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(25, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(26, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(27, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(28, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(29, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(30, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(31, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(32, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(33, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(34, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(35, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(36, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(37, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(38, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(39, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(40, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(41, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(42, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(43, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(44, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 0),
+(45, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 5),
+(46, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 5),
+(47, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 29),
+(48, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 1),
+(49, '89 Lamido Crescent', '89 Lamido Crescent', 'Nigeria', 'Kano', '700213', 34),
+(50, '89 lamido crescent, nassarawa kano nigeria', '89 lamido crescent, nassarawa kano nigeria', 'Nigeria', 'Kano', '7000', 559),
+(51, 'MM WAY', 'MM WAY', 'Nigeria', 'Kano', '700213', 32),
+(52, 'Houston City', 'Houston City', 'United States of America (the)', 'Houston', '700213', 33);
 
 -- --------------------------------------------------------
 
@@ -862,14 +1038,26 @@ CREATE TABLE `VAT_details` (
   `status` enum('Yes','No') NOT NULL,
   `tin` varchar(200) NOT NULL,
   `property_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `VAT_details`
 --
 
 INSERT INTO `VAT_details` (`id`, `status`, `tin`, `property_id`) VALUES
-(1, 'Yes', '20230210143825926295', 1);
+(1, 'Yes', '20230210143825926295', 1),
+(2, 'Yes', '', 1),
+(3, 'Yes', '1111111111', 1),
+(4, 'Yes', '11111111111', 1),
+(5, 'Yes', '111111111111', 1),
+(6, 'Yes', '111111111111', 1),
+(7, 'Yes', '111111111111', 1),
+(8, 'Yes', '111111', 1),
+(9, 'Yes', '111111', 1),
+(10, 'Yes', '111111', 1),
+(11, 'Yes', '111111', 1),
+(12, 'Yes', '1111111', 1),
+(13, 'Yes', '', 1);
 
 --
 -- Indexes for dumped tables
@@ -961,12 +1149,6 @@ ALTER TABLE `hotelListerUsers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `hotelReservation`
---
-ALTER TABLE `hotelReservation`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `Hotel_lister_agent`
 --
 ALTER TABLE `Hotel_lister_agent`
@@ -1041,13 +1223,13 @@ ALTER TABLE `VAT_details`
 -- AUTO_INCREMENT for table `amenties`
 --
 ALTER TABLE `amenties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `channelManager`
 --
 ALTER TABLE `channelManager`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `copy_of_yearly_rate`
@@ -1059,13 +1241,13 @@ ALTER TABLE `copy_of_yearly_rate`
 -- AUTO_INCREMENT for table `endUsers`
 --
 ALTER TABLE `endUsers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `facilitiesServices`
 --
 ALTER TABLE `facilitiesServices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `generalRoomAmenities`
@@ -1077,7 +1259,7 @@ ALTER TABLE `generalRoomAmenities`
 -- AUTO_INCREMENT for table `health_safety_features`
 --
 ALTER TABLE `health_safety_features`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `HotelListerNotifications`
@@ -1089,73 +1271,67 @@ ALTER TABLE `HotelListerNotifications`
 -- AUTO_INCREMENT for table `hotelListerPayments`
 --
 ALTER TABLE `hotelListerPayments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `hotelListerProperties`
 --
 ALTER TABLE `hotelListerProperties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `hotelListerPropertiesBasicInfo`
 --
 ALTER TABLE `hotelListerPropertiesBasicInfo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `hotelListerPropertiesLocation`
 --
 ALTER TABLE `hotelListerPropertiesLocation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `hotelListerrights`
 --
 ALTER TABLE `hotelListerrights`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `hotelListerUsers`
 --
 ALTER TABLE `hotelListerUsers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
-
---
--- AUTO_INCREMENT for table `hotelReservation`
---
-ALTER TABLE `hotelReservation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `Hotel_lister_agent`
 --
 ALTER TABLE `Hotel_lister_agent`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `layoutPrice`
 --
 ALTER TABLE `layoutPrice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `newsletter`
 --
 ALTER TABLE `newsletter`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `open_close_rooms`
 --
 ALTER TABLE `open_close_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `otherPropertyDescription`
@@ -1167,31 +1343,31 @@ ALTER TABLE `otherPropertyDescription`
 -- AUTO_INCREMENT for table `policies`
 --
 ALTER TABLE `policies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `propertiesPhotos`
 --
 ALTER TABLE `propertiesPhotos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `propertyContactDetails`
 --
 ALTER TABLE `propertyContactDetails`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `propertyLocation`
 --
 ALTER TABLE `propertyLocation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `VAT_details`
 --
 ALTER TABLE `VAT_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
