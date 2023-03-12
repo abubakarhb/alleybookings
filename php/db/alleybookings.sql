@@ -25,6 +25,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL,
+  `fullname` varchar(350) NOT NULL,
+  `email` varchar(300) NOT NULL,
+  `username` varchar(400) NOT NULL,
+  `password` varchar(300) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `fullname`, `email`, `username`, `password`, `created_at`) VALUES
+(1, 'Mohammed Hassan', 'moh@gmail.com', 'Mohammed', '1234567890', '2023-02-27 12:09:45');
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `amenties`
 --
 
@@ -1027,6 +1050,42 @@ INSERT INTO `propertyLocation` (`id`, `address1`, `address2`, `country`, `city`,
 (51, 'MM WAY', 'MM WAY', 'Nigeria', 'Kano', '700213', 32),
 (52, 'Houston City', 'Houston City', 'United States of America (the)', 'Houston', '700213', 33);
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rating_reviews`
+--
+
+CREATE TABLE `rating_reviews` (
+  `id` int(11) NOT NULL,
+  `property_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `staff_reviews` varchar(350) NOT NULL,
+  `staff_ratings` bigint(20) NOT NULL,
+  `freeWifi_reviews` varchar(350) NOT NULL,
+  `freeWifi_ratings` bigint(20) NOT NULL,
+  `clealiness_reviews` varchar(350) NOT NULL,
+  `clealiness_ratings` bigint(20) NOT NULL,
+  `location_reviews` varchar(350) NOT NULL,
+  `location_ratings` bigint(20) NOT NULL,
+  `comfort_reviews` varchar(350) NOT NULL,
+  `comfort_ratings` bigint(20) NOT NULL,
+  `facilities_reviews` varchar(350) NOT NULL,
+  `facilities_ratings` bigint(20) NOT NULL,
+  `status` enum('Yes','No') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `rating_reviews`
+--
+
+INSERT INTO `rating_reviews` (`id`, `property_id`, `user_id`, `staff_reviews`, `staff_ratings`, `freeWifi_reviews`, `freeWifi_ratings`, `clealiness_reviews`, `clealiness_ratings`, `location_reviews`, `location_ratings`, `comfort_reviews`, `comfort_ratings`, `facilities_reviews`, `facilities_ratings`, `status`, `created_at`) VALUES
+(1, 1, 1, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:29:20'),
+(2, 2, 1, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:31:17'),
+(3, 2, 2, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:31:46');
+
 -- --------------------------------------------------------
 
 --
@@ -1062,6 +1121,12 @@ INSERT INTO `VAT_details` (`id`, `status`, `tin`, `property_id`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `amenties`
@@ -1208,6 +1273,12 @@ ALTER TABLE `propertyContactDetails`
 --
 ALTER TABLE `propertyLocation`
   ADD PRIMARY KEY (`id`);
+  
+--
+-- Indexes for table `rating_reviews`
+--
+ALTER TABLE `rating_reviews`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `VAT_details`
@@ -1218,6 +1289,12 @@ ALTER TABLE `VAT_details`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `amenties`
@@ -1362,6 +1439,12 @@ ALTER TABLE `propertyContactDetails`
 --
 ALTER TABLE `propertyLocation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  
+ --
+-- AUTO_INCREMENT for table `rating_reviews`
+--
+ALTER TABLE `rating_reviews`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `VAT_details`
