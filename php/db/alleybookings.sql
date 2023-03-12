@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.11
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Mar 08, 2023 at 08:05 PM
--- Server version: 10.2.44-MariaDB
--- PHP Version: 7.4.33
+-- Host: localhost
+-- Generation Time: Mar 12, 2023 at 07:59 AM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `alleyboo_alleybookings`
+-- Database: `alleybookings`
 --
 
 -- --------------------------------------------------------
@@ -43,7 +42,6 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id`, `fullname`, `email`, `username`, `password`, `created_at`) VALUES
 (1, 'Mohammed Hassan', 'moh@gmail.com', 'Mohammed', '1234567890', '2023-02-27 12:09:45');
-
 
 -- --------------------------------------------------------
 
@@ -1079,7 +1077,6 @@ INSERT INTO `propertyLocation` (`id`, `address1`, `address2`, `country`, `city`,
 (51, 'MM WAY', 'MM WAY', 'Nigeria', 'Kano', '700213', 32),
 (52, 'Houston City', 'Houston City', 'United States of America (the)', 'Houston', '700213', 33);
 
-
 -- --------------------------------------------------------
 
 --
@@ -1308,7 +1305,7 @@ ALTER TABLE `propertyContactDetails`
 --
 ALTER TABLE `propertyLocation`
   ADD PRIMARY KEY (`id`);
-  
+
 --
 -- Indexes for table `rating_reviews`
 --
@@ -1480,8 +1477,8 @@ ALTER TABLE `propertyContactDetails`
 --
 ALTER TABLE `propertyLocation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
-  
- --
+
+--
 -- AUTO_INCREMENT for table `rating_reviews`
 --
 ALTER TABLE `rating_reviews`
