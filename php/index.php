@@ -15,6 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         login($username, $password);
     } elseif (isset($_GET['createEndUser'])) {
         createUser();
+    } elseif (isset($_GET['loginListerUser'])) {
+        $username = (string) $_GET['email'];
+        $password = (string) $_GET['password'];
+        loginListerUser($username, $password);
     } elseif (isset($_GET['reservationDetail'])) {;
         reservationDetail($_GET);
     } elseif (isset($_GET['singleHotelReservation'])) {

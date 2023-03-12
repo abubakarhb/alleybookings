@@ -204,14 +204,14 @@ function singleUserInfor($data)
 }
 
 
-function createListerUser($email, $firstname, $lastname, $phone)
+function createListerUser($email, $firstname, $lastname, $pword, $phone)
 {
     include "config/index.php";
     include "config/enctp.php";
     $verification = encripted_data($email . "Â£Â£" . "30" . "_");
     $status = "active";
-    $query_User_re = sprintf("INSERT INTO `hotelListerUsers`(`first_name`, `last_name`, `email`, `phone_number`, `status`) 
-                        VALUES ('$firstname','$lastname','$email','$phone','$status')");
+    $query_User_re = sprintf("INSERT INTO `hotelListerUsers`(`first_name`, `last_name`, `email`, `pword`, `phone_number`, `status`,) 
+                        VALUES ('$firstname','$lastname','$email',$pword,'$phone','$status')");
     $check_exist = check_db_query_staus("SELECT email FROM hotelListerUsers WHERE email='{$email}'", "CHK");
 
     if ($check_exist['status'] == 1) {
@@ -246,6 +246,30 @@ function createListerUser($email, $firstname, $lastname, $phone)
             $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
             return (json_encode($returnResponse));
         }
+    }
+}
+
+function loginListerUser($username, $password)
+{
+    include "config/index.php";
+  
+    $query_User = sprintf("SELECT * FROM hotelListerUsers WHERE email='{$username}'");
+    $User_1 = mysqli_query($alleybookingsConnection, $query_User) or die(mysqli_error($alleybookingsConnection));
+    print_r($User_1);die;
+    $row_User_re = mysqli_fetch_assoc($User_1);
+    $totalRows_User_re = mysqli_num_rows($User_1);
+
+    // print_r($row_User_re);die;
+
+    if ($totalRows_User_re > 0) {
+        if ($row_User_re['pword'] == $password) {
+            
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']." ".$row_User_re['last_name'] , "userID" => $row_User_re['id']];
+            exit(json_encode($arr));
+        }
+    } else {
+        $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
+        exit(json_encode($arr));
     }
 }
 
@@ -285,7 +309,7 @@ function hotelListerUserCall001($data)
 {
     if (count(get_object_vars($data->hotelListerUsers)) == 4) {
         if (filter_var($data->hotelListerUsers->email, FILTER_VALIDATE_EMAIL)) {
-            $user_creation = json_decode(createListerUser($data->hotelListerUsers->email, $data->hotelListerUsers->first_name, $data->hotelListerUsers->last_name, $data->hotelListerUsers->phone));
+            $user_creation = json_decode(createListerUser($data->hotelListerUsers->email, $data->hotelListerUsers->first_name, $data->hotelListerUsers->last_name,$data->hotelListerUsers->pword, $data->hotelListerUsers->phone));
             if ($user_creation->status == 1) {
                 $pLocation = json_decode(hotelListerPropertiesLocation($data->hotelListerPropertiesLocation->property_location, $data->hotelListerPropertiesLocation->property_country, $data->hotelListerPropertiesLocation->property_street_address, $data->hotelListerPropertiesLocation->property_unit_number, $data->hotelListerPropertiesLocation->property_city, $data->hotelListerPropertiesLocation->zip_code, $user_creation->user));
                 $pListedDetail = json_decode(hotelListerProperties($data->hotelListerProperties->property_name, $data->hotelListerProperties->property_type, $data->hotelListerProperties->property_currency, $data->hotelListerProperties->zip_code, $data->hotelListerProperties->property_chain_status, $data->hotelListerProperties->property_channel_manager_status, $user_creation->user));
