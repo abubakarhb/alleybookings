@@ -175,6 +175,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }elseif ($data['endpoint'] == "UpdateCardDetail") {
             UpdateCardDetail($data['data']);
             // print_r($data['data']);
+        }elseif ($data['endpoint'] == "updateHotelListerAgent") {
+            updateHotelListerAgent($data['data']);
+            // print_r($data['data']);
         }
     }
 }

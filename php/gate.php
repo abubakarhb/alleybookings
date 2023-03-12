@@ -1519,6 +1519,40 @@ function getHotelListerAgent($data)
     exit(json_encode($pull_data));
 }
 
+function updateHotelListerAgent($data)
+{
+    //   print_r($data); die;
+    include "config/index.php";
+    
+    $id = $data->id;
+    $property_id = $data->property_id;
+    $fname = $data->fname;
+    $lname = $data->lname;
+    $email = $data->email;
+    $mobile_number = $data->mobile_number;
+    $homepage_access = $data->homepage_access;
+    $reservations_access = $data->reservations_access;
+    $finance_access = $data->finance_access;
+    $users_access = $data->users_access;
+    $rates_availability_access = $data->rates_availability_access;
+    $property_access = $data->property_access;
+    $messages_access = $data->messages_access;
+    $reviews_access = $data->reviews_access;
+ 
+    $query =  "UPDATE `Hotel_lister_agent` SET `fname`='{$fname}',`lname`='{$lname}',`email`='{$email}',`mobile_number`='{$mobile_number}',`property_id`='{$property_id}',`homepage_access`='{$homepage_access}',`reservations_access`='{$reservations_access}',`finance_access`='{$finance_access}',`users_access`='{$users_access}',`rates_availability_access`='{$rates_availability_access}',`property_access`='{$property_access}',`messages_access`='{$messages_access}',`reviews_access`='{$reviews_access}'  WHERE `id` = {$id}";
+
+    //   print_r($query);die;
+    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+    if ($User_re) {
+        $arr = ["status" => 1, "message" => "Successfully Updated "];
+        exit(json_encode($arr));
+    } else {
+        $error_creating = ["Error" => "Invalid operation"];
+        exit(json_encode($error_creating));
+    }
+}
+
 // Admin section   
 
 // admin login
