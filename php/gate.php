@@ -1507,6 +1507,11 @@ function deleteCardDetail($data)
     }
 }
 
+function getAllHotelListerAgent()
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation`", "CHK");
+    exit(json_encode($pull_data));
+}
 
 // Admin section   
 

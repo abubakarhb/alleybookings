@@ -90,6 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }elseif (isset($_GET['deleteCardDetail'])) {
         deleteCardDetail($_GET['id']);
         // print_r($data['data']);
+    } elseif (isset($_GET['getAllHotelListerAgent'])) {
+        getAllHotelListerAgent($_GET);
+        // print_r($data['data']);
     } 
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
