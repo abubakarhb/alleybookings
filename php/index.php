@@ -81,7 +81,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }elseif (isset($_GET['singleUserInfor'])) {
         singleUserInfor($_GET['id']);
         // print_r($data['data']);
-    }
+    }elseif (isset($_GET['fetchSingleCardDetail'])) {
+        fetchSingleCardDetail($_GET['id']);
+        // print_r($data['data']);
+    }elseif (isset($_GET['fetchCardDetail'])) {
+        fetchCardDetail($_GET['user_id']);
+        // print_r($data['data']);
+    }elseif (isset($_GET['deleteCardDetail'])) {
+        deleteCardDetail($_GET['id']);
+        // print_r($data['data']);
+    } elseif (isset($_GET['getAllHotelListerAgent'])) {
+        getAllHotelListerAgent($_GET);
+        // print_r($data['data']);
+    } 
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
     $entityBody = file_get_contents('php://input');
@@ -126,6 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }elseif ($data['endpoint'] == "addRatingsAndReviews") {
             addRatingsAndReviews($data['data']);
             //  print_r($data['data']);
+        } elseif ($data['endpoint'] == "createCardDetail") {
+            createCardDetail($data['data']);
+            //  print_r($data['data']);
         } 
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -153,6 +168,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             // print_r($data['data']);
         } elseif ($data['endpoint'] == "changePassword") {
             changePassword($data['data']);
+            // print_r($data['data']);
+        }elseif ($data['endpoint'] == "UpdateCardDetail") {
+            UpdateCardDetail($data['data']);
             // print_r($data['data']);
         }
     }

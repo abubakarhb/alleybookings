@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.11
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Mar 08, 2023 at 08:05 PM
--- Server version: 10.2.44-MariaDB
--- PHP Version: 7.4.33
+-- Host: localhost
+-- Generation Time: Mar 12, 2023 at 07:59 AM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,8 +18,30 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `alleyboo_alleybookings`
+-- Database: `alleybookings`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL,
+  `fullname` varchar(350) NOT NULL,
+  `email` varchar(300) NOT NULL,
+  `username` varchar(400) NOT NULL,
+  `password` varchar(300) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `fullname`, `email`, `username`, `password`, `created_at`) VALUES
+(1, 'Mohammed Hassan', 'moh@gmail.com', 'Mohammed', '1234567890', '2023-02-27 12:09:45');
 
 -- --------------------------------------------------------
 
@@ -870,6 +891,35 @@ INSERT INTO `otherPropertyDescription` (`id`, `propertyDescription`, `roomDescri
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `paymentDetails`
+--
+
+CREATE TABLE `paymentDetails` (
+  `id` int(11) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `cardName` varchar(350) NOT NULL,
+  `cardNumber` varchar(200) NOT NULL,
+  `card_expire_date` date NOT NULL,
+  `cardCVV` float NOT NULL,
+  `cardType` varchar(200) NOT NULL,
+  `status` enum('active','inactive') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `paymentDetails`
+--
+
+INSERT INTO `paymentDetails` (`id`, `user_id`, `cardName`, `cardNumber`, `card_expire_date`, `cardCVV`, `cardType`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Hassan Mohammed', '234535000000000', '2024-03-08', 657, 'Visa', 'active', '2023-03-12 05:58:08', '2023-03-12 06:05:21'),
+(2, 1, 'Abu Usman', '234567868897004', '2023-12-08', 453, 'Masters', 'inactive', '2023-03-12 05:58:08', '2023-03-12 06:44:46'),
+(3, 2, 'Usman Laura', '234567868897004', '2023-12-08', 786, 'Verve', 'active', '2023-03-12 06:25:32', '2023-03-12 06:25:32'),
+(4, 2, 'Usman Laura', '234567868897004', '2023-12-08', 786, 'Verve', 'active', '2023-03-12 06:41:31', '2023-03-12 06:41:31');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `policies`
 --
 
@@ -1030,6 +1080,41 @@ INSERT INTO `propertyLocation` (`id`, `address1`, `address2`, `country`, `city`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rating_reviews`
+--
+
+CREATE TABLE `rating_reviews` (
+  `id` int(11) NOT NULL,
+  `property_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `staff_reviews` varchar(350) NOT NULL,
+  `staff_ratings` bigint(20) NOT NULL,
+  `freeWifi_reviews` varchar(350) NOT NULL,
+  `freeWifi_ratings` bigint(20) NOT NULL,
+  `clealiness_reviews` varchar(350) NOT NULL,
+  `clealiness_ratings` bigint(20) NOT NULL,
+  `location_reviews` varchar(350) NOT NULL,
+  `location_ratings` bigint(20) NOT NULL,
+  `comfort_reviews` varchar(350) NOT NULL,
+  `comfort_ratings` bigint(20) NOT NULL,
+  `facilities_reviews` varchar(350) NOT NULL,
+  `facilities_ratings` bigint(20) NOT NULL,
+  `status` enum('Yes','No') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `rating_reviews`
+--
+
+INSERT INTO `rating_reviews` (`id`, `property_id`, `user_id`, `staff_reviews`, `staff_ratings`, `freeWifi_reviews`, `freeWifi_ratings`, `clealiness_reviews`, `clealiness_ratings`, `location_reviews`, `location_ratings`, `comfort_reviews`, `comfort_ratings`, `facilities_reviews`, `facilities_ratings`, `status`, `created_at`) VALUES
+(1, 1, 1, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:29:20'),
+(2, 2, 1, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:31:17'),
+(3, 2, 2, 'string', 8, 'string', 6, 'string', 4, 'string', 5, 'string', 7, 'string', 5, 'Yes', '2023-02-20 10:31:46');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `VAT_details`
 --
 
@@ -1062,6 +1147,12 @@ INSERT INTO `VAT_details` (`id`, `status`, `tin`, `property_id`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `amenties`
@@ -1185,6 +1276,12 @@ ALTER TABLE `otherPropertyDescription`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `paymentDetails`
+--
+ALTER TABLE `paymentDetails`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `policies`
 --
 ALTER TABLE `policies`
@@ -1210,6 +1307,12 @@ ALTER TABLE `propertyLocation`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `rating_reviews`
+--
+ALTER TABLE `rating_reviews`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `VAT_details`
 --
 ALTER TABLE `VAT_details`
@@ -1218,6 +1321,12 @@ ALTER TABLE `VAT_details`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `amenties`
@@ -1340,6 +1449,12 @@ ALTER TABLE `otherPropertyDescription`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `paymentDetails`
+--
+ALTER TABLE `paymentDetails`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `policies`
 --
 ALTER TABLE `policies`
@@ -1362,6 +1477,12 @@ ALTER TABLE `propertyContactDetails`
 --
 ALTER TABLE `propertyLocation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT for table `rating_reviews`
+--
+ALTER TABLE `rating_reviews`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `VAT_details`
