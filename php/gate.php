@@ -389,7 +389,7 @@ function CreateHotelPropertyDetails($data)
             $standard_rate_status = "active";
             $non_refundable_rates_status = "active";
             $query_User_re_openandclose = sprintf("INSERT INTO `open_close_rooms`(`room_id`,`property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) 
-            VALUES ('$room_id','{$data->accountInfo->propertyId})', '$date_from' ,'$date_to', '{$data->layoutPrice->budgetDoubleRoom->roomType}', '$room_selling_amount', '$standard_rate', '$non_refundable_rates', '$open_close_booking_status', '$standard_rate_status', '$non_refundable_rates_status')");
+            VALUES ('$room_id','{$data->accountInfo->propertyId}', '$date_from' ,'$date_to', '{$data->layoutPrice->budgetDoubleRoom->roomType}', '$room_selling_amount', '$standard_rate', '$non_refundable_rates', '$open_close_booking_status', '$standard_rate_status', '$non_refundable_rates_status')");
             $User_re_hotelListerrights = mysqli_query($alleybookingsConnection, $query_User_re_openandclose) or die(mysqli_error($alleybookingsConnection));
             
             $arr = ["status" => 1, "message" => "Hotel information successfully created, your rooms should be ready for reservations"];
