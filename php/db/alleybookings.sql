@@ -893,6 +893,35 @@ INSERT INTO `otherPropertyDescription` (`id`, `propertyDescription`, `roomDescri
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `paymentDetails`
+--
+
+CREATE TABLE `paymentDetails` (
+  `id` int(11) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `cardName` varchar(350) NOT NULL,
+  `cardNumber` varchar(200) NOT NULL,
+  `card_expire_date` date NOT NULL,
+  `cardCVV` float NOT NULL,
+  `cardType` varchar(200) NOT NULL,
+  `status` enum('active','inactive') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `paymentDetails`
+--
+
+INSERT INTO `paymentDetails` (`id`, `user_id`, `cardName`, `cardNumber`, `card_expire_date`, `cardCVV`, `cardType`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Hassan Mohammed', '234535000000000', '2024-03-08', 657, 'Visa', 'active', '2023-03-12 05:58:08', '2023-03-12 06:05:21'),
+(2, 1, 'Abu Usman', '234567868897004', '2023-12-08', 453, 'Masters', 'inactive', '2023-03-12 05:58:08', '2023-03-12 06:44:46'),
+(3, 2, 'Usman Laura', '234567868897004', '2023-12-08', 786, 'Verve', 'active', '2023-03-12 06:25:32', '2023-03-12 06:25:32'),
+(4, 2, 'Usman Laura', '234567868897004', '2023-12-08', 786, 'Verve', 'active', '2023-03-12 06:41:31', '2023-03-12 06:41:31');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `policies`
 --
 
@@ -1250,6 +1279,12 @@ ALTER TABLE `otherPropertyDescription`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `paymentDetails`
+--
+ALTER TABLE `paymentDetails`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `policies`
 --
 ALTER TABLE `policies`
@@ -1415,6 +1450,12 @@ ALTER TABLE `open_close_rooms`
 --
 ALTER TABLE `otherPropertyDescription`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `paymentDetails`
+--
+ALTER TABLE `paymentDetails`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `policies`
