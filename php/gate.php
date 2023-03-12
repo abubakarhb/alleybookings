@@ -1509,7 +1509,13 @@ function deleteCardDetail($data)
 
 function getAllHotelListerAgent()
 {
-    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation`", "CHK");
+    $pull_data = check_db_query_staus1("SELECT * FROM `Hotel_lister_agent`", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function getHotelListerAgent($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `Hotel_lister_agent` WHERE `property_id`= '{$data}' ", "CHK");
     exit(json_encode($pull_data));
 }
 
