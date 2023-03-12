@@ -100,6 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }  elseif (isset($_GET['getHotelListerAgent'])) {
         getHotelListerAgent($_GET['property_id']);
         
+    } elseif (isset($_GET['getuserPrefrences'])) {
+        getuserPrefrences($_GET['user_id']);
+        
     } 
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
@@ -148,6 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "createCardDetail") {
             createCardDetail($data['data']);
             //  print_r($data['data']);
+        } elseif ($data['endpoint'] == "createUserPrefrences") {
+            createUserPrefrences($data['data']);
+            //  print_r($data['data']);
         } 
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -181,6 +187,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             // print_r($data['data']);
         }elseif ($data['endpoint'] == "updateHotelListerAgent") {
             updateHotelListerAgent($data['data']);
+            // print_r($data['data']);
+        } elseif ($data['endpoint'] == "updateUserPrefrences") {
+            updateUserPrefrences($data['data']);
             // print_r($data['data']);
         }
     }

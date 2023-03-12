@@ -952,6 +952,29 @@ INSERT INTO `policies` (`id`, `daysInAdvance_cancellations`, `guestPay_cancellat
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `prefrences`
+--
+
+CREATE TABLE `prefrences` (
+  `id` int(11) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `currency` varchar(350) NOT NULL,
+  `language` varchar(300) NOT NULL,
+  `Accessibility_requirements` enum('Yes','No') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `prefrences`
+--
+
+INSERT INTO `prefrences` (`id`, `user_id`, `currency`, `language`, `Accessibility_requirements`, `created_at`) VALUES
+(1, 1, 'Euro', 'English', 'Yes', '2023-03-12 17:28:31'),
+(2, 2, 'Euro', 'Hausa', 'Yes', '2023-03-12 17:28:48');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `propertiesPhotos`
 --
 
@@ -1288,6 +1311,12 @@ ALTER TABLE `policies`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `prefrences`
+--
+ALTER TABLE `prefrences`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `propertiesPhotos`
 --
 ALTER TABLE `propertiesPhotos`
@@ -1459,6 +1488,12 @@ ALTER TABLE `paymentDetails`
 --
 ALTER TABLE `policies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `prefrences`
+--
+ALTER TABLE `prefrences`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `propertiesPhotos`

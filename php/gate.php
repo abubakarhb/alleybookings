@@ -1577,6 +1577,66 @@ function updateHotelListerAgent($data)
     }
 }
 
+function getuserPrefrences($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `prefrences` WHERE `user_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function updateUserPrefrences($data)
+{
+    //   print_r($data); die;
+    include "config/index.php";
+    
+    $id = $data->id;
+    $currency = $data->currency;
+    $language = $data->language;
+    $Accessibility_requirements = $data->Accessibility_requirements;
+
+   
+
+ 
+    $query =  "UPDATE `prefrences` SET `currency`='{$currency}',`language`='{$language}',`Accessibility_requirements`='{$Accessibility_requirements}'  WHERE `id` = {$id}";
+
+    //   print_r($query);die;
+    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+    if ($User_re) {
+        $arr = ["status" => 1, "message" => "Successfully Updated "];
+        exit(json_encode($arr));
+    } else {
+        $error_creating = ["Error" => "Invalid operation"];
+        exit(json_encode($error_creating));
+    }
+}
+
+function createUserPrefrences($data)
+{
+    include "config/index.php";
+    include "config/enctp.php";
+    // print_r($data); die;
+    $user_id = $data->user_id;
+    $currency = $data->currency;
+    $language = $data->language;
+    $Accessibility_requirements = $data->Accessibility_requirements;
+
+   
+    // Insert email address into the database
+    $query = sprintf("INSERT INTO `prefrences`(`user_id`, `currency`, `language`, `Accessibility_requirements`) VALUES ('$user_id','$currency','$language','$Accessibility_requirements')");
+    //  print_r($query); die;
+
+    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+    if ($User_re) {
+        $arr = ["status" => 1, "message" => "Created Successfully !!!"];
+        exit(json_encode($arr));
+    } else {
+        $error_sub = ["Error" => "Transaction Failed"];
+        exit(json_encode($error_sub));
+    }
+    
+}
+
 // Admin section   
 
 // admin login
