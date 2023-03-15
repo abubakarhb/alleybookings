@@ -249,6 +249,30 @@ function createListerUser($email, $firstname, $lastname, $phone, $password)
     }
 }
 
+function loginListerUser($username, $password)
+{
+    include "config/index.php";
+  
+    $query_User = sprintf("SELECT * FROM hotelListerUsers WHERE email='{$username}'");
+    $User_1 = mysqli_query($alleybookingsConnection, $query_User) or die(mysqli_error($alleybookingsConnection));
+    print_r($User_1);die;
+    $row_User_re = mysqli_fetch_assoc($User_1);
+    $totalRows_User_re = mysqli_num_rows($User_1);
+
+    // print_r($row_User_re);die;
+
+    if ($totalRows_User_re > 0) {
+        if ($row_User_re['pword'] == $password) {
+            
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']." ".$row_User_re['last_name'] , "userID" => $row_User_re['id']];
+            exit(json_encode($arr));
+        }
+    } else {
+        $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
+        exit(json_encode($arr));
+    }
+}
+
 function hotelListerPropertiesLocation($property_location, $property_country, $property_street_address, $property_unit_number, $property_city, $zip_code, $hotelListerProperties_id)
 {
     include "config/index.php";
@@ -1548,6 +1572,68 @@ function updateHotelListerAgent($data)
         exit(json_encode($error_creating));
     }
 }
+
+function getuserPrefrences($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `prefrences` WHERE `user_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function updateUserPrefrences($data)
+{
+    //   print_r($data); die;
+    include "config/index.php";
+    
+    $id = $data->id;
+    $currency = $data->currency;
+    $language = $data->language;
+    $Accessibility_requirements = $data->Accessibility_requirements;
+
+   
+
+ 
+    $query =  "UPDATE `prefrences` SET `currency`='{$currency}',`language`='{$language}',`Accessibility_requirements`='{$Accessibility_requirements}'  WHERE `id` = {$id}";
+
+    //   print_r($query);die;
+    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+    if ($User_re) {
+        $arr = ["status" => 1, "message" => "Successfully Updated "];
+        exit(json_encode($arr));
+    } else {
+        $error_creating = ["Error" => "Invalid operation"];
+        exit(json_encode($error_creating));
+    }
+}
+
+function createUserPrefrences($data)
+{
+    include "config/index.php";
+    include "config/enctp.php";
+    // print_r($data); die;
+    $user_id = $data->user_id;
+    $currency = $data->currency;
+    $language = $data->language;
+    $Accessibility_requirements = $data->Accessibility_requirements;
+
+   
+    // Insert email address into the database
+    $query = sprintf("INSERT INTO `prefrences`(`user_id`, `currency`, `language`, `Accessibility_requirements`) VALUES ('$user_id','$currency','$language','$Accessibility_requirements')");
+    //  print_r($query); die;
+
+    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+    if ($User_re) {
+        $arr = ["status" => 1, "message" => "Created Successfully !!!"];
+        exit(json_encode($arr));
+    } else {
+        $error_sub = ["Error" => "Transaction Failed"];
+        exit(json_encode($error_sub));
+    }
+    
+}
+
+
 
 // Admin section   
 
