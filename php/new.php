@@ -204,14 +204,14 @@ function singleUserInfor($data)
 }
 
 
-function createListerUser($email, $firstname, $lastname, $phone, $password)
+function createListerUser($email, $firstname, $lastname, $phone)
 {
     include "config/index.php";
     include "config/enctp.php";
     $verification = encripted_data($email . "Â£Â£" . "30" . "_");
     $status = "active";
-    $query_User_re = sprintf("INSERT INTO `hotelListerUsers`(`first_name`, `last_name`, `email`, `phone_number`, `password`, `verification`, `status`) 
-                        VALUES ('$firstname','$lastname','$email','$phone','$password','$verification','$status')");
+    $query_User_re = sprintf("INSERT INTO `hotelListerUsers`(`first_name`, `last_name`, `email`, `phone_number`, `status`) 
+                        VALUES ('$firstname','$lastname','$email','$phone','$status')");
     $check_exist = check_db_query_staus("SELECT email FROM hotelListerUsers WHERE email='{$email}'", "CHK");
 
     if ($check_exist['status'] == 1) {
@@ -283,9 +283,9 @@ function hotelListerProperties($property_name, $property_type, $property_currenc
 
 function hotelListerUserCall001($data)
 {
-    if (count(get_object_vars($data->hotelListerUsers)) == 5) {
+    if (count(get_object_vars($data->hotelListerUsers)) == 4) {
         if (filter_var($data->hotelListerUsers->email, FILTER_VALIDATE_EMAIL)) {
-            $user_creation = json_decode(createListerUser($data->hotelListerUsers->email, $data->hotelListerUsers->first_name, $data->hotelListerUsers->last_name, $data->hotelListerUsers->phone, $data->hotelListerUsers->password));
+            $user_creation = json_decode(createListerUser($data->hotelListerUsers->email, $data->hotelListerUsers->first_name, $data->hotelListerUsers->last_name, $data->hotelListerUsers->phone));
             if ($user_creation->status == 1) {
                 $pLocation = json_decode(hotelListerPropertiesLocation($data->hotelListerPropertiesLocation->property_location, $data->hotelListerPropertiesLocation->property_country, $data->hotelListerPropertiesLocation->property_street_address, $data->hotelListerPropertiesLocation->property_unit_number, $data->hotelListerPropertiesLocation->property_city, $data->hotelListerPropertiesLocation->zip_code, $user_creation->user));
                 $pListedDetail = json_decode(hotelListerProperties($data->hotelListerProperties->property_name, $data->hotelListerProperties->property_type, $data->hotelListerProperties->property_currency, $data->hotelListerProperties->zip_code, $data->hotelListerProperties->property_chain_status, $data->hotelListerProperties->property_channel_manager_status, $user_creation->user));
@@ -916,13 +916,6 @@ function invoice($data)
     }
 }
 
-function getInvoice($data)
-{
-    //  print_r($data);
-    include "config/index.php";
-    $pull_data = check_db_query_staus1("SELECT * FROM `invoices`", "CHK");
-    exit(json_encode($pull_data));
-}
 function reservationGrossRevenue($data)
 {
     //  print_r($data);
@@ -1265,45 +1258,56 @@ function resetPassword()
     $user_id = $_GET['user_id'];
     $email = $_GET['email'];
 
+
+
     // Check if email exists in the database
     $row = sprintf("SELECT * FROM `endUsers` WHERE `id`= '{$user_id}'");
 
     $User_re = mysqli_query($alleybookingsConnection, $row) or die(mysqli_error($alleybookingsConnection));
 
-    if ($User_re) {
+    $row_User_re = mysqli_fetch_assoc($User_re);
+    $totalRows_User_re = mysqli_num_rows($User_re);
+    // print_r($row_User_re); die;
+    if ($totalRows_User_re > 0) {
+        if ($row_User_re['email'] == $email) {
 
             $mail = new PHPMailer(true);
+            try {
+
                 //Server settings
-                $mail->isSMTP();                                            //Send using SMTP
-                $mail->Host       = 'alleybookings.com';               //Set the SMTP server to send through
-                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                $mail->Username   = 'verify@alleybookings.com';                   //SMTP username
-                $mail->Password   = 'verify@2023';                               //SMTP password
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-                $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-        
+                $mail->SMTPDebug = 1;
+                $mail->isSMTP();
+                $mail->Host       = 'sandbox.smtp.mailtrap.io';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'a3d7643a5e2648';
+                $mail->Password   = '7a57e1373e5d6b';
+                $mail->Port       = 2525;
+
                 //Recipients
-                $mail->setFrom('verify@alleybookings.com', 'alleybookings');
-                $mail->addAddress($email);
+                $mail->setFrom('noreply@gmail.com', 'Mailer');
+                $mail->addAddress($row_User_re['email'], 'Joe User');
 
 
                 //Attachments
                 // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
                 // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
 
-                $bodyB = "To Change your Password, Goto https://alleyy.vercel.app/resetpassword?id=$user_id";
+                $body = '<p>To Change your Password, Goto <a href="https://alleyy.vercel.app/userprofile">Change Password</a>...</p>';
 
                 //Content
                 $mail->isHTML(true);                                  //Set email format to HTML
-                $mail->Subject = 'Password Change';
-                $mail->Body    = ($bodyB);
+                $mail->Subject = 'Here is the subject';
+                $mail->Body    = $body;
+                $mail->AltBody = strip_tags($body);
 
                 $mail->send();
-                $arr = ["status" => 1, "message" => "message sent successfully"];
-                exit(json_encode($arr));
-        } else {
-            $arr = ["status" => 0, "message" => "message Not sent"];
-            exit(json_encode($arr));
+                print_r('Message has been sent');
+            } catch (Exception $e) {
+                print_r("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+            }
+        }
+    } else {
+        print_r("hello");
     }
 }
 function changePassword($data)
@@ -1410,146 +1414,9 @@ function singleReservation($data)
     $pull_data = check_db_query_staus("SELECT * FROM `hotelReservation` WHERE `id`= '{$data}'", "CHK");
     exit(json_encode($pull_data));
 }
-function fetchSingleCardDetail($data)
-{
-    $pull_data = check_db_query_staus1("SELECT * FROM `paymentDetails` WHERE `id`= '{$data}'", "CHK");
-    exit(json_encode($pull_data));
-}
-function fetchCardDetail($data)
-{
-    $pull_data = check_db_query_staus1("SELECT * FROM `paymentDetails` WHERE `user_id`= '{$data}' AND `status` = 'active' ORDER BY id DESC", "CHK");
-    exit(json_encode($pull_data));
-}
-
-function createCardDetail($data)
-{
-    include "config/index.php";
-    include "config/enctp.php";
-    // print_r($data); die;
-    $user_id = $data->user_id;
-    $cardName = $data->cardName;
-    $cardNumber = $data->cardNumber;
-    $card_expire_date = $data->card_expire_date;
-    $cardCVV = $data->cardCVV;
-    $cardType = $data->cardType;
-    $status = "active";
-
-   
-    // Insert email address into the database
-    $query = sprintf("INSERT INTO `paymentDetails`(`user_id`, `cardName`, `cardNumber`, `card_expire_date`, `cardCVV`, `cardType`, `status`) VALUES ('$user_id','$cardName','$cardNumber','$card_expire_date','$cardCVV','$cardType','$status')");
-    //  print_r($query); die;
-
-    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
-
-    if ($User_re) {
-        $arr = ["status" => 1, "message" => "Payed Successfully !!!"];
-        exit(json_encode($arr));
-    } else {
-        $error_sub = ["Error" => "Transaction Failed"];
-        exit(json_encode($error_sub));
-    }
-    
-}
-
-function UpdateCardDetail($data)
-{
-    //   print_r($data); die;
-    include "config/index.php";
-    
-    $id = $data->id;
-    $cardName = $data->cardName;
-    $cardNumber = $data->cardNumber;
-    $card_expire_date = $data->card_expire_date;
-    $cardCVV = $data->cardCVV;
-    $cardType = $data->cardType;
-    $status = "active";
 
 
-
-    $query =  "UPDATE `paymentDetails` SET `cardName`='{$cardName}',`cardNumber`='{$cardNumber}',`card_expire_date`='{$card_expire_date}',`cardCVV`='{$cardCVV}',`cardType`='{$cardType}',`status`='{$status}' WHERE `id` = {$id}";
-
-    //   print_r($query);die;
-    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
-
-    if ($User_re) {
-        $arr = ["status" => 1, "message" => "Payment Details Successfully Updated "];
-        exit(json_encode($arr));
-    } else {
-        $error_creating = ["Error" => "Invalid operation"];
-        exit(json_encode($error_creating));
-    }
-}
-
-function deleteCardDetail($data)
-{
-    include "config/index.php";
-    $row2 = check_db_query_staus1("SELECT * FROM `paymentDetails`  WHERE `id`= '{$data}' ", "CHK");
-    // print_r($row2); die;
-    if ($row2['status'] == 1) {
-        $query =  "UPDATE `paymentDetails` SET `status`='inactive' WHERE `id` = {$data}";
-
-        //   print_r($query);die;
-        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
-
-        if ($User_re) {
-            $arr = ["status" => 1, "message" => "Payment Detail has been deactivated Successfully"];
-            exit(json_encode($arr));
-        } else {
-            $error_creating = ["Error" => "Invalid operation"];
-            exit(json_encode($error_creating));
-        }
-    } else {
-        print_r('no');
-    }
-}
-
-function getAllHotelListerAgent()
-{
-    $pull_data = check_db_query_staus1("SELECT * FROM `Hotel_lister_agent`", "CHK");
-    exit(json_encode($pull_data));
-}
-
-function getHotelListerAgent($data)
-{
-    $pull_data = check_db_query_staus1("SELECT * FROM `Hotel_lister_agent` WHERE `property_id`= '{$data}' ", "CHK");
-    exit(json_encode($pull_data));
-}
-
-function updateHotelListerAgent($data)
-{
-    //   print_r($data); die;
-    include "config/index.php";
-    
-    $id = $data->id;
-    $property_id = $data->property_id;
-    $fname = $data->fname;
-    $lname = $data->lname;
-    $email = $data->email;
-    $mobile_number = $data->mobile_number;
-    $homepage_access = $data->homepage_access;
-    $reservations_access = $data->reservations_access;
-    $finance_access = $data->finance_access;
-    $users_access = $data->users_access;
-    $rates_availability_access = $data->rates_availability_access;
-    $property_access = $data->property_access;
-    $messages_access = $data->messages_access;
-    $reviews_access = $data->reviews_access;
- 
-    $query =  "UPDATE `Hotel_lister_agent` SET `fname`='{$fname}',`lname`='{$lname}',`email`='{$email}',`mobile_number`='{$mobile_number}',`property_id`='{$property_id}',`homepage_access`='{$homepage_access}',`reservations_access`='{$reservations_access}',`finance_access`='{$finance_access}',`users_access`='{$users_access}',`rates_availability_access`='{$rates_availability_access}',`property_access`='{$property_access}',`messages_access`='{$messages_access}',`reviews_access`='{$reviews_access}'  WHERE `id` = {$id}";
-
-    //   print_r($query);die;
-    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
-
-    if ($User_re) {
-        $arr = ["status" => 1, "message" => "Successfully Updated "];
-        exit(json_encode($arr));
-    } else {
-        $error_creating = ["Error" => "Invalid operation"];
-        exit(json_encode($error_creating));
-    }
-}
-
-// Admin section   
+// Admin section
 
 // admin login
 function adminLogin()
@@ -1672,25 +1539,6 @@ function deactivateHotelReservation($data)
         }
     } else {
         print_r('no');
-    }
-}
-
-function loginLister($username, $password)
-{
-    include "config/index.php";
-    $query_User_re = sprintf("SELECT * FROM hotelListerUsers WHERE email='{$username}'");
-    $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
-    $row_User_re = mysqli_fetch_assoc($User_re);
-    $totalRows_User_re = mysqli_num_rows($User_re);
-    if ($totalRows_User_re > 0) {
-        if ($row_User_re['password'] == $password) {
-            
-            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "id" => $row_User_re['id']];
-            exit(json_encode($arr));
-        }
-    } else {
-        $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
-        exit(json_encode($arr));
     }
 }
 
