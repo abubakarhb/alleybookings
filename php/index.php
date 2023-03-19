@@ -101,6 +101,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }  elseif (isset($_GET['getHotelListerAgent'])) {
         getHotelListerAgent($_GET['property_id']);
         
+    }elseif (isset($_GET['sendMail'])) {
+        sendEmail($_GET);
+        
     } elseif (isset($_GET['getuserPrefrences'])) {
         getuserPrefrences($_GET['user_id']);
         

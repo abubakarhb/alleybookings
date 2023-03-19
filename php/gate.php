@@ -206,6 +206,8 @@ function singleUserInfor($data)
 
 function createListerUser($email, $firstname, $lastname, $phone, $password)
 {
+    ini_set('error_reporting', 0);
+ini_set('display_errors', 0);
     include "config/index.php";
     include "config/enctp.php";
     $verification = encripted_data($email . "Â£Â£" . "30" . "_");
@@ -219,28 +221,41 @@ function createListerUser($email, $firstname, $lastname, $phone, $password)
         exit(json_encode($returnResponse));
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $message = "
-        Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
-           \n
-            https://alleybookings/user/verification/?" . $verification . "
-            \n   \n         
-            This link is only valid for 3 day, so please make sure to click on it as soon as possible.
-            \n \n
-            Thank you,\n
-            Ibrahim Ismail
-            \n\n
-            I hope this helps! Let me know if you have any questions or need further assistance.
-        \n
-        ";
-        // More headers
-        $headers .= 'From: <hello@alleybookings.com>' . "\r\n";
-        $headers .= 'Cc: marketing@alleybookings.com' . "\r\n";
-        mail($email, "ALLEYBOOKINGS VERIFICATION", $message, $headers);
+       //Enable verbose debug output
+       $mail = new PHPMailer(true);
+       $mail->isSMTP();                                            //Send using SMTP
+            $mail->SMTPDebug = false;
+            $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPOptions = array(
+        'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        )
+    );
+          $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+          $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
+          $mail->Password   = 'laeokjgelrblotgy';                               //SMTP password
+         $mail->SMTPSecure = 'tls';         //Enable implicit TLS encryption
+          $mail->Port = 587;                                 //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+          //Recipients
+           $mail->setFrom('alleyys.com@gmail.com', 'Alleybookings');
+          $mail->addAddress($email);
+      
+          //Content
+          $bodyB = " <p>Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:</p>
+        <p> https://alleyy.vercel.app/listing/propverification </p>
+           <p> This link is only valid for 3 day, so please make sure to click on it as soon as possible.</p>
+           <p>Thank you,</p>
+           <p>Alleybookings</p>
+          <p> I hope this helps! Let me know if you have any questions or need further assistance.</p>";
+              $mail->isHTML(true);                                  //Set email format to HTML
+              $mail->Subject = "Account Verification";
+              $mail->Body    = ($bodyB);
         if ($User_re) {
+            $mail->send();
             $last_id = mysqli_insert_id($alleybookingsConnection);
-            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", "user" => $last_id];
+            $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", "user" => $last_id, "email" => $email];
             return (json_encode($returnResponse));
         } else {
             $returnResponse = ['status' => 0, 'message' => "{$email} not created, try again"];
@@ -315,6 +330,7 @@ function hotelListerUserCall001($data)
                 $pListedDetail = json_decode(hotelListerProperties($data->hotelListerProperties->property_name, $data->hotelListerProperties->property_type, $data->hotelListerProperties->property_currency, $data->hotelListerProperties->zip_code, $data->hotelListerProperties->property_chain_status, $data->hotelListerProperties->property_channel_manager_status, $user_creation->user));
                 $arr = [];
                 $dd = null;
+                $maile = $user_creation->email;
                 if ($pListedDetail->status == 1) {
                     $dd =$pListedDetail->property_id;
                     $arr['hotelListerProperties'] = $pListedDetail->status;
@@ -322,8 +338,44 @@ function hotelListerUserCall001($data)
                 if ($pLocation->status == 1) {
                     $arr['hotelListerPropertiesLocation'] = $pLocation->status;
                 }
-                $arr= ["message"=>"Successfully created an account", "id"=>$dd ] ;
+                $arr= ["message"=>"Successfully created an account", "id"=>$dd ];
                 echo json_encode($arr);
+                $mail = new PHPMailer(true);
+
+        //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'alleybookings.com';               //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'info@alleybookings.com';                   //SMTP username
+        $mail->Password   = 'info@2022';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+        //Recipients
+        $mail->setFrom('info@alleybookings.com', 'alleybookings');
+        $mail->addAddress($maile);     //Add a recipient
+
+
+
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = "Alleybookings Account Verification";
+        $mail->Body    = "
+      Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
+         <br/>
+         https://alleyy.vercel.app/verifyemail
+          <br/>       
+
+          This link is only valid for 3 day, so please make sure to click on it as soon as possible.
+          <br/>
+          Thank you,<br>
+          Alleybookings
+          <br/>
+          <br/>
+          I hope this helps! Let me know if you have any questions or need further assistance.
+      \n
+      ";
+      $mail->send();
             } else {
             }
         } else {
@@ -1780,7 +1832,194 @@ function loginLister($username, $password)
     }
 }
 
+function sendEmail($data)
+{
 
+
+    include "config/index.php";
+    include "config/enctp.php";
+    //print_r($data);
+        $dati = date('d-m-Y');
+        $email = $_GET['email'];
+        $name = $_GET['fullname'];
+        $address = $_GET['address'];
+        $id = $_GET['property_name'];
+
+        $mail = new PHPMailer(true);
+
+       $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host = 'smtp.gmail.com';           //Set the SMTP server to send through
+          $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+          $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
+          $mail->Password   = 'laeokjgelrblotgy';                               //SMTP password
+         $mail->SMTPSecure = 'tls';         //Enable implicit TLS encryption
+          $mail->Port = 587;                                 //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+  
+          //Recipients
+           $mail->setFrom('alleyys.com@gmail.com', 'Alleybookings');
+          $mail->addAddress($email);
+        // $mail->addAddress('ellen@example.com');               //Name is optional
+        // $mail->addReplyTo('info@example.com', 'Information');
+
+
+        //Content
+        $bodyB = "
+        <section className=''>
+        <h1 className='text-center text-2xl fontBold'>PROPERTY LISTING AGREEMENT</h1>
+
+        <div className='mt-5 px-10'>
+          <p>THIS AGREEMENT IS MADE ON THE $dati</p>
+
+          <p className='fontBold mt-2'>BETWEEN:</p>
+
+          <p className='mt-3'><span className='fontBold'>$name</span>, hereinafter referred to as “Seller” and Alleybookings, hereinafter referred to as “Broker”.
+            The purpose of this agreement is to set forth in writing the understanding, which has been reached between the Seller and the Broker.</p>
+
+
+          <p className='fontBold mt-2 mb-3'>WHEREAS:</p>
+
+          <ol type='A'>
+            <li className='mb-3'>A. The Seller is the owner of a $id and lying at $address, hereinafter referred to as the “Property” covered with Certificate No: 77/77/2004k.</li>
+
+            <li className='mb-3'>B. The Broker is a Company duly registered in Nigeria under the
+              Companies and Allied Matters Act Cap C20 Laws of the Federation of Nigeria.</li>
+
+            <li className='mb-3'>C. The Seller has agreed that the Broker list the Property on her website or other plaftorms for the purpose of selling the property
+              and the broker has agreed to do same subject to the terms and conditions hereinafter appearing. .</li>
+          </ol>
+
+          <p><b>NOW THEREFORE</b>, in consideration of the recitals and the mutual covenants and agreements and obligations
+            set out below and to be performed, the sufficiency of which the parties acknowledge, the parties agree as follows;</p>
+
+          <ul className='list-decimal mt-10 ml-10'>
+            <li className='mb-3'>The Seller hereby appoints the Broker to act as non-exclusive sales agent for the Seller's Property.</li>
+            <li className='mb-3'>The Seller agrees that the property is owned by seller and is free and clear of any liens, encumbrances,
+              liabilities and adverse claims of every nature whatsoever.</li>
+
+            <li className='mb-3'>The Seller may withdraw the Property listing, without penalty, upon written notification to Broker.</li>
+
+            <li className='mb-3'>The Seller retains the right to market the Property with or without the assistance of the broker and sell
+              the Property to any third party making an acceptable offer to purchase the Property.</li>
+
+            <li className='mb-3'>The Broker's Fee will be earned during the term of this Listing when the Broker individually or in
+              cooperation with another broker procures a buyer who enters into a contract with Seller to buy the Property or the Broker individually or in cooperation with another
+              broker procures a buyer ready, willing, and able to buy the Property at the Listing Price and on terms stated acceptable to Seller.</li>
+
+            <li className='mb-3'>The Seller shall allow the Broker to allow other brokers to show the Property under this Listing Agreement on their platform.</li>
+
+            <li className='mb-3'>If within 120 days after the termination of this agreement, the Seller enters into a contract to sell the Property or sells, exchanges or otherwise transfers a legal or equitable interest (excluding a lease with no right to purchase) of the Property to any person whose attention has been called to the Property by Broker,
+              any other broker, or Seller during the term of this Listing, Seller will pay Broker 3 % of the Purchase Price as commission.</li>
+
+            <li className='mb-3'>The Seller agrees to pay the Broker commission of the purchase price paid to the seller by the buyer. The amount of the commission shall be determined by using the commission schedule found on Schedule A.</li>
+
+            <li className='mb-3'>The Seller agrees to pay the Broker 3 % as commission if the Property is sold to a buyer previously identified by Broker in writing.</li>
+
+            <li className='mb-3'>The Seller agrees that the Broker will be entitled to 3% commission in the event the Seller enters into a purchase contract with any buyer previously identified by the Broker, and such contract results in a sale of the Property.</li>
+
+            <li className='mb-3'>The Seller agrees that all sales commissions will be deemed earned and payable once payment is made to the seller.</li>
+
+            <li className='mb-3'>Broker shall be an independent contractor, and Seller shall not be liable for any expenses, fees, charges or costs of Broker in connection with its performance herein, except for out-of-pocket expenses which may be incurred in connection with any project at the specific request of the seller.</li>
+
+            <li className='mb-3'>The Broker agrees to indemnify and hold Seller harmless from any claims of third parties based upon or arising out of Broker’s performance herein.  Broker will not be an employee or agent of Seller or any of its affiliates and will not be entitled to any benefits under any plans or programs of Seller or any of its affiliates. </li>
+
+            <li className='mb-3'>The Broker shall not have the authority to bind or commit Seller to any agreement or obligation whatsoever.</li>
+
+            <li className='mb-3'>Nothing contained herein shall obligate Seller to negotiate or close any sale opportunity presented by the Broker.</li>
+
+            <li className='mb-3'>This agreement shall commence on the date of execution and shall continue till the sales of the Property.</li>
+
+            <li className='mb-3'>Parties agree to negotiate in good faith in an effort to resolve any dispute related to this Agreement that may arise between the parties. The dispute shall be submitted to negotiation and or mediation before resorting to arbitration or litigation.</li>
+
+            <li className='mb-3'>This agreement shall be governed and construed in accordance with the laws of the Federal Republic of Nigeria.  It is also understood and agreed that this agreement shall be binding upon and accrue to the benefit of the successor’s and the assigns of the respective parties hereto, which shall include any parent corporation or subsidiaries or affiliates of the parties to this agreement, including joint ventures or limited partnerships to which either party is a part. </li>
+
+
+          </ul>
+
+
+          <p className='mt-5'>
+            <b>IN WITNESS WHEREOF</b> the Seller and Broker has caused their common seals to be affixed the day and year first above written.
+          </p>
+
+          <p className='mt-5'>
+            <b>The Common Seal of the ……..(Seller)</b>
+            is hereunto affixed
+            In the presence of </p>
+
+          <div className='flex justify-center'>
+            <img src='/img/director.png' />
+          </div>
+
+          <p className='text-center fontBold mt-5 text-gray-600'>SCHEDULE A</p>
+          <p className='text-center fontBold mt-5'>NON-EXCLUSIVE LISTING AGREEMENT</p>
+
+          <p className='mt-5'>The commission due from the Seller and payable to the Broker shall be calculated by
+            taking the total Sales Proceeds at the close of a transaction and applying such total toward
+            the appropriate listing status and price range delineated below.  The following table outlines
+            the declining commission schedule for the Alleybookings.</p>
+
+
+          <div className='flex justify-center mt-10'>
+
+            <Table>
+              <thead>
+                <th colSpan={2}>Transaction Value</th>
+                <th>Commission Fee</th>
+              </thead>
+              <tbody>
+              <tr>
+                  <td>Over</td>
+                  <td>But not over</td>
+                  <td> By %</td>
+                  </tr>
+
+                <tr>
+                  <td>N50,000,000</td>
+                  <td>N100,000,000</td>
+                  <td> 10%</td>
+                  </tr>
+                <tr>
+                  <td>N100,000,000</td>
+                  <td>N500,000,00</td>
+                  <td> 8%</td>
+                  </tr>
+                <tr>
+                  <td>N500,000,000</td>
+                  <td>N900,000,000</td>
+                  <td>7%</td>
+                  </tr>
+
+                <tr>
+                  <td>N1Billion</td>
+                  <td>N3Billion</td>
+                  <td>6%</td>
+                  </tr>
+
+                  <tr>
+                  <td>N3Billion</td>
+                  <td>N5Billion</td>
+                  <td>5%</td>
+                  </tr>
+
+                <tr>
+                  <td>N5Billion</td>
+                  <td>..........</td>
+                  <td>4%</td>
+                </tr>
+
+              </tbody>
+            </Table>
+          </div>
+        </div>
+      </section>
+        ";
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = "alleybookings Agreement";
+        $mail->Body    = ($bodyB);
+        $mail->send();
+        $arr = ['status' => 1, 'message' => 'Message sent Successfully'];
+        exit(json_encode($arr));
+   
+}
 
 
 // select all from user where created_at BETWEEN `` AND ``;
