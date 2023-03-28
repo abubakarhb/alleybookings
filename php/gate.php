@@ -151,37 +151,28 @@ function createUser()
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
 
-        $mail = new PHPMailer(true);
+        $sender = "alleyys.com@gmail.com";
+        //    $contact = "me";
+        //    $postmessage = "message";  
+        $to = "$email";
+        $subject = "Alleybookings Account Verification";
+        // Email Template
+        $message = "<p> Thank you for signing up for our service! In order to complete your registration</p>
+        <p>please click on the following link to verify your account:</p>
+       <p>https://alleyy.vercel.app/verifyemail</p>
+        <p>This link is only valid for 3 day, so please make sure to click on it as soon as possible.</p>
+        <p>Thank you</p>
+        <h6>Alleybookings</h6> <br/>
+       <p> I hope this helps! Let me know if you have any questions or need further assistance.</p>";
+        //    $message .= "<b>Contact Number : </b>".$contact."<br>";
+        //    $message .= "<b>Email Address : </b>".$email."<br>";
+        //    $message .= "<b>Message : </b>".$postmessage."<br>";
 
-        //Enable verbose debug output
-        $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host = 'smtp.gmail.com';           //Set the SMTP server to send through
-          $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-          $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
-          $mail->Password   = 'laeokjgelrblotgy';                               //SMTP password
-         $mail->SMTPSecure = 'tls';         //Enable implicit TLS encryption
-          $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-        //Recipients
-        $mail->setFrom('alleyys.com@gmail.com', 'alleybookings');
-        $mail->addAddress($email);     //Add a recipient
-
-
-
-        //Content
-        $bodyB = "<p> Thank you for signing up for our service! In order to complete your registration</p>
-         <p>please click on the following link to verify your account:</p>
-        <p>https://alleyy.vercel.app/verifyemail</p>
-         <p>This link is only valid for 3 day, so please make sure to click on it as soon as possible.</p>
-         <p>Thank you</p>
-         <h6>Alleybookings</h6> <br/>
-        <p> I hope this helps! Let me know if you have any questions or need further assistance.</p>";
-        $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = "Alleybookings Account Verification";
-        $mail->Body    = ($bodyB);
-
+        $header = "From:'$sender'";
+        $header .= "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html\r\n";
+        $retval = mail($to, $subject, $message, $header);
         if ($User_re) {
-            $mail->send();
             $returnResponse = ['status' => 1, 'message' => "{$email} added successfully", 'message1' => "message sent successfully"];
             exit(json_encode($returnResponse));
         } else {
@@ -216,36 +207,26 @@ ini_set('display_errors', 0);
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
        //Enable verbose debug output
-       $mail = new PHPMailer(true);
-       $mail->isSMTP();                                            //Send using SMTP
-            $mail->SMTPDebug = false;
-            $mail->Host = 'smtp.gmail.com';
-                $mail->SMTPOptions = array(
-        'ssl' => array(
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-        )
-    );
-          $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-          $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
-          $mail->Password   = 'laeokjgelrblotgy';                               //SMTP password
-         $mail->SMTPSecure = 'tls';         //Enable implicit TLS encryption
-          $mail->Port = 587;                                 //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-          //Recipients
-           $mail->setFrom('alleyys.com@gmail.com', 'Alleybookings');
-          $mail->addAddress($email);
-      
-          //Content
-          $bodyB = " <p>Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:</p>
-        <p> https://alleyy.vercel.app/listing/propverification </p>
-           <p> This link is only valid for 3 day, so please make sure to click on it as soon as possible.</p>
-           <p>Thank you,</p>
-           <p>Alleybookings</p>
-          <p> I hope this helps! Let me know if you have any questions or need further assistance.</p>";
-              $mail->isHTML(true);                                  //Set email format to HTML
-              $mail->Subject = "Account Verification";
-              $mail->Body    = ($bodyB);
+       $sender = "alleyys.com@gmail.com";
+       //    $contact = "me";
+       //    $postmessage = "message";  
+       $to = "$email";
+       $subject = "Alleybookings Account Verification";
+       // Email Template
+       $message = " <p>Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:</p>
+       <p> https://alleyy.vercel.app/listing/propverification </p>
+          <p> This link is only valid for 3 day, so please make sure to click on it as soon as possible.</p>
+          <p>Thank you,</p>
+          <p>Alleybookings</p>
+         <p> I hope this helps! Let me know if you have any questions or need further assistance.</p>";
+       //    $message .= "<b>Contact Number : </b>".$contact."<br>";
+       //    $message .= "<b>Email Address : </b>".$email."<br>";
+       //    $message .= "<b>Message : </b>".$postmessage."<br>";
+
+       $header = "From:'$sender'";
+       $header .= "MIME-Version: 1.0\r\n";
+       $header .= "Content-type: text/html\r\n";
+       $retval = mail($to, $subject, $message, $header);                             //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         if ($User_re) {
             $mail->send();
             $last_id = mysqli_insert_id($alleybookingsConnection);
@@ -734,30 +715,21 @@ function reservationDetail()
     $result = mysqli_query($alleybookingsConnection, $sql2) or die(mysqli_error($alleybookingsConnection));
     if ($result) {
 
-        $mail = new PHPMailer(true);
-
-            //Server settings
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host = 'smtp.gmail.com';           //Set the SMTP server to send through
-          $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-          $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
-          $mail->Password   = 'laeokjgelrblotgy';                               //SMTP password
-         $mail->SMTPSecure = 'tls';         //Enable implicit TLS encryption
-          $mail->Port = 587; 
-
-            //Recipients
-            $mail->setFrom('alleyys.com@gmail.com', 'Alleybookings');
-            $mail->addAddress($email);
-
-
-    
-            $bodyB = '<p> Dear <strong>' . $guest_name . ' </strong>Your Reservation has been booked Successfully</p>';
-
-            //Content
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = 'Alleybookings Reservation';
-            $mail->Body    = ($bodyB);
-            $mail->send();
+        $sender = "alleyys.com@gmail.com";
+        //    $contact = "me";
+        //    $postmessage = "message";  
+        $to = "$email";
+        $subject = "Alleybookings Reservation";
+        // Email Template
+        $message = " <p> Dear <strong>' . $guest_name . ' </strong>Your Reservation has been booked Successfully</p>";
+        //    $message .= "<b>Contact Number : </b>".$contact."<br>";
+        //    $message .= "<b>Email Address : </b>".$email."<br>";
+        //    $message .= "<b>Message : </b>".$postmessage."<br>";
+ 
+        $header = "From:'$sender'";
+        $header .= "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html\r\n";
+        $retval = mail($to, $subject, $message, $header);  
         $last_id = mysqli_insert_id($alleybookingsConnection);
         $arr = ["status" => 1, "message" =>  "Created successfully!", "reservation_id" => $last_id];
         exit(json_encode($arr));
@@ -1331,33 +1303,21 @@ function resetPassword()
 
     if ($User_re) {
 
-            $mail = new PHPMailer(true);
-                //Server settings
-                $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host = 'smtp.gmail.com';           //Set the SMTP server to send through
-          $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-          $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
-          $mail->Password   = 'laeokjgelrblotgy';                               //SMTP password
-         $mail->SMTPSecure = 'tls';         //Enable implicit TLS encryption
-          $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-        
-                //Recipients
-                $mail->setFrom('alleyys.com@gmail.com', 'Alleybookings');
-          $mail->addAddress($email);
-
-
-                //Attachments
-                // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-                // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-                $bodyB = "To Change your Password, Goto https://alleyy.vercel.app/resetpassword?id=$user_id";
-
-                //Content
-                $mail->isHTML(true);                                  //Set email format to HTML
-                $mail->Subject = 'Password Change';
-                $mail->Body    = ($bodyB);
-
-                $mail->send();
+        $sender = "alleyys.com@gmail.com";
+        //    $contact = "me";
+        //    $postmessage = "message";  
+        $to = "$email";
+        $subject = "Password Change";
+        // Email Template
+        $message = " To Change your Password, Goto https://alleyy.vercel.app/resetpassword?id=$user_id";
+        //    $message .= "<b>Contact Number : </b>".$contact."<br>";
+        //    $message .= "<b>Email Address : </b>".$email."<br>";
+        //    $message .= "<b>Message : </b>".$postmessage."<br>";
+ 
+        $header = "From:'$sender'";
+        $header .= "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html\r\n";
+        $retval = mail($to, $subject, $message, $header);  
                 $arr = ["status" => 1, "message" => "message sent successfully"];
                 exit(json_encode($arr));
         } else {
@@ -1828,26 +1788,13 @@ function sendEmail($data)
         $address = $_GET['address'];
         $id = $_GET['property_name'];
 
-        $mail = new PHPMailer(true);
-
-       $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host = 'smtp.gmail.com';           //Set the SMTP server to send through
-          $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-          $mail->Username   = 'alleyys.com@gmail.com';                   //SMTP username
-          $mail->Password   = 'laeokjgelrblotgy';                               //SMTP password
-         $mail->SMTPSecure = 'tls';         //Enable implicit TLS encryption
-          $mail->Port = 587;                                 //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-  
-          //Recipients
-           $mail->setFrom('alleyys.com@gmail.com', 'Alleybookings');
-          $mail->addAddress($email);
-        // $mail->addAddress('ellen@example.com');               //Name is optional
-        // $mail->addReplyTo('info@example.com', 'Information');
-
-
-        //Content
-        $bodyB = "
-        <section className=''>
+        $sender = "alleyys.com@gmail.com";
+        //    $contact = "me";
+        //    $postmessage = "message";  
+        $to = "$email";
+        $subject = "alleybookings Agreement";
+        // Email Template
+        $message = " <section className=''>
         <h1 className='text-center text-2xl fontBold'>PROPERTY LISTING AGREEMENT</h1>
 
         <div className='mt-5 px-10'>
@@ -1993,12 +1940,16 @@ function sendEmail($data)
             </Table>
           </div>
         </div>
-      </section>
-        ";
-        $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = "alleybookings Agreement";
-        $mail->Body    = ($bodyB);
-        $mail->send();
+      </section>";
+        //    $message .= "<b>Contact Number : </b>".$contact."<br>";
+        //    $message .= "<b>Email Address : </b>".$email."<br>";
+        //    $message .= "<b>Message : </b>".$postmessage."<br>";
+ 
+        $header = "From:'$sender'";
+        $header .= "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html\r\n";
+        $retval = mail($to, $subject, $message, $header);                              
+        
         $arr = ['status' => 1, 'message' => 'Message sent Successfully'];
         exit(json_encode($arr));
    
