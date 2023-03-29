@@ -316,41 +316,6 @@ function hotelListerUserCall001($data)
                 $arr= ["message"=>"Successfully created an account", "id"=>$dd ];
                 echo json_encode($arr);
                 $mail = new PHPMailer(true);
-
-        //Enable verbose debug output
-        $mail->isSMTP();                                            //Send using SMTP
-        $mail->Host       = 'alleybookings.com';               //Set the SMTP server to send through
-        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = 'info@alleybookings.com';                   //SMTP username
-        $mail->Password   = 'info@2022';                               //SMTP password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-        //Recipients
-        $mail->setFrom('info@alleybookings.com', 'alleybookings');
-        $mail->addAddress($maile);     //Add a recipient
-
-
-
-        //Content
-        $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = "Alleybookings Account Verification";
-        $mail->Body    = "
-      Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:\n
-         <br/>
-         https://alleyy.vercel.app/verifyemail
-          <br/>       
-
-          This link is only valid for 3 day, so please make sure to click on it as soon as possible.
-          <br/>
-          Thank you,<br>
-          Alleybookings
-          <br/>
-          <br/>
-          I hope this helps! Let me know if you have any questions or need further assistance.
-      \n
-      ";
-      $mail->send();
             } else {
             }
         } else {
