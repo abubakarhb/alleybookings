@@ -245,7 +245,6 @@ function loginListerUser($username, $password)
   
     $query_User = sprintf("SELECT * FROM hotelListerUsers WHERE email='{$username}'");
     $User_1 = mysqli_query($alleybookingsConnection, $query_User) or die(mysqli_error($alleybookingsConnection));
-    print_r($User_1);die;
     $row_User_re = mysqli_fetch_assoc($User_1);
     $totalRows_User_re = mysqli_num_rows($User_1);
 
@@ -1763,16 +1762,36 @@ function loginLister($username, $password)
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     $row_User_re = mysqli_fetch_assoc($User_re);
     $totalRows_User_re = mysqli_num_rows($User_re);
+    $userID = $row_User_re['id'];
     if ($totalRows_User_re > 0) {
         if ($row_User_re['password'] == $password) {
             
-            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "id" => $row_User_re['id']];
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "id" => $userID];
             exit(json_encode($arr));
         }
     } else {
         $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
         exit(json_encode($arr));
     }
+}
+
+$query_User = sprintf("SELECT * FROM hotelListerUsers WHERE email='{$username}'");
+$User_1 = mysqli_query($alleybookingsConnection, $query_User) or die(mysqli_error($alleybookingsConnection));
+$row_User_re = mysqli_fetch_assoc($User_1);
+$totalRows_User_re = mysqli_num_rows($User_1);
+$userID = $row_User_re['id'];
+
+if ($totalRows_User_re > 0) {
+    $query_User1 = sprintf("SELECT * FROM hotelListerProperties WHERE owner_id ='{$userID}'");
+    $User_2 = mysqli_query($alleybookingsConnection, $query_User1) or die(mysqli_error($alleybookingsConnection));
+    $row_User_re1 = mysqli_fetch_assoc($User_2);
+    if ($row_User_re['pword'] == $password) {
+        $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']." ".$row_User_re['last_name'] , "userID" => $userID, "property_id" => $row_User_re1['id']];
+        exit(json_encode($arr));
+    }
+} else {
+    $arr = ['status' => 0, 'message' => 'Not a user, try registering again'];
+    exit(json_encode($arr));
 }
 
 function sendEmail($data)
