@@ -45,6 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         roomsInAHotel($_GET['property_id']);
     } elseif (isset($_GET['generalRoomAmenities'])) {
         generalRoomAmenities($_GET['property_id']);
+    } elseif (isset($_GET['generalHotelFacilities'])) {
+        generalHotelFacilities($_GET['property_id']);
     } elseif (isset($_GET['propertiesPhotos'])) {
         propertiesPhotos($_GET['property_id']);
     } elseif (isset($_GET['otherPropertyDescription'])) {

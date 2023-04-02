@@ -1177,6 +1177,16 @@ function generalRoomAmenities($data)
     }
     exit(json_encode($pull_data));
 }
+
+function generalHotelFacilities($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `facilitiesServices` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
+    if ($pull_data['status'] == 1) {
+        $pull_data['message'][0]['more_facilities'] = json_decode($pull_data['message'][0]['more_facilities']);
+    }
+    exit(json_encode($pull_data));
+}
+
 function propertiesPhotos($data)
 {
     $pull_data = check_db_query_staus1("SELECT * FROM `propertiesPhotos` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
@@ -1697,7 +1707,8 @@ function deactivateHotelListersUser($data)
             exit(json_encode($error_creating));
         }
     } else {
-        print_r('no');
+        $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
     }
 }
 
@@ -1728,7 +1739,9 @@ function deactivateEndUser($data)
             exit(json_encode($error_creating));
         }
     } else {
-        print_r('no');
+        // print_r('no');
+        $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
     }
 }
 // Reservation Management
@@ -1758,7 +1771,7 @@ function deactivateHotelReservation($data)
             exit(json_encode($error_creating));
         }
     } else {
-        print_r('no');
+        // print_r('no');
     }
 }
 
