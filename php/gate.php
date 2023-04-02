@@ -1129,7 +1129,7 @@ function InsertRoomAmenities($data)
 
    
     // Insert email address into the database
-    $query = sprintf("INSERT INTO generalRoomAmenities(`unit`, `size`, `other_amenities`, `property_id`) VALUES ('$unit','$size','$other_amenities','$property_id')");
+    $query = sprintf("INSERT INTO generalRoomAmenities(`unit`, `size`, `other_amenities`, `hotelListerPropertiesId`) VALUES ('$unit','$size','$other_amenities','$property_id')");
     //  print_r($query); die;
 
     $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
