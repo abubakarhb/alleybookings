@@ -507,7 +507,7 @@ function updateHotelMoreFacilities($data)
     }
 }
 
-function hotelGeneralRoomAmenities($data)
+function hotelNotification($data)
 {
     include "config/index.php";
     if (!empty($data->accountId)) {
@@ -730,7 +730,7 @@ function HotelReservationStatement()
     $date_to = $_GET['date_to'];
     // print_r($property_id ." ". $date_to); die;
 
-    $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE book_on BETWEEN '{$date_from}' AND '{$date_to}' AND `property_id`= '{$property_id}' AND `status` = 'active' ORDER BY id DESC ", "CHK");
+    $pull_data = check_db_query_staus("SELECT * FROM `hotelReservation` WHERE book_on BETWEEN '{$date_from}' AND '{$date_to}' AND `property_id`= '{$property_id}' AND `status` = 'active' ORDER BY id DESC ", "CHK");
     exit(json_encode($pull_data));
 }
 
@@ -764,14 +764,14 @@ function insertRoomDetails($data)
 
     // print_r($data);
     include "config/index.php";
-    $roomType = $data->roomType_budgetDoubleRoom;
-    $roomName = $data->roomName_budgetDoubleRoom;
-    $customName = $data->customName_budgetDoubleRoom;
-    $smokingPolicy =  $data->smokingPolicy_budgetDoubleRoom;
-    $numRoom_ =  $data->numRoom_budgetDoubleRoom;
-    $bedKind = $data->bedKind_bedOptions;
-    $numGuest = $data->numGuest_bedOptions;
-    $pricePerPerson = $data->pricePerPerson_basePricePerNight;
+    $roomType = $data->roomType;
+    $roomName = $data->roomName;
+    $customName = $data->customName;
+    $smokingPolicy =  $data->smokingPolicy;
+    $numRoom_ =  $data->numRoom_;
+    $bedKind = $data->bedKind;
+    $numGuest = $data->pricePerPerson;
+    $pricePerPerson = $data->pricePerPerson;
     $roomLocation = $data->roomLocation;
     $totalOccupant = $data->totalOccupant;
     $maxAdultOccupants =  $data->maxAdultOccupants;
@@ -1116,6 +1116,34 @@ function roomsInAHotel($data)
     $pull_data = check_db_query_staus1("SELECT * FROM `layoutPrice` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
     exit(json_encode($pull_data));
 }
+function InsertRoomAmenities($data)
+{
+    include "config/index.php";
+    include "config/enctp.php";
+    // print_r($data); die;
+    $unit = $data->unit;
+    $size = $data->size;
+    $other_amenities = $data->other_amenities;
+    $other_amenities = implode('~', $other_amenities);
+    $property_id = $data->property_id;
+
+   
+    // Insert email address into the database
+    $query = sprintf("INSERT INTO generalRoomAmenities(`unit`, `size`, `other_amenities`, `property_id`) VALUES ('$unit','$size','$other_amenities','$property_id')");
+    //  print_r($query); die;
+
+    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+    if ($User_re) {
+        $arr = ["status" => 1, "message" => "Room Amenities Added Successfully !!!"];
+        exit(json_encode($arr));
+    } else {
+        $arr = ["status" => 2, "message" => "Room Amenities Not Added"];
+        exit(json_encode($arr));
+    }
+    
+}
+
 function generalRoomAmenities($data)
 {
     $pull_data = check_db_query_staus1("SELECT * FROM `generalRoomAmenities` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
@@ -1325,6 +1353,7 @@ function cancelHotelReservation($data)
     $result22 = mysqli_query($alleybookingsConnection, $row22) or die(mysqli_error($alleybookingsConnection));
     $row11 = mysqli_fetch_assoc($result22);
     $user_id = $row11['user_id'];
+    $name = $row11['guest_name'];
     // print_r($user_id); die;
 
     if ($row11 > 1) {
@@ -1334,6 +1363,7 @@ function cancelHotelReservation($data)
         $result = mysqli_query($alleybookingsConnection, $query3) or die(mysqli_error($alleybookingsConnection));
         $row3 = mysqli_fetch_assoc($result);
         $email = $row3["email"];
+        
         // print_r($email); die;
 
 
@@ -1344,41 +1374,22 @@ function cancelHotelReservation($data)
 
         if ($User_re) {
 
-            $mail = new PHPMailer(true);
-            try {
-
-                //Server settings
-                $mail->SMTPDebug = 1;
-                $mail->isSMTP();
-                $mail->Host       = 'sandbox.smtp.mailtrap.io';
-                $mail->SMTPAuth   = true;
-                $mail->Username   = 'a3d7643a5e2648';
-                $mail->Password   = '7a57e1373e5d6b';
-                $mail->Port       = 2525;
-
-                //Recipients
-                $mail->setFrom('support@alleybookings.com', 'Mailer');
-                $mail->addAddress($email, 'Joe User');
-
-
-                //Attachments
-                // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-                // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-                $name = $row11['guest_name'];
-                $body = '<p> Dear <strong>' . $name . ' </strong>Your Reservation Booking was Cancelled</p>';
-
-                //Content
-                $mail->isHTML(true);                                  //Set email format to HTML
-                $mail->Subject = 'Here is the subject';
-                $mail->Body    = $body;
-                $mail->AltBody = strip_tags($body);
-
-                $mail->send();
-                // print_r('Message has been sent');
-            } catch (Exception $e) {
-                // print_r("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
-            }
+            $sender = "alleyys.com@gmail.com";
+            //    $contact = "me";
+            //    $postmessage = "message";  
+            $to = "$email";
+            $subject = "Password Change";
+            // Email Template
+            $message = " <p> Dear <strong>' . $name . ' </strong>Your Reservation Booking was Cancelled</p>";
+            //    $message .= "<b>Contact Number : </b>".$contact."<br>";
+            //    $message .= "<b>Email Address : </b>".$email."<br>";
+            //    $message .= "<b>Message : </b>".$postmessage."<br>";
+     
+            $header = "From:'$sender'";
+            $header .= "MIME-Version: 1.0\r\n";
+            $header .= "Content-type: text/html\r\n";
+            $retval = mail($to, $subject, $message, $header); 
+          
         } else {
             $error_creating = ["Error" => "Invalid operation"];
             exit(json_encode($error_creating));
@@ -1728,10 +1739,14 @@ function loginLister($username, $password)
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     $row_User_re = mysqli_fetch_assoc($User_re);
     $totalRows_User_re = mysqli_num_rows($User_re);
+    $user_id = $row_User_re['id'];
     if ($totalRows_User_re > 0) {
+        $query_User_re1 = sprintf("SELECT * FROM hotelListerProperties WHERE owner_id='{$user_id}'");
+        $User_re1 = mysqli_query($alleybookingsConnection, $query_User_re1) or die(mysqli_error($alleybookingsConnection));
+        $row_User_re1 = mysqli_fetch_assoc($User_re1);
         if ($row_User_re['password'] == $password) {
             
-            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "id" => $row_User_re['id']];
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "id" => $user_id, "property" => $row_User_re1['id'], "property_name"=> $row_User_re1['property_name']];
             exit(json_encode($arr));
         }
     } else {
