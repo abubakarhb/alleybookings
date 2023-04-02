@@ -1172,6 +1172,9 @@ function UpdateRoomAmenities($data)
 function generalRoomAmenities($data)
 {
     $pull_data = check_db_query_staus1("SELECT * FROM `generalRoomAmenities` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
+    if ($pull_data['status'] == 1) {
+        $pull_data['message'][0]['other_amenities'] = explode('~', $pull_data['message'][0]['other_amenities']);
+    }
     exit(json_encode($pull_data));
 }
 function propertiesPhotos($data)
