@@ -1129,7 +1129,7 @@ function InsertRoomAmenities($data)
 
    
     // Insert email address into the database
-    $query = sprintf("INSERT INTO generalRoomAmenities(`unit`, `size`, `other_amenities`, `property_id`) VALUES ('$unit','$size','$other_amenities','$property_id')");
+    $query = sprintf("INSERT INTO generalRoomAmenities(`unit`, `size`, `other_amenities`, `hotelListerPropertiesId`) VALUES ('$unit','$size','$other_amenities','$property_id')");
     //  print_r($query); die;
 
     $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
@@ -1142,6 +1142,31 @@ function InsertRoomAmenities($data)
         exit(json_encode($arr));
     }
     
+}
+
+function UpdateRoomAmenities($data)
+{
+    //   print_r($data); die;
+    include "config/index.php";
+    $unit = $data->unit;
+    $size = $data->size;
+    $other_amenities = $data->other_amenities;
+    $other_amenities = implode('~', $other_amenities);
+    $property_id = $data->property_id;
+
+
+    $query =  "UPDATE `generalRoomAmenities` SET `unit`='{$unit}',`size`='{$size}',`other_amenities`='{$other_amenities}' WHERE `hotelListerPropertiesId` = {$property_id}";
+
+    //   print_r($query);die;
+    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+
+    if ($User_re) {
+        $arr = ["status" => 1, "message" => "General Room Amenities Details Successfully Updated "];
+        exit(json_encode($arr));
+    } else {
+        $error_creating = ["Error" => "Invalid operation"];
+        exit(json_encode($error_creating));
+    }
 }
 
 function generalRoomAmenities($data)
@@ -1281,6 +1306,8 @@ function UpdatePersonalInfor($data)
         exit(json_encode($error_creating));
     }
 }
+
+
 
 function resetPassword()
 {

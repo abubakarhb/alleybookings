@@ -198,6 +198,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "updateUserPrefrences") {
             updateUserPrefrences($data['data']);
             // print_r($data['data']);
+        } elseif ($data['endpoint'] == "UpdateRoomAmenities") {
+            UpdateRoomAmenities($data['data']);
+            //print_r($data['data']);
         }
     }
 }
