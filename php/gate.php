@@ -117,7 +117,7 @@ function login($username, $password)
     $totalRows_User_re = mysqli_num_rows($User_re);
     if ($totalRows_User_re > 0) {
         if ($row_User_re['password'] == $password) {
-            
+
             $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "userID" => $row_User_re['id']];
             exit(json_encode($arr));
         }
@@ -192,7 +192,7 @@ function singleUserInfor($data)
 function createListerUser($email, $firstname, $lastname, $phone, $password)
 {
     ini_set('error_reporting', 0);
-ini_set('display_errors', 0);
+    ini_set('display_errors', 0);
     include "config/index.php";
     include "config/enctp.php";
     $verification = encripted_data($email . "Â£Â£" . "30" . "_");
@@ -206,27 +206,27 @@ ini_set('display_errors', 0);
         exit(json_encode($returnResponse));
     } else {
         $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
-       //Enable verbose debug output
-       $sender = "alleyys.com@gmail.com";
-       //    $contact = "me";
-       //    $postmessage = "message";  
-       $to = "$email";
-       $subject = "Alleybookings Account Verification";
-       // Email Template
-       $message = " <p>Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:</p>
+        //Enable verbose debug output
+        $sender = "alleyys.com@gmail.com";
+        //    $contact = "me";
+        //    $postmessage = "message";  
+        $to = "$email";
+        $subject = "Alleybookings Account Verification";
+        // Email Template
+        $message = " <p>Thank you for signing up for our service! In order to complete your registration, please click on the following link to verify your account:</p>
        <p> https://alleyy.vercel.app/listing/propverification </p>
           <p> This link is only valid for 3 day, so please make sure to click on it as soon as possible.</p>
           <p>Thank you,</p>
           <p>Alleybookings</p>
          <p> I hope this helps! Let me know if you have any questions or need further assistance.</p>";
-       //    $message .= "<b>Contact Number : </b>".$contact."<br>";
-       //    $message .= "<b>Email Address : </b>".$email."<br>";
-       //    $message .= "<b>Message : </b>".$postmessage."<br>";
+        //    $message .= "<b>Contact Number : </b>".$contact."<br>";
+        //    $message .= "<b>Email Address : </b>".$email."<br>";
+        //    $message .= "<b>Message : </b>".$postmessage."<br>";
 
-       $header = "From:'$sender'";
-       $header .= "MIME-Version: 1.0\r\n";
-       $header .= "Content-type: text/html\r\n";
-       $retval = mail($to, $subject, $message, $header);                             //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $header = "From:'$sender'";
+        $header .= "MIME-Version: 1.0\r\n";
+        $header .= "Content-type: text/html\r\n";
+        $retval = mail($to, $subject, $message, $header);                             //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         if ($User_re) {
             $mail->send();
             $last_id = mysqli_insert_id($alleybookingsConnection);
@@ -242,10 +242,11 @@ ini_set('display_errors', 0);
 function loginListerUser($username, $password)
 {
     include "config/index.php";
-  
+
     $query_User = sprintf("SELECT * FROM hotelListerUsers WHERE email='{$username}'");
     $User_1 = mysqli_query($alleybookingsConnection, $query_User) or die(mysqli_error($alleybookingsConnection));
-    print_r($User_1);die;
+    print_r($User_1);
+    die;
     $row_User_re = mysqli_fetch_assoc($User_1);
     $totalRows_User_re = mysqli_num_rows($User_1);
 
@@ -253,8 +254,8 @@ function loginListerUser($username, $password)
 
     if ($totalRows_User_re > 0) {
         if ($row_User_re['pword'] == $password) {
-            
-            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name']." ".$row_User_re['last_name'] , "userID" => $row_User_re['id']];
+
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'] . " " . $row_User_re['last_name'], "userID" => $row_User_re['id']];
             exit(json_encode($arr));
         }
     } else {
@@ -287,7 +288,7 @@ function hotelListerProperties($property_name, $property_type, $property_currenc
     $User_re = mysqli_query($alleybookingsConnection, $query_User_re) or die(mysqli_error($alleybookingsConnection));
     if ($User_re) {
         $last_idi = mysqli_insert_id($alleybookingsConnection);
-        $returnResponse = ['status' => 1, "property_id"=>$last_idi];
+        $returnResponse = ['status' => 1, "property_id" => $last_idi];
         return (json_encode($returnResponse));
     } else {
         $returnResponse = ['status' => 0];
@@ -307,13 +308,13 @@ function hotelListerUserCall001($data)
                 $dd = null;
                 $maile = $user_creation->email;
                 if ($pListedDetail->status == 1) {
-                    $dd =$pListedDetail->property_id;
+                    $dd = $pListedDetail->property_id;
                     $arr['hotelListerProperties'] = $pListedDetail->status;
                 }
                 if ($pLocation->status == 1) {
                     $arr['hotelListerPropertiesLocation'] = $pLocation->status;
                 }
-                $arr= ["message"=>"Successfully created an account", "id"=>$dd ];
+                $arr = ["message" => "Successfully created an account", "id" => $dd];
                 echo json_encode($arr);
                 $mail = new PHPMailer(true);
             } else {
@@ -407,7 +408,7 @@ function CreateHotelPropertyDetails($data)
             $query_User_re_openandclose = sprintf("INSERT INTO `open_close_rooms`(`room_id`,`property_id`, `date_from`, `date_to`, `room_type`, `room_selling_amount`, `standard_rate`, `non_refundable_rates`, `open_close_booking_status`, `standard_rate_status`, `non_refundable_rates_status`) 
             VALUES ('$room_id','{$data->accountInfo->propertyId}', '$date_from' ,'$date_to', '{$data->layoutPrice->budgetDoubleRoom->roomType}', '$room_selling_amount', '$standard_rate', '$non_refundable_rates', '$open_close_booking_status', '$standard_rate_status', '$non_refundable_rates_status')");
             $User_re_hotelListerrights = mysqli_query($alleybookingsConnection, $query_User_re_openandclose) or die(mysqli_error($alleybookingsConnection));
-            
+
             $arr = ["status" => 1, "message" => "Hotel information successfully created, your rooms should be ready for reservations"];
             exit(json_encode($arr));
         }
@@ -690,11 +691,11 @@ function reservationDetail()
         //    $message .= "<b>Contact Number : </b>".$contact."<br>";
         //    $message .= "<b>Email Address : </b>".$email."<br>";
         //    $message .= "<b>Message : </b>".$postmessage."<br>";
- 
+
         $header = "From:'$sender'";
         $header .= "MIME-Version: 1.0\r\n";
         $header .= "Content-type: text/html\r\n";
-        $retval = mail($to, $subject, $message, $header);  
+        $retval = mail($to, $subject, $message, $header);
         $last_id = mysqli_insert_id($alleybookingsConnection);
         $arr = ["status" => 1, "message" =>  "Created successfully!", "reservation_id" => $last_id];
         exit(json_encode($arr));
@@ -1126,9 +1127,28 @@ function InsertRoomAmenities($data)
     $other_amenities = $data->other_amenities;
     $other_amenities = implode('~', $other_amenities);
     $property_id = $data->property_id;
-
-   
-    // Insert email address into the database
+    $check_existance = check_db_query_staus1("SELECT * FROM `generalRoomAmenities` WHERE `hotelListerPropertiesId`= '{$property_id}' ", "CHK");
+    if ($check_existance['status'] == 1) {
+        $query =  "UPDATE `generalRoomAmenities` SET `unit`='{$unit}',`size`='{$size}',`other_amenities`='{$other_amenities}' WHERE `hotelListerPropertiesId` = {$property_id}";
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "General Room Amenities Details Successfully Updated "];
+            exit(json_encode($arr));
+        } else {
+            $error_creating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_creating));
+        }
+    } else {
+        $query = sprintf("INSERT INTO generalRoomAmenities(`unit`, `size`, `other_amenities`, `hotelListerPropertiesId`) VALUES ('$unit','$size','$other_amenities','$property_id')");
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Room Amenities Added Successfully !!!"];
+            exit(json_encode($arr));
+        } else {
+            $arr = ["status" => 2, "message" => "Room Amenities Not Added"];
+            exit(json_encode($arr));
+        }
+    }
     $query = sprintf("INSERT INTO generalRoomAmenities(`unit`, `size`, `other_amenities`, `hotelListerPropertiesId`) VALUES ('$unit','$size','$other_amenities','$property_id')");
     //  print_r($query); die;
 
@@ -1141,33 +1161,8 @@ function InsertRoomAmenities($data)
         $arr = ["status" => 2, "message" => "Room Amenities Not Added"];
         exit(json_encode($arr));
     }
-    
 }
 
-function UpdateRoomAmenities($data)
-{
-    //   print_r($data); die;
-    include "config/index.php";
-    $unit = $data->unit;
-    $size = $data->size;
-    $other_amenities = $data->other_amenities;
-    $other_amenities = implode('~', $other_amenities);
-    $property_id = $data->property_id;
-
-
-    $query =  "UPDATE `generalRoomAmenities` SET `unit`='{$unit}',`size`='{$size}',`other_amenities`='{$other_amenities}' WHERE `hotelListerPropertiesId` = {$property_id}";
-
-    //   print_r($query);die;
-    $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
-
-    if ($User_re) {
-        $arr = ["status" => 1, "message" => "General Room Amenities Details Successfully Updated "];
-        exit(json_encode($arr));
-    } else {
-        $error_creating = ["Error" => "Invalid operation"];
-        exit(json_encode($error_creating));
-    }
-}
 
 function generalRoomAmenities($data)
 {
@@ -1346,16 +1341,16 @@ function resetPassword()
         //    $message .= "<b>Contact Number : </b>".$contact."<br>";
         //    $message .= "<b>Email Address : </b>".$email."<br>";
         //    $message .= "<b>Message : </b>".$postmessage."<br>";
- 
+
         $header = "From:'$sender'";
         $header .= "MIME-Version: 1.0\r\n";
         $header .= "Content-type: text/html\r\n";
-        $retval = mail($to, $subject, $message, $header);  
-                $arr = ["status" => 1, "message" => "message sent successfully"];
-                exit(json_encode($arr));
-        } else {
-            $arr = ["status" => 0, "message" => "message Not sent"];
-            exit(json_encode($arr));
+        $retval = mail($to, $subject, $message, $header);
+        $arr = ["status" => 1, "message" => "message sent successfully"];
+        exit(json_encode($arr));
+    } else {
+        $arr = ["status" => 0, "message" => "message Not sent"];
+        exit(json_encode($arr));
     }
 }
 function changePassword($data)
@@ -1403,7 +1398,7 @@ function cancelHotelReservation($data)
         $result = mysqli_query($alleybookingsConnection, $query3) or die(mysqli_error($alleybookingsConnection));
         $row3 = mysqli_fetch_assoc($result);
         $email = $row3["email"];
-        
+
         // print_r($email); die;
 
 
@@ -1424,12 +1419,11 @@ function cancelHotelReservation($data)
             //    $message .= "<b>Contact Number : </b>".$contact."<br>";
             //    $message .= "<b>Email Address : </b>".$email."<br>";
             //    $message .= "<b>Message : </b>".$postmessage."<br>";
-     
+
             $header = "From:'$sender'";
             $header .= "MIME-Version: 1.0\r\n";
             $header .= "Content-type: text/html\r\n";
-            $retval = mail($to, $subject, $message, $header); 
-          
+            $retval = mail($to, $subject, $message, $header);
         } else {
             $error_creating = ["Error" => "Invalid operation"];
             exit(json_encode($error_creating));
@@ -1469,7 +1463,7 @@ function createCardDetail($data)
     $cardType = $data->cardType;
     $status = "active";
 
-   
+
     // Insert email address into the database
     $query = sprintf("INSERT INTO `paymentDetails`(`user_id`, `cardName`, `cardNumber`, `card_expire_date`, `cardCVV`, `cardType`, `status`) VALUES ('$user_id','$cardName','$cardNumber','$card_expire_date','$cardCVV','$cardType','$status')");
     //  print_r($query); die;
@@ -1483,14 +1477,13 @@ function createCardDetail($data)
         $error_sub = ["Error" => "Transaction Failed"];
         exit(json_encode($error_sub));
     }
-    
 }
 
 function UpdateCardDetail($data)
 {
     //   print_r($data); die;
     include "config/index.php";
-    
+
     $id = $data->id;
     $cardName = $data->cardName;
     $cardNumber = $data->cardNumber;
@@ -1554,7 +1547,7 @@ function updateHotelListerAgent($data)
 {
     //   print_r($data); die;
     include "config/index.php";
-    
+
     $id = $data->id;
     $property_id = $data->property_id;
     $fname = $data->fname;
@@ -1569,7 +1562,7 @@ function updateHotelListerAgent($data)
     $property_access = $data->property_access;
     $messages_access = $data->messages_access;
     $reviews_access = $data->reviews_access;
- 
+
     $query =  "UPDATE `Hotel_lister_agent` SET `fname`='{$fname}',`lname`='{$lname}',`email`='{$email}',`mobile_number`='{$mobile_number}',`property_id`='{$property_id}',`homepage_access`='{$homepage_access}',`reservations_access`='{$reservations_access}',`finance_access`='{$finance_access}',`users_access`='{$users_access}',`rates_availability_access`='{$rates_availability_access}',`property_access`='{$property_access}',`messages_access`='{$messages_access}',`reviews_access`='{$reviews_access}'  WHERE `id` = {$id}";
 
     //   print_r($query);die;
@@ -1594,15 +1587,15 @@ function updateUserPrefrences($data)
 {
     //   print_r($data); die;
     include "config/index.php";
-    
+
     $id = $data->id;
     $currency = $data->currency;
     $language = $data->language;
     $Accessibility_requirements = $data->Accessibility_requirements;
 
-   
 
- 
+
+
     $query =  "UPDATE `prefrences` SET `currency`='{$currency}',`language`='{$language}',`Accessibility_requirements`='{$Accessibility_requirements}'  WHERE `id` = {$id}";
 
     //   print_r($query);die;
@@ -1627,7 +1620,7 @@ function createUserPrefrences($data)
     $language = $data->language;
     $Accessibility_requirements = $data->Accessibility_requirements;
 
-   
+
     // Insert email address into the database
     $query = sprintf("INSERT INTO `prefrences`(`user_id`, `currency`, `language`, `Accessibility_requirements`) VALUES ('$user_id','$currency','$language','$Accessibility_requirements')");
     //  print_r($query); die;
@@ -1641,7 +1634,6 @@ function createUserPrefrences($data)
         $error_sub = ["Error" => "Transaction Failed"];
         exit(json_encode($error_sub));
     }
-    
 }
 
 
@@ -1708,7 +1700,7 @@ function deactivateHotelListersUser($data)
         }
     } else {
         $error_creating = ["Error" => "Invalid operation"];
-            exit(json_encode($error_creating));
+        exit(json_encode($error_creating));
     }
 }
 
@@ -1741,7 +1733,7 @@ function deactivateEndUser($data)
     } else {
         // print_r('no');
         $error_creating = ["Error" => "Invalid operation"];
-            exit(json_encode($error_creating));
+        exit(json_encode($error_creating));
     }
 }
 // Reservation Management
@@ -1788,8 +1780,8 @@ function loginLister($username, $password)
         $User_re1 = mysqli_query($alleybookingsConnection, $query_User_re1) or die(mysqli_error($alleybookingsConnection));
         $row_User_re1 = mysqli_fetch_assoc($User_re1);
         if ($row_User_re['password'] == $password) {
-            
-            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "id" => $user_id, "property" => $row_User_re1['id'], "property_name"=> $row_User_re1['property_name']];
+
+            $arr = ['status' => 1, 'message' => 'Buzzing you in ðŸ˜Ž', 'email' => $row_User_re['email'], 'fullname' => $row_User_re['first_name'], "id" => $user_id, "property" => $row_User_re1['id'], "property_name" => $row_User_re1['property_name']];
             exit(json_encode($arr));
         }
     } else {
@@ -1805,19 +1797,19 @@ function sendEmail($data)
     include "config/index.php";
     include "config/enctp.php";
     //print_r($data);
-        $dati = date('d-m-Y');
-        $email = $_GET['email'];
-        $name = $_GET['fullname'];
-        $address = $_GET['address'];
-        $id = $_GET['property_name'];
+    $dati = date('d-m-Y');
+    $email = $_GET['email'];
+    $name = $_GET['fullname'];
+    $address = $_GET['address'];
+    $id = $_GET['property_name'];
 
-        $sender = "alleyys.com@gmail.com";
-        //    $contact = "me";
-        //    $postmessage = "message";  
-        $to = "$email";
-        $subject = "alleybookings Agreement";
-        // Email Template
-        $message = " <section className=''>
+    $sender = "alleyys.com@gmail.com";
+    //    $contact = "me";
+    //    $postmessage = "message";  
+    $to = "$email";
+    $subject = "alleybookings Agreement";
+    // Email Template
+    $message = " <section className=''>
         <h1 className='text-center text-2xl fontBold'>PROPERTY LISTING AGREEMENT</h1>
 
         <div className='mt-5 px-10'>
@@ -1964,18 +1956,17 @@ function sendEmail($data)
           </div>
         </div>
       </section>";
-        //    $message .= "<b>Contact Number : </b>".$contact."<br>";
-        //    $message .= "<b>Email Address : </b>".$email."<br>";
-        //    $message .= "<b>Message : </b>".$postmessage."<br>";
- 
-        $header = "From:'$sender'";
-        $header .= "MIME-Version: 1.0\r\n";
-        $header .= "Content-type: text/html\r\n";
-        $retval = mail($to, $subject, $message, $header);                              
-        
-        $arr = ['status' => 1, 'message' => 'Message sent Successfully'];
-        exit(json_encode($arr));
-   
+    //    $message .= "<b>Contact Number : </b>".$contact."<br>";
+    //    $message .= "<b>Email Address : </b>".$email."<br>";
+    //    $message .= "<b>Message : </b>".$postmessage."<br>";
+
+    $header = "From:'$sender'";
+    $header .= "MIME-Version: 1.0\r\n";
+    $header .= "Content-type: text/html\r\n";
+    $retval = mail($to, $subject, $message, $header);
+
+    $arr = ['status' => 1, 'message' => 'Message sent Successfully'];
+    exit(json_encode($arr));
 }
 
 
