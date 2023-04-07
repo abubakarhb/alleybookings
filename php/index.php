@@ -109,6 +109,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } elseif (isset($_GET['getuserPrefrences'])) {
         getuserPrefrences($_GET['user_id']);
         
+    }  elseif (isset($_GET['reservationCount'])) {
+        reservationCount($_GET['property_id']);
+        
+    }  elseif (isset($_GET['cancelReservationCount'])) {
+        cancelReservationCount($_GET['property_id']);
+        
+    } elseif (isset($_GET['allReviewsCount'])) {
+        allReviewsCount($_GET['property_id']);
+        
+    }elseif (isset($_GET['queuedReviewsCount'])) {
+        queuedReviewsCount($_GET['property_id']);
+        
+    }elseif (isset($_GET['queriedReviewsCount'])) {
+        queriedReviewsCount($_GET['property_id']);
+        
+    }
+    
+    elseif (isset($_GET['invoiceCount'])) {
+        invoiceCount($_GET);
+        
     } 
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';

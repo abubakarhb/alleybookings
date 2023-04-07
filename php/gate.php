@@ -1636,6 +1636,38 @@ function createUserPrefrences($data)
     }
 }
 
+function reservationCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM hotelReservation WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function cancelReservationCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM hotelReservation WHERE `property_id`= '{$data}' AND `status` = 'inactive' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function allReviewsCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM rating_reviews WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function queuedReviewsCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM rating_reviews WHERE `property_id`= '{$data}' AND `status` = 'Yes' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function queriedReviewsCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM rating_reviews WHERE `property_id`= '{$data}' AND `status` = 'No' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function invoiceCount()
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM invoices WHERE `status`= 'unpaid' ", "CHK");
+    exit(json_encode($pull_data));
+}
 
 
 // Admin section   
