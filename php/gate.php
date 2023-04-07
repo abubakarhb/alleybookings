@@ -1969,6 +1969,3 @@ function sendEmail($data)
     exit(json_encode($arr));
 }
 
-
-// select all from user where created_at BETWEEN `` AND ``;
-// SELECT SUM(score) as sum_score FROM game;/Applications/XAMPP/xamppfiles/htdocs/alleybookings/php/gate.php
