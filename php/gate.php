@@ -1668,6 +1668,11 @@ function invoiceCount()
     $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM invoices WHERE `status`= 'unpaid' ", "CHK");
     exit(json_encode($pull_data));
 }
+function getDescription($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM otherPropertyDescription WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
 
 
 // Admin section   

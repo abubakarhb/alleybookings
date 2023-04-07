@@ -124,12 +124,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }elseif (isset($_GET['queriedReviewsCount'])) {
         queriedReviewsCount($_GET['property_id']);
         
-    }
-    
-    elseif (isset($_GET['invoiceCount'])) {
+    }  elseif (isset($_GET['invoiceCount'])) {
         invoiceCount($_GET);
         
-    } 
+    }  elseif (isset($_GET['getDescription'])) {
+        getDescription($_GET['property_id']);
+        
+    }
+    
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
     $entityBody = file_get_contents('php://input');
