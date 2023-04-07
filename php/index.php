@@ -130,6 +130,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }  elseif (isset($_GET['getDescription'])) {
         getDescription($_GET['property_id']);
         
+    } elseif (isset($_GET['messagingPreferences'])) {
+        messagingPreferences($_GET);
+        
     }
     
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {

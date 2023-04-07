@@ -1674,6 +1674,42 @@ function getDescription($data)
     exit(json_encode($pull_data));
 }
 
+function messagingPreferences($data)
+{
+
+    //    print_r($data); die;
+    include "config/index.php";
+    $property_id = $_GET['property_id'];
+    $emailWhenMsgSend = $_GET['emailWhenMsgSend'];
+    $sendMsgDerect = $_GET['sendMsgDerect'];
+    $dailyReminderEmail = $_GET['dailyReminderEmail'];
+
+
+    $checkingLog = check_db_query_staus("SELECT * FROM `messaging_preferences` WHERE `property_id`= {$property_id}", "CHK");
+    if ($checkingLog['status'] == 1) {
+       
+        $query = "UPDATE `messaging_preferences` SET `email_when_msg_sent`='{$emailWhenMsgSend}',`send_msg_direct`='{$sendMsgDerect}',`daily_reminder_email`='{$dailyReminderEmail}' WHERE `property_id`= '{$property_id}'";
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Updated"];
+            exit(json_encode($arr));
+        } else {
+            $error_updating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_updating));
+        }
+    } else {
+        $query = "INSERT INTO `messaging_preferences`(`property_id`, `email_when_msg_sent`, `send_msg_direct`, `daily_reminder_email`) VALUES ('$property_id', '$emailWhenMsgSend', '$sendMsgDerect', '$dailyReminderEmail')";
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "successfully added"];
+            exit(json_encode($arr));
+        } else {
+            $error_updating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_updating));
+        }
+    }
+}
+
 
 // Admin section   
 
@@ -2005,4 +2041,3 @@ function sendEmail($data)
     $arr = ['status' => 1, 'message' => 'Message sent Successfully'];
     exit(json_encode($arr));
 }
-
