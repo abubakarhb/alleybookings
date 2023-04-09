@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $username = (string) $_GET['email'];
         $password = (string) $_GET['password'];
         login($username, $password);
-    }elseif (isset($_GET['loginLister'])) {
+    } elseif (isset($_GET['loginLister'])) {
         $username = (string) $_GET['email'];
         $password = (string) $_GET['password'];
         loginLister($username, $password);
@@ -43,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         searchFiltering($_GET);
     } elseif (isset($_GET['roomsInAHotel'])) {
         roomsInAHotel($_GET['property_id']);
+    }elseif (isset($_GET['propertyDiscounts'])) {
+        getDiscount($_GET['property_id']);
     } elseif (isset($_GET['generalRoomAmenities'])) {
         generalRoomAmenities($_GET['property_id']);
     } elseif (isset($_GET['generalHotelFacilities'])) {
@@ -53,63 +55,77 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         otherPropertyDescription($_GET['property_id']);
     } elseif (isset($_GET['getRatingsAndReviews'])) {
         getRatingsAndReviews($_GET['property_id']);
-    }   elseif (isset($_GET['facilitiesServices'])) {
+    } elseif (isset($_GET['facilitiesServices'])) {
         facilitiesServices($_GET['property_id']);
     } elseif (isset($_GET['policies'])) {
         policies($_GET['property_id']);
     } elseif (isset($_GET['resetPassword'])) {
         resetPassword($_GET);
-    }elseif (isset($_GET['getInvoice'])) {
+    } elseif (isset($_GET['getInvoice'])) {
         getInvoice($_GET);
-    }elseif (isset($_GET['cancelHotelReservation'])) {
+    } elseif (isset($_GET['cancelHotelReservation'])) {
         cancelHotelReservation($_GET['id']);
         // print_r($data['data']);
-    }elseif (isset($_GET['singleReservation'])) {
+    } elseif (isset($_GET['singleReservation'])) {
         singleReservation($_GET['id']);
         // print_r($data['data']);
-    }elseif (isset($_GET['adminLogin'])) {
+    } elseif (isset($_GET['adminLogin'])) {
         adminLogin($_GET);
         // print_r($data['data']);
-    }  elseif (isset($_GET['hotelListersUserManagement'])) {
+    } elseif (isset($_GET['hotelListersUserManagement'])) {
         hotelListersUserManagement($_GET);
         // print_r($data['data']);
-    }elseif (isset($_GET['deactivateHotelListersUser'])) {
+    } elseif (isset($_GET['deactivateHotelListersUser'])) {
         deactivateHotelListersUser($_GET['id']);
         // print_r($data['data']);
     } elseif (isset($_GET['endUserManagement'])) {
         endUserManagement($_GET);
         // print_r($data['data']);
-    }elseif (isset($_GET['deactivateEndUser'])) {
+    } elseif (isset($_GET['deactivateEndUser'])) {
         deactivateEndUser($_GET['id']);
         // print_r($data['data']);
     } elseif (isset($_GET['hotelReservationManagement'])) {
         hotelReservationManagement($_GET);
         // print_r($data['data']);
-    }elseif (isset($_GET['singleUserInfor'])) {
+    } elseif (isset($_GET['singleUserInfor'])) {
         singleUserInfor($_GET['id']);
         // print_r($data['data']);
-    }elseif (isset($_GET['fetchSingleCardDetail'])) {
+    } elseif (isset($_GET['fetchSingleCardDetail'])) {
         fetchSingleCardDetail($_GET['id']);
         // print_r($data['data']);
-    }elseif (isset($_GET['fetchCardDetail'])) {
+    } elseif (isset($_GET['fetchCardDetail'])) {
         fetchCardDetail($_GET['user_id']);
         // print_r($data['data']);
-    }elseif (isset($_GET['deleteCardDetail'])) {
+    } elseif (isset($_GET['deleteCardDetail'])) {
         deleteCardDetail($_GET['id']);
         // print_r($data['data']);
     } elseif (isset($_GET['getAllHotelListerAgent'])) {
         getAllHotelListerAgent($_GET);
         // print_r($data['data']);
-    }  elseif (isset($_GET['getHotelListerAgent'])) {
+    } elseif (isset($_GET['getHotelListerAgent'])) {
         getHotelListerAgent($_GET['property_id']);
-        
-    }elseif (isset($_GET['sendMail'])) {
+    } elseif (isset($_GET['sendMail'])) {
         sendEmail($_GET);
-        
     } elseif (isset($_GET['getuserPrefrences'])) {
         getuserPrefrences($_GET['user_id']);
-        
-    } 
+    } elseif (isset($_GET['getHotelBasicDetails'])) {
+        getHotelBasicDetails($_GET['property_id']);
+        // print_r($_GET);
+    } elseif (isset($_GET['reservationCount'])) {
+        reservationCount($_GET['property_id']);
+    } elseif (isset($_GET['cancelReservationCount'])) {
+        cancelReservationCount($_GET['property_id']);
+    } elseif (isset($_GET['allReviewsCount'])) {
+        allReviewsCount($_GET['property_id']);
+    } elseif (isset($_GET['queuedReviewsCount'])) {
+        queuedReviewsCount($_GET['property_id']);
+    } elseif (isset($_GET['queriedReviewsCount'])) {
+        queriedReviewsCount($_GET['property_id']);
+    } elseif (isset($_GET['invoiceCount'])) {
+        invoiceCount($_GET);
+    } elseif (isset($_GET['getDescription'])) {
+        getDescription($_GET['property_id']);
+    }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
     $entityBody = file_get_contents('php://input');
@@ -122,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             CreateHotelPropertyDetails($data['data']);
             print_r($data['data']);
         } elseif ($data['endpoint'] == "hotelNotification") {
-            // hotelGeneralRoomAmenities($data['data']);
+            hotelNotification($data['data']);
             // print_r($data['data']);
         } elseif ($data['endpoint'] == "hotelGeneralNotification") {
             // hotelGeneralRoomAmenities($data['data']);
@@ -145,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "InsertRoomAmenities") {
             InsertRoomAmenities($data['data']);
             // print_r($data['data']);
-        }elseif ($data['endpoint'] == "invoice") {
+        } elseif ($data['endpoint'] == "invoice") {
             invoice($data['data']);
             //print_r($data['data']);
         } elseif ($data['endpoint'] == "hotelListerAgent") {
@@ -154,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "healthAndSafety") {
             healthAndSafety($data['data']);
             //print_r($data['data']);
-        }elseif ($data['endpoint'] == "addRatingsAndReviews") {
+        } elseif ($data['endpoint'] == "addRatingsAndReviews") {
             addRatingsAndReviews($data['data']);
             //  print_r($data['data']);
         } elseif ($data['endpoint'] == "createCardDetail") {
@@ -163,7 +179,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "createUserPrefrences") {
             createUserPrefrences($data['data']);
             //  print_r($data['data']);
-        } 
+        } elseif ($data['endpoint'] == "CreateHotelRoomTypeDiscount") {
+            createDiscount($data['data']);
+            //  print_r($data['data']);
+        }
+
+        //Form encoded Data
+        elseif (isset($_POST['updatePolicy'])) {
+            patchPolicy($_POST);
+            // print_r($_POST);
+        }
+    } elseif (isset($_POST['updatePolicy'])) {
+        patchPolicy($_POST);
+        // print_r($_POST);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     include 'gate.php';
@@ -185,22 +213,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } elseif ($data['endpoint'] == "UpdateSingleRoom") {
             updateSingleRoom($data['data']);
             // print_r($data['data']);
-        }   elseif ($data['endpoint'] == "UpdatePersonalInfor") {
+        } elseif ($data['endpoint'] == "UpdatePersonalInfor") {
             updatePersonalInfor($data['data']);
             // print_r($data['data']);
         } elseif ($data['endpoint'] == "changePassword") {
             changePassword($data['data']);
             // print_r($data['data']);
-        }elseif ($data['endpoint'] == "UpdateCardDetail") {
+        } elseif ($data['endpoint'] == "UpdateCardDetail") {
             UpdateCardDetail($data['data']);
             // print_r($data['data']);
-        }elseif ($data['endpoint'] == "updateHotelListerAgent") {
+        } elseif ($data['endpoint'] == "updateHotelListerAgent") {
             updateHotelListerAgent($data['data']);
             // print_r($data['data']);
         } elseif ($data['endpoint'] == "updateUserPrefrences") {
             updateUserPrefrences($data['data']);
             // print_r($data['data']);
-        } 
+        } elseif ($data['endpoint'] == "UpdatePropertyAgent") {
+            UpdatePropertyAgent($data['data']);
+            // print_r($data['data']);
+        }
         // elseif ($data['endpoint'] == "UpdateRoomAmenities") {
         //     UpdateRoomAmenities($data['data']);
         //     //print_r($data['data']);

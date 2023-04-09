@@ -420,6 +420,8 @@ function updateHotelHostType($data)
 {
     include "config/index.php";
     if (!empty($data->accountId)) {
+        // $pull_data = check_db_query_staus("SELECT * FROM `hotelListerPropertiesBasicInfo` WHERE `hotelListerPropertiesId`= '{$data->accountId}' ", "CHK");
+        // if ($pull_data['status'] == 1) {
         $query = "UPDATE `hotelListerPropertiesBasicInfo` SET `property_host_type`='{$data->value}' WHERE `hotelListerPropertiesId` = {$data->accountId}";
         $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
         if ($User_re) {
@@ -429,6 +431,9 @@ function updateHotelHostType($data)
             $error_updating = ["Error" => "Invalid operation"];
             exit(json_encode($error_updating));
         }
+        // }elseif($pull_data['status'] == 0){
+
+        // }
     }
 }
 
@@ -714,6 +719,12 @@ function reservationDetail()
 function singleHotelReservation($data)
 {
     $pull_data = check_db_query_staus1("SELECT * FROM `hotelReservation` WHERE `property_id`= '{$data}' AND `status` = 'active' ORDER BY id DESC", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function getHotelBasicDetails($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM `hotelListerPropertiesBasicInfo` WHERE `hotelListerPropertiesId`= '{$data}'", "CHK");
     exit(json_encode($pull_data));
 }
 function singleUserReservation($data)
@@ -1127,7 +1138,7 @@ function InsertRoomAmenities($data)
     $other_amenities = $data->other_amenities;
     $other_amenities = implode('~', $other_amenities);
     $property_id = $data->property_id;
-    $check_existance = check_db_query_staus1("SELECT * FROM `generalRoomAmenities` WHERE `hotelListerPropertiesId`= '{$property_id}' ", "CHK");
+    $check_existance = check_db_query_staus("SELECT * FROM `generalRoomAmenities` WHERE `hotelListerPropertiesId`= '{$property_id}' ", "CHK");
     if ($check_existance['status'] == 1) {
         $query =  "UPDATE `generalRoomAmenities` SET `unit`='{$unit}',`size`='{$size}',`other_amenities`='{$other_amenities}' WHERE `hotelListerPropertiesId` = {$property_id}";
         $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
@@ -1166,10 +1177,10 @@ function InsertRoomAmenities($data)
 
 function generalRoomAmenities($data)
 {
-    $pull_data = check_db_query_staus1("SELECT * FROM `generalRoomAmenities` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
-    if ($pull_data['status'] == 1) {
-        $pull_data['message'][0]['other_amenities'] = explode('~', $pull_data['message'][0]['other_amenities']);
-    }
+    $pull_data = check_db_query_staus("SELECT * FROM `generalRoomAmenities` WHERE `hotelListerPropertiesId`= '{$data}' ", "CHK");
+    // if ($pull_data['status'] == 1) {
+    //     $pull_data['message'][0]['other_amenities'] = explode('~', $pull_data['message'][0]['other_amenities']);
+    // }
     exit(json_encode($pull_data));
 }
 
@@ -1969,6 +1980,119 @@ function sendEmail($data)
     exit(json_encode($arr));
 }
 
+function UpdatePropertyAgent($data)
+{
+    include "config/index.php";
+    if (!empty($data->userId)) {
+        $query = "UPDATE `Hotel_lister_agent` SET `fname`='{$data->firstname}',`lname`='{$data->lastname}',`mobile_number`='{$data->phone}',`homepage_access`='{$data->homepage_access}',`reservations_access`='{$data->reservations_access}',`finance_access`='{$data->finance_access}',`users_access`='{$data->users_access}',`rates_availability_access`='{$data->rates_availability_access}',`property_access`='{$data->property_access}',`messages_access`='{$data->messages_access}',`reviews_access`='{$data->reviews_access}' WHERE `id` = {$data->userId}";
+        $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+        if ($User_re) {
+            $arr = ["status" => 1, "message" => "Hotel User(`AGENT`) successfully updated"];
+            exit(json_encode($arr));
+        } else {
+            $error_updating = ["Error" => "Invalid operation"];
+            exit(json_encode($error_updating));
+        }
+    }
+}
 
-// select all from user where created_at BETWEEN `` AND ``;
-// SELECT SUM(score) as sum_score FROM game;/Applications/XAMPP/xamppfiles/htdocs/alleybookings/php/gate.php
+
+function patchPolicy($data)
+{
+    include "config/index.php";
+    $value_to_update = "";
+    $hotelListerPropertiesId = "";
+    if (!empty($data['hotelListerPropertiesId'])) {
+        foreach ($data as $key => $value) {
+            if ($key == "hotelListerPropertiesId") {
+                $hotelListerPropertiesId = $value;
+            }
+            if (($key != "updatePolicy") && ($key != "hotelListerPropertiesId")) {
+                $value_to_update .= "`{$key}`='{$value}',";
+            }
+        }
+        $value_to_update = rtrim($value_to_update, ",");
+        exit(json_encode(check_db_query_staus("UPDATE `policies` SET {$value_to_update} WHERE `hotelListerPropertiesId`='{$hotelListerPropertiesId}'", "UPD")));
+    } else {
+        $returnResponse = ['message' => 'hotelListerPropertiesId is required'];
+        exit(json_encode($returnResponse));
+    }
+}
+
+function createDiscount($data)
+{
+    include "config/index.php";
+    include "config/enctp.php";
+    // echo($data[0]->property_id); 
+    $arrStatus = ""; 
+    foreach ($data as $key => $value) {
+        $property_id = $data[$key]->property_id;
+        $name = $data[$key]->name;
+        $discount = $data[$key]->discount;
+        $room = $data[$key]->room;
+        $start_date = $data[$key]->start_date;
+        $end_date = $data[$key]->end_date;
+        $check_exist = check_db_query_staus1("SELECT * FROM `discounts`  WHERE `property_id`= '{$property_id}' AND `room_type`='{$room}'", "CHK");
+        if ($check_exist['status'] == 1) {
+            // echo json_encode($check_exist);
+        } else {
+            $query = sprintf("INSERT INTO `discounts`(`property_id`, `name`, `discount`, `room_type`, `start_date`, `end_date`) 
+            VALUES ('$property_id','$name','$discount','$room','$start_date','$end_date')");
+            $User_re = mysqli_query($alleybookingsConnection, $query) or die(mysqli_error($alleybookingsConnection));
+            if ($User_re) {
+                $arrStatus = 1;
+            }
+        }
+    }
+    if ($arrStatus > 0) {
+        $arr = ["status" => 1, "message" => "Created Successfully !!!"];
+        exit(json_encode($arr));
+    } else {
+        $error_sub = ["Error" => "Operation Failed"];
+        exit(json_encode($error_sub));
+    }
+}
+
+function getDiscount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM discounts WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function reservationCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM hotelReservation WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function cancelReservationCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM hotelReservation WHERE `property_id`= '{$data}' AND `status` = 'inactive' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function allReviewsCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM rating_reviews WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function queuedReviewsCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM rating_reviews WHERE `property_id`= '{$data}' AND `status` = 'Yes' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function queriedReviewsCount($data)
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM rating_reviews WHERE `property_id`= '{$data}' AND `status` = 'No' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
+function invoiceCount()
+{
+    $pull_data = check_db_query_staus1("SELECT COUNT(*) FROM invoices WHERE `status`= 'unpaid' ", "CHK");
+    exit(json_encode($pull_data));
+}
+function getDescription($data)
+{
+    $pull_data = check_db_query_staus1("SELECT * FROM otherPropertyDescription WHERE `property_id`= '{$data}' ", "CHK");
+    exit(json_encode($pull_data));
+}
+
