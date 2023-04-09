@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 12, 2023 at 07:59 AM
+-- Generation Time: Apr 07, 2023 at 01:58 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.1.6
 
@@ -812,6 +812,29 @@ INSERT INTO `layoutPrice` (`id`, `roomType_budgetDoubleRoom`, `roomName_budgetDo
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `messaging_preferences`
+--
+
+CREATE TABLE `messaging_preferences` (
+  `id` int(11) NOT NULL,
+  `property_id` int(11) NOT NULL,
+  `email_when_msg_sent` enum('Yes','No') NOT NULL,
+  `send_msg_direct` enum('Yes','No') NOT NULL,
+  `daily_reminder_email` enum('Yes','No') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `messaging_preferences`
+--
+
+INSERT INTO `messaging_preferences` (`id`, `property_id`, `email_when_msg_sent`, `send_msg_direct`, `daily_reminder_email`, `created_at`) VALUES
+(1, 1, 'Yes', 'Yes', 'Yes', '2023-04-07 11:15:16'),
+(2, 2, 'Yes', 'Yes', 'Yes', '2023-04-07 11:51:54');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `newsletter`
 --
 
@@ -1281,6 +1304,12 @@ ALTER TABLE `layoutPrice`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `messaging_preferences`
+--
+ALTER TABLE `messaging_preferences`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `newsletter`
 --
 ALTER TABLE `newsletter`
@@ -1458,6 +1487,12 @@ ALTER TABLE `invoices`
 --
 ALTER TABLE `layoutPrice`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT for table `messaging_preferences`
+--
+ALTER TABLE `messaging_preferences`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `newsletter`

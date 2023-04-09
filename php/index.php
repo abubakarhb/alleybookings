@@ -108,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         sendEmail($_GET);
     } elseif (isset($_GET['getuserPrefrences'])) {
         getuserPrefrences($_GET['user_id']);
+<<<<<<< HEAD
     } elseif (isset($_GET['getHotelBasicDetails'])) {
         getHotelBasicDetails($_GET['property_id']);
         // print_r($_GET);
@@ -126,6 +127,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } elseif (isset($_GET['getDescription'])) {
         getDescription($_GET['property_id']);
     }
+=======
+        
+    }  elseif (isset($_GET['reservationCount'])) {
+        reservationCount($_GET['property_id']);
+        
+    }  elseif (isset($_GET['cancelReservationCount'])) {
+        cancelReservationCount($_GET['property_id']);
+        
+    } elseif (isset($_GET['allReviewsCount'])) {
+        allReviewsCount($_GET['property_id']);
+        
+    }elseif (isset($_GET['queuedReviewsCount'])) {
+        queuedReviewsCount($_GET['property_id']);
+        
+    }elseif (isset($_GET['queriedReviewsCount'])) {
+        queriedReviewsCount($_GET['property_id']);
+        
+    }  elseif (isset($_GET['invoiceCount'])) {
+        invoiceCount($_GET);
+        
+    }  elseif (isset($_GET['getDescription'])) {
+        getDescription($_GET['property_id']);
+        
+    } elseif (isset($_GET['messagingPreferences'])) {
+        messagingPreferences($_GET);
+        
+    }
+    
+>>>>>>> 7c444655d50e19288afc6df05a97330dafb95cfd
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'gate.php';
     $entityBody = file_get_contents('php://input');

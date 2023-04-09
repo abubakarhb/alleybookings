@@ -2024,7 +2024,7 @@ function createDiscount($data)
     include "config/index.php";
     include "config/enctp.php";
     // echo($data[0]->property_id); 
-    $arrStatus = ""; 
+    $arrStatus = "";
     foreach ($data as $key => $value) {
         $property_id = $data[$key]->property_id;
         $name = $data[$key]->name;
@@ -2035,6 +2035,12 @@ function createDiscount($data)
         $check_exist = check_db_query_staus1("SELECT * FROM `discounts`  WHERE `property_id`= '{$property_id}' AND `room_type`='{$room}'", "CHK");
         if ($check_exist['status'] == 1) {
             // echo json_encode($check_exist);
+            // upd_discount = ("", "UPD");
+            $upd_discount = sprintf("UPDATE `discounts` SET `name`='{$name}', `discount`='{$discount}', `room_type`='{$room}', `start_date`='$start_date', `end_date`='{$end_date}' WHERE  `id`='{$check_exist['message'][0]['id']}'");
+            $User_re1 = mysqli_query($alleybookingsConnection, $upd_discount) or die(mysqli_error($alleybookingsConnection));
+            if ($User_re1) {
+                $arrStatus = 1;
+            }
         } else {
             $query = sprintf("INSERT INTO `discounts`(`property_id`, `name`, `discount`, `room_type`, `start_date`, `end_date`) 
             VALUES ('$property_id','$name','$discount','$room','$start_date','$end_date')");
@@ -2095,4 +2101,3 @@ function getDescription($data)
     $pull_data = check_db_query_staus1("SELECT * FROM otherPropertyDescription WHERE `property_id`= '{$data}' ", "CHK");
     exit(json_encode($pull_data));
 }
-
